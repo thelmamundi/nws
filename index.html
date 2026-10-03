@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>~/home</title>
+<meta name="description" content="DOS edition">
+<meta name="author" content="name">
+<meta name="theme-color" content="#0000aa">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230000aa'/%3E%3Cpath d='M3 12V4h2l6 5V4h2v8h-2L5 7v5z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/dos.css">
+<script>
+  /* apply the saved look before first paint (no flash) */
+  (function () { try {
+    var t = localStorage.getItem('nws-theme'); if (t) document.documentElement.setAttribute('data-theme', t);
+    if (localStorage.getItem('nws-crt') !== '0') document.documentElement.className += ' crt flicker';
+  } catch (e) { document.documentElement.className += ' crt flicker'; } })();
+</script>
+</head>
+<body>
+
+  <!-- header that only shows up on mobile -->
+  <header class="mobile-only">
+    <div><p>///</p></div>
+    <div><a href="index.html">home</a></div>
+    <div><a href="#menu">menu</a></div>
+  </header>
+
+  <!-- DOS title strip (desktop) -->
+  <div class="titlebar"><span class="lhs">C:\NWS\INDEX.HTM</span><span class="rhs"><span id="tb-clock">0000-00-00 00:00:00</span> &nbsp; <a href="#console">F1=HELP</a></span></div>
+  <main>
+    <div class="sidebar">
+
+      <!-- sidebar menu. in mobile-view, this moves to the end of the page. -->
+      <nav id="menu">
+        <a href="index.html" class="category">&lt; home &gt;</a>
+
+        <details>
+          <summary class="category">&lt; about &gt;</summary>
+          <div class="tree-view">
+            <ul>
+              <li><a href="about.html">about me</a></li>
+              <li><a href="about.html#find">where to find me</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary class="category">&lt; works &gt;</summary>
+          <div class="tree-view">
+            <ul>
+              <li><span class="soon">projects</span></li>
+              <li><span class="soon">old posts</span></li>
+              <li><span class="soon">creations</span></li>
+            </ul>
+          </div>
+        </details>
+
+        <a href="sky.html" class="category">&lt; sky &gt;</a>
+        <span class="category soon">&lt; blog site &gt;</span>
+        <span class="category soon">&lt; links &gt;</span>
+        <span class="category soon">&lt; sitemap &gt;</span>
+      </nav>
+
+      <!-- widgets START -->
+      <div class="widget">
+        <h3>Moon</h3>
+        <center><div data-art="moon" data-size="216" data-cell="3"></div></center>
+        <p class="note" style="text-align:center">live phase, drawn in the current art mode</p>
+      </div>
+
+      <div class="widget">
+        <h3>Sky Now</h3>
+        <div data-widget="mini"></div>
+      </div>
+
+      <div class="widget">
+        <h3>Song of the Now</h3>
+        <pre class="ascii" style="font-size:16px;line-height:1">   ┌──────────────────┐
+   │ ▐▌ ▌▐ ▐▌ ▌▐ ▐▌ ▌▐│
+   │ ▐▌ ▌▐ ▐▌ ▌▐ ▐▌ ▌▐│
+   └──────────────────┘</pre>
+        <p>Walking Into Sunshine<br><span class="dm">Central Line</span></p>
+        <p class="note">Drop an &lt;audio&gt; tag here to bring the player back.</p>
+      </div>
+
+      <div class="widget console" id="console">
+        <h3>Console</h3>
+        <div class="out" aria-live="polite"></div>
+        <form autocomplete="off"><label for="cmd">C:\&gt;</label><input id="cmd" type="text" spellcheck="false" autocapitalize="off" placeholder="help"></form>
+      </div>
+    </div>
+    <!-- widgets END -->
+
+    <div class="content">
+
+      <div class="onair"><span class="tag">ON AIR</span><div class="onair-track" data-widget="ticker"></div></div>
+
+      <section>
+        <h1>Logging on to the Network...</h1>
+        <div class="flex-columns">
+          <div class="flex-text">
+<pre aria-label="nws" style="font-size:30px;line-height:.9">█   █  █   █   ████
+██  █  █   █  █    
+█ █ █  █ █ █   ███ 
+█  ██  ██ ██      █
+█   █  █   █  ████ </pre>
+            <p></p>
+            <p>My name is me, <strong>meby if you're nasty</strong>; and I am a sexy, thought-provoking internet feline looking to make the world a better place with every breath I take in it. <a href="about.html">You can learn more about me here.</a> Please stop by, take a look around, and interact. I have worked to make this a tremendous space for everyone, but more specifically ... me!</p>
+          </div>
+          <div class="flex-image">
+            <div class="art-frame"><div data-art="orb" data-spin data-size="216" data-cell="3"></div></div>
+            <p class="note">orb.exe &mdash; dithered or ASCII, your call (dock, bottom right)</p>
+          </div>
+        </div>
+      </section>
+
+      <section2>
+        <div class="onair" style="box-shadow:none;border-style:solid;border-width:2px">
+          <div class="onair-track"><span class="inner" style="animation-duration:40s">
+            <a href="#">[ neocities ]</a> <a href="#">[ firefox now ]</a> <a href="#">[ girls4notepad ]</a> <a href="#">[ discord now ]</a> <a href="#">[ apple fatal error ]</a> <a href="#">[ explicit content ]</a> <a href="#">[ best viewed 800x600 ]</a> <a href="#">[ no ai ]</a>
+          </span></div>
+        </div>
+      </section2>
+
+      <section>
+        <h1>Sky Now</h1>
+        <div data-widget="conditions" data-compact></div>
+      </section>
+
+      <section>
+        <h2>Celestial Flight Board</h2>
+        <div data-widget="flight" data-compact></div>
+      </section>
+
+      <section2>
+        <section>
+          <h1>Updates</h1>
+          <ul class="arrow-list">
+            <li><i>2026-10-03</i> &harr; DOS edition: blue-screen themes, ASCII, bitmap dither, a console. The LED instruments moved in.</li>
+            <li><i>2024-06-24</i> &harr; Added Linkback Buttons</li>
+            <li><i>2024-06-21</i> &harr; Redebuting website. Happy summer! Summer Song is Walking into Sunshine by London's Central Line!</li>
+          </ul>
+        </section>
+      </section2>
+
+      <div class="half-width">
+        <section>
+          <h2>Link Back To Me</h2>
+          <p><b>Copy the markup, put it on your site.</b></p>
+<pre>+------------+ +------------+
+| ### N W S  | | C:\&gt; _     |
++------------+ +------------+</pre>
+          <p>Let me know if you link back to me &mdash; and if I like your site, I might link back to you!</p>
+        </section>
+        <section>
+          <h2>How Do Into Cube?</h2>
+<pre aria-label="cube">     +--------+
+    /        /|
+   /        / |
+  +--------+  |
+  |        |  +
+  |        | /
+  |        |/
+  +--------+</pre>
+        </section>
+      </div>
+
+      <section>
+        <h2>Title</h2>
+        <p>Lorem ipsum dolor sit amet, adipiscing elit. Nullam dignissim convallis est. Quisque aliquam. Donec faucibus. Nunc iaculis suscipit dui. Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl.</p>
+        <hr>
+        <p class="note">Any &lt;img class="dither" src="..."&gt; placed here is redrawn as a 1-bit ordered-dither bitmap (or ASCII) in the active theme's colours.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>me (c) 2024-2026</p>
+    <p class="footer-tray">THEME: DOS BIOS GREEN AMBER PAPER &middot; CONSOLE: TYPE HELP</p>
+    <p class="template-credits"><a href="https://debtdeath.neocities.org/">+ cc-link layout by cc debtdeath +</a></p>
+  </footer>
+
+  <script src="assets/js/astro-engine.js"></script>
+  <script src="assets/js/art.js"></script>
+  <script src="assets/js/widgets.js"></script>
+  <script src="assets/js/theme.js"></script>
+</body>
+</html>

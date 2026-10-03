@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dos">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+<meta name="author" content="name">
+<meta name="theme-color" content="#0000aa">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230000aa'/%3E%3Cpath d='M3 12V4h2l6 5V4h2v8h-2L5 7v5z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/dos.css">
+<script>
+  /* apply the saved look before first paint (no flash) */
+  (function () { try {
+    var t = localStorage.getItem('nws-theme'); if (t) document.documentElement.setAttribute('data-theme', t);
+    if (localStorage.getItem('nws-crt') !== '0') document.documentElement.className += ' crt flicker';
+  } catch (e) { document.documentElement.className += ' crt flicker'; } })();
+</script>
+</head>
+<body>
+
+  <!-- header that only shows up on mobile -->
+  <header class="mobile-only">
+    <div><p>///</p></div>
+    <div><a href="index.html">home</a></div>
+    <div><a href="#menu">menu</a></div>
+  </header>
+
+  <!-- DOS title strip (desktop) -->
+  <div class="titlebar"><span class="lhs">C:\NWS\{{pageUpper}}.HTM</span><span class="rhs"><span id="tb-clock">0000-00-00 00:00:00</span> &nbsp; <a href="#console">F1=HELP</a></span></div>
