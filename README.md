@@ -1,6 +1,6 @@
 # nws
 
-Weathergirl 98's structure (hero header with ASCII planet, left rail, status strip, instruments, link-column footer) joined to the CC-LINK sections, on a DOS blue screen. Five colour schemes (DOS blue default, BIOS grey, green, amber, paper); LED panels take each scheme's own dark tone. No on-page buttons: pick a scheme in the Start menu > Colors, or type `theme green` in the console. Nav is separate tan bevelled buttons.
+Weathergirl 98's structure (hero header with ASCII planet, left rail, status strip, instruments, link-column footer) joined to the CC-LINK sections, on a DOS blue screen. Six colour schemes: DOS blue (default), BIOS grey, void green and void amber (black page, glow, tinted starfield), paper, and Y2K pink pop (glitter, bubble buttons, sparkle cursor). LED panels are black. No on-page buttons: pick a scheme in the Start menu > Colors, or type `theme green` in the console. Nav is separate tan bevelled buttons.
 
 - **Pages:** `index` (home), `weather` (radar, impact, seismograph, traffic, time control), `sky` (conditions, flight board, next exact, changelog, lunar monitor, planetary clock, speedometer, status, compare, personal aspects), `post` (sample blog post with a live teletext screen), `about`.
 - **Instruments:** `assets/js/widgets.js` + `astro-engine.js`, copied from `ws`. Everything is computed in the browser.
