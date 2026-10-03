@@ -1,6 +1,6 @@
 # nws
 
-Weathergirl 98's structure (hero header with ASCII planet, left rail, status strip, instruments, link-column footer) joined to the CC-LINK sections, on a DOS blue screen. Six colour schemes: DOS blue (default), BIOS grey, void green and void amber (black page, glow, tinted starfield), paper, and Y2K pink pop (glitter, bubble buttons, sparkle cursor). LED panels are black. No on-page buttons: pick a scheme in the Start menu > Colors, or type `theme green` in the console. Nav is separate tan bevelled buttons.
+Weathergirl 98's structure (hero header with ASCII planet, left rail, status strip, instruments, link-column footer) joined to the CC-LINK sections, on a DOS blue screen. Six colour schemes: DOS blue (default), BIOS grey, void green and void amber (black page, glow, tinted starfield), paper, and Y2K pink pop (glitter, bubble buttons, sparkle cursor). Screens use each scheme's own dark tone; only void green, void amber and paper are true black. Widget colours are scheme pairs (accent + complement). CRT scanlines are off by default; the CRT badge in the left rail turns them on. Pink pop's gradients are Bayer-dithered tiles (`scripts/make-dither-tiles.py`). No on-page buttons: pick a scheme in the Start menu > Colors, or type `theme green` in the console. Nav is separate tan bevelled buttons.
 
 - **Pages:** `index` (home), `weather` (radar, impact, seismograph, traffic, time control), `sky` (conditions, flight board, next exact, changelog, lunar monitor, planetary clock, speedometer, status, compare, personal aspects), `post` (sample blog post with a live teletext screen), `about`.
 - **Instruments:** `assets/js/widgets.js` + `astro-engine.js`, copied from `ws`. Everything is computed in the browser.
@@ -13,3 +13,5 @@ Pages: `src/pages/*.html` inside `src/partials/layout.html`. `node build.js` wri
 
 Styling: `assets/css/legacy.css` is the old theme's CSS (instrument internals); `assets/css/dos-skin.css` re-skins it. Placeholders to replace: intro/about copy, link buttons, post tiles, archive rows.
 Layout credit: CC-LINK by CC DebtDeath (linked in the footer). Font: VT323 (OFL).
+
+Writing up changes: see `docs/CHANGES.md`.
