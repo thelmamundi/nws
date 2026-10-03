@@ -3,8 +3,22 @@
 One entry per round. Each lists **Comes with** (what the site has after the round), **Added**, **Changed**, **Removed**.
 To ask for changes, use `docs/REQUESTS.md`. What's still only in the old `ws` site: `docs/FROM-WS.md`.
 
-## Round 7 (current)
-**Comes with:** 6 schemes (DOS blue, BIOS, void green, void amber, paper, pink pop); pages home, weather, sky, post, about; full instrument set; Sky Link evergreen card; console; Start menu with Colors.
+## Round 8 (current)
+**Comes with:** 6 schemes (DOS blue, BIOS, void green, void amber, paper, LITERAL LEGEND); pages home, weather, sky, post, about; full instrument set; Sky Link; console; Start menu > Colors.
+**Added**
+- **LITERAL LEGEND** (replaces "pink pop"): black void with the animated pixel nebula as the page background (`assets/img/ll-space.gif`), pink DOS windows on top, rainbow dithered title text in the teletext colours.
+- Teletext colours (red, green, yellow, cyan, magenta, white on black) for every LED screen in this scheme.
+- All artwork in this scheme (planets, moon, header ASCII planet) is white 1-bit on black, like the dithered hands.
+- Font slot for **dogica** (the Literal Legend page's pixel font): drop `dogica.ttf` into `assets/fonts/` (or install it) and window titles, nav, buttons, labels and chips switch to it.
+- Start menu entry in Fraktur; console `theme literal`.
+**Changed**
+- Dither on bars, buttons and the rainbow title is half the size (1 px cells). `--dz` in the CSS scales it (1 = fine, 2 = previous size).
+- Title bars are one wide left-to-right dither.
+**Removed:** the pink sky, bitmapped clouds and glitter; the lemon/mint/pink LED colours (now teletext colours).
+**Not done yet:** the GIFs and fonts from the Literal Legend page. The page file only names them; the `_files` folder wasn't included, and the site can't be fetched from here. Send the folder (or the .ttf and .gif files) and they get wired in.
+
+## Round 7
+**Comes with:** 6 schemes (DOS blue, BIOS, void green, void amber, paper, pink pop); pages home, weather, sky, post, about; full instrument set; Sky Link; console; Start menu > Colors.
 **Added**
 - **Sky Link** LED card on posts: pick a topic (`topic=communication`), it finds that topic's ruling planet and the CLOSEST real event, last or next (station, sign change, lunation, exact aspect). A second card, "Link your own chart", shows the house it is moving through and the planets it touches (birth details stay in the browser).
 - Pink pop: bitmapped white clouds, dithered sky, dithered left-to-right title bars, dithered rainbow title text, pixel glitter, hearts.
