@@ -1,9 +1,26 @@
 # Change log
 
-One entry per round. Each lists **Comes with** (what the site has after the round), **Added**, **Changed**, **Removed**.
-To ask for changes, use `docs/REQUESTS.md`. What's still only in the old `ws` site: `docs/FROM-WS.md`.
+Write your next requests in **Requests** below (one bullet each, say which scheme and where). Each round I move them into a numbered entry with **Comes with / Added / Changed / Fixed / Removed**.
+Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
 
-## Round 9 (current)
+## Requests (write here)
+- (empty)
+
+## Round 10 (current)
+**Comes with:** 6 schemes (DOS blue, BIOS, void green, void amber, paper, LITERAL LEGEND); pages home, weather, sky, post, about; full instrument set; Sky Link; console; Start menu > Colors.
+**Added**
+- Nav sub-menus say `< OPEN >` and `< CLOSE >` instead of arrows (all schemes).
+- LITERAL LEGEND background: the nebula GIF is tiled twice (offset, lightened together) at native size, so it reads as one dense starfield.
+- BIOS uses the soft 4-tone dither for thumbnails and art (blue to yellow), like DOS blue and LITERAL LEGEND.
+**Changed**
+- LITERAL LEGEND pinks: a touch redder than the old magenta, no longer rose-red (#ff3f8e / #c0105f / #7a0a58, window body #ffe6f1). Same dithered title bars, buttons and shadows, recoloured.
+- LITERAL LEGEND screens: pink + darker blue (#5b84ff) + light blue (#8fd0ff). The yellow, green and teletext cyan are gone; retrograde and alerts are pink. Art and the header planet are light blue.
+- LITERAL LEGEND title text is a dithered gradient pink to blue and back (was full rainbow).
+- Headings are back to VT323. PixelOperator (text), Silkscreen (titles, nav, buttons) and dogica (clocks) stay.
+- The 88x31 bar slots are 36 px high (88 x 36). Your own button images drop into `src/pages/index.html` in the `b88-bar`.
+**Removed:** the Literal Legend logo in the masthead (NWS wordart is back); GothicPixels font.
+
+## Round 9
 **Comes with:** 6 schemes (DOS blue, BIOS, void green, void amber, paper, LITERAL LEGEND); pages home, weather, sky, post, about; full instrument set; Sky Link; console; Start menu > Colors.
 **Added**
 - LITERAL LEGEND uses your files: the nebula GIF **tiled** (2x, crisp), **PixelOperator** (text), **Silkscreen** (window titles, nav, buttons, labels), **GothicPixels** (headings and the rainbow title), **dogica** (clocks). LED screens keep VT323. Your logo GIF is the masthead, `purplebar.gif` is the divider line, `purpleroselg.gif` tops the footer.

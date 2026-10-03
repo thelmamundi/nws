@@ -1,6 +1,6 @@
 # Change requests
 
-Copy a block per request, or paste the same shape into chat. One batch per message works best.
+Write requests under **Requests** in `docs/CHANGES.md` (or paste the same shape into chat). One batch per message works best.
 
 ```
 ## <short name>

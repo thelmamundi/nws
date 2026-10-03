@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
    ART: ordered dithering, driven by the active theme's colours.
-   DOS blue + LITERAL LEGEND: soft 4-tone dither between --art-bg and --art-ink (optional --art-mid). Other schemes: 1-bit bitmap. Cell size: --art-cell (px).
+   DOS blue, BIOS + LITERAL LEGEND: soft 4-tone dither between --art-bg and --art-ink (optional --art-mid). Other schemes: 1-bit bitmap. Cell size: --art-cell (px).
 
    <div data-art="orb|moon" data-size="200">    procedural shaded sphere, drawn as a 1-bit Bayer-dithered bitmap
                                                 or as ASCII (the BITMAP/ASCII switch in the dock decides)
@@ -23,8 +23,8 @@
     return m;
   })(8);
 
-  /* DOS blue and LITERAL LEGEND use the soft 4-tone ordered dither; every other scheme uses the 1-bit bitmap */
-  function mode() { var t = root.getAttribute('data-theme') || 'dos'; return (t === 'dos' || t === 'legend') ? 'dither' : 'bitmap'; }
+  /* DOS blue, BIOS and LITERAL LEGEND use the soft 4-tone ordered dither; green, amber and paper use the 1-bit bitmap */
+  function mode() { var t = root.getAttribute('data-theme') || 'dos'; return (t === 'dos' || t === 'bios' || t === 'legend') ? 'dither' : 'bitmap'; }
   function cellPx() { var v = parseInt(cssv('--art-cell'), 10); return v > 0 ? v : 2; }
   var LEVELS = 4;
   function mix(a, b, k) { return [Math.round(a[0] + (b[0] - a[0]) * k), Math.round(a[1] + (b[1] - a[1]) * k), Math.round(a[2] + (b[2] - a[2]) * k)]; }
