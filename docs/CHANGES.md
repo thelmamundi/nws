@@ -3,7 +3,24 @@
 One entry per round. Each lists **Comes with** (what the site has after the round), **Added**, **Changed**, **Removed**.
 To ask for changes, use `docs/REQUESTS.md`. What's still only in the old `ws` site: `docs/FROM-WS.md`.
 
-## Round 8 (current)
+## Round 9 (current)
+**Comes with:** 6 schemes (DOS blue, BIOS, void green, void amber, paper, LITERAL LEGEND); pages home, weather, sky, post, about; full instrument set; Sky Link; console; Start menu > Colors.
+**Added**
+- LITERAL LEGEND uses your files: the nebula GIF **tiled** (2x, crisp), **PixelOperator** (text), **Silkscreen** (window titles, nav, buttons, labels), **GothicPixels** (headings and the rainbow title), **dogica** (clocks). LED screens keep VT323. Your logo GIF is the masthead, `purplebar.gif` is the divider line, `purpleroselg.gif` tops the footer.
+- Pinks now come from the nebula: #e83058 / #b00030 / #780058 / #580030 on a rose-white window body (replaces the off-pink). Artwork is cyan (the rose's complement) instead of white.
+- Drop shadows in LITERAL LEGEND are a dithered gradient, dark at the window edge to light away from it.
+- Home: the intro moved into the black header next to the spinning planet; **Celestial System Status** took the old "Logging on" box's place; the middle bar is an **88x31 button bar** with two live clock buttons (your Clock GIFs).
+- Taskbar tray: time to the **second**, and the icon is the **planetary hour's ruler** (changes each hour; hover for the name).
+- Planets in the header are more realistic (per-planet textures: Sun granulation and spots, cratered Mercury and Moon with maria, banded Venus, Mars with caps and dark regions, Jupiter with the Great Red Spot, Saturn rings, Neptune dark spot, Pluto's heart) and still change with the planetary day.
+- Posts: the header glyph is set per post (`art="glyph:mercury"`, a sign works too).
+**Changed**
+- Artwork dither: DOS blue and LITERAL LEGEND use the soft 4-tone dither; every other scheme uses the 1-bit bitmap. Pixel cells are 2 px (were 3).
+- LITERAL LEGEND dither is 1.5x (`--dz`), softer: more shade steps between pinks.
+**Fixed:** hovering a tile or archive row no longer turns it solid pink (the invisible full-card link was picking up the link hover colour in every scheme).
+**Removed:** the "Logging on to the Network" box; the ASCII NWS banner in the intro.
+**Notes:** 88x31 is the standard button size; slots are 88x31 inside a bar tall enough for 36 (`--b88-h` in the CSS if you want 36 exactly). The teletext colours for the LED screens stay (yellow "will do for now").
+
+## Round 8
 **Comes with:** 6 schemes (DOS blue, BIOS, void green, void amber, paper, LITERAL LEGEND); pages home, weather, sky, post, about; full instrument set; Sky Link; console; Start menu > Colors.
 **Added**
 - **LITERAL LEGEND** (replaces "pink pop"): black void with the animated pixel nebula as the page background (`assets/img/ll-space.gif`), pink DOS windows on top, rainbow dithered title text in the teletext colours.

@@ -1174,7 +1174,6 @@
       '<div class="sm">' + esc(ph.name.toUpperCase()) + ' ' + Math.round(ph.illum * 100) + '%</div>' +
       '<div>DAY ' + g(S.BY_ID[ck.dayRuler].glyph) + ' HOUR ' + g(S.BY_ID[ck.current.ruler].glyph) + '</div>' +
       '<div class="' + (rx ? 'red' : 'dm') + '">' + (rx ? '℞ <span class="g">' + rx + '</span>' : 'NO RETROGRADES') + '</div></div>';
-    var tm = doc.getElementById('tray-moon'); if (tm) tm.textContent = S.BY_ID.moon.glyph;
   } };
 
   /* ───────────────────────── RADAR ───────────────────────── */
@@ -1505,8 +1504,14 @@
       var now = Date.now();
       qsa('span.cd').forEach(function (n) { n.textContent = S.countdown(+n.getAttribute('data-t') - now); });
     }
-    var tc = doc.getElementById('tray-clock'); if (tc) tc.textContent = hm(Date.now());
+    var tc = doc.getElementById('tray-clock'), nowD = new Date(); if (tc) tc.textContent = pad(nowD.getHours()) + ':' + pad(nowD.getMinutes()) + ':' + pad(nowD.getSeconds());
+    var tm = doc.getElementById('tray-moon');                                   /* the icon is the planetary hour's ruler; refreshed each minute */
+    if (tm) {
+      var mk = Math.floor(nowD.getTime() / 60000);
+      if (trayMin !== mk) { trayMin = mk; try { var hr = clockFor(nowD.getTime()).current.ruler; if (hr && hr !== trayRuler) { trayRuler = hr; tm.innerHTML = g(S.BY_ID[hr].glyph); var tr = tm.parentNode; if (tr) tr.setAttribute('title', 'Planetary hour of ' + S.BY_ID[hr].name + ' (' + loc.name + ')'); } } catch (e) { /* keep the last icon */ } }
+    }
   }
+  var trayMin = -1, trayRuler = '';
 
 
   /* ───────────────────────── MAST CHIPS (page header): date, time, cycling next-up ───────────────────────── */

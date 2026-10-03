@@ -15,3 +15,5 @@ Styling: `assets/css/legacy.css` is the old theme's CSS (instrument internals); 
 Layout credit: CC-LINK by CC DebtDeath (linked in the footer). Font: VT323 (OFL).
 
 Docs: `docs/CHANGES.md` (log), `docs/REQUESTS.md` (how to ask), `docs/FROM-WS.md` (old site inventory), `docs/POSTS.md` (evergreen posts).
+
+LITERAL LEGEND assets are from the Literal Legend site: fonts PixelOperator, Silkscreen, GothicPixels, dogica in `assets/fonts/`; GIFs in `assets/img/ll/`.

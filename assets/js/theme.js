@@ -37,7 +37,10 @@
   function ready() { bg(); badgeLabel(); }
   /* Dogica (the Literal Legend page's pixel font): switches on only if the font is installed or assets/fonts/dogica.ttf exists */
   try { if (document.fonts && document.fonts.load) document.fonts.load('16px dogica').then(function () { if (document.fonts.check('16px dogica')) root.classList.add('dogica'); }); } catch (e) { /* ignore */ }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function clocks() { var d = new Date(), t = pad(d.getHours()) + ':' + pad(d.getMinutes()); [].forEach.call(document.querySelectorAll('[data-clock]'), function (n) { n.textContent = t; }); }
+  setInterval(clocks, 1000);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { ready(); clocks(); }); else ready();
   window.addEventListener('load', bg);
   window.Nws = { setTheme: setTheme, setFx: setFx, themes: NAMES };
 })();

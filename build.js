@@ -30,6 +30,7 @@ function hero(a) {
     <span class="chip mast-chip mast-chip-dim" id="mast-label">Next up</span>
     <span class="chip mast-chip mast-chip-value" id="mast-value">&hellip;</span>
   </div>` : ''}
+  ${a.intro ? R('src/partials', 'intro-' + a.intro + '.html') : ''}
   </div>
   <pre class="hero-art" data-ascii-art ${a.post ? `data-title="${a.title}" data-tags="${a.tags || ''}" data-excerpt="${a.lead || ''}"` : `data-art="${a.art || 'day'}"`} aria-hidden="true"></pre>
 </header>`;
@@ -65,9 +66,11 @@ if (process.argv.includes('--single')) {
   const post = first.slice(first.indexOf('</main>'), first.indexOf('<script src='));
   let body = (pre + onair + secs + post).replace(/<body[^>]*>/, '');
   body = body.replace(/\{\{[^}]*\}\}/g, '').replace(/href="(index|weather|sky|post|about)\.html(#\w+)?"/g, (m, p, h) => `href="#${p === 'index' ? 'home' : p}"`);
-  const font = fs.readFileSync(path.join(__dirname, 'assets/fonts/vt323.woff2')).toString('base64');
-  const gif = fs.readFileSync(path.join(__dirname, 'assets/img/ll-space.gif')).toString('base64');
-  const css = ['legacy', 'dos-skin'].map(n => R('assets/css', n + '.css')).join('\n').replace(/url\("\.\.\/fonts\/vt323\.woff2"\)/g, `url(data:font/woff2;base64,${font})`).replace(/url\("\.\.\/img\/ll-space\.gif"\)/g, `url(data:image/gif;base64,${gif})`).replace(/, url\("\.\.\/fonts\/dogica\.ttf"\) format\("truetype"\)/g, '');
+  const MIME = { gif: 'image/gif', png: 'image/png', ttf: 'font/ttf', woff2: 'font/woff2', otf: 'font/otf' };
+  const inline = (txt) => txt.replace(/url\((["']?)(?:\.\.\/|assets\/)((?:img\/ll|fonts)\/[\w.-]+\.(?:gif|png|ttf|woff2|otf))\1\)/g, (m, q, f) =>
+    `url(data:${MIME[f.split('.').pop()]};base64,${fs.readFileSync(path.join(__dirname, 'assets', f)).toString('base64')})`);
+  const css = inline(['legacy', 'dos-skin'].map(n => R('assets/css', n + '.css')).join('\n'));
+  body = inline(body);
   const js = ['pixel-glyphs', 'starfield', 'astro-engine', 'ascii-art', 'art', 'widgets', 'site', 'sky-topic', 'hero-art', 'theme', 'console'].map(n => `<script>\n${R('assets/js', n + '.js')}\n</script>`).join('\n');
   const nav = `<script>try{var t=localStorage.getItem('nws-theme');if(t)document.documentElement.setAttribute('data-theme',t);if(localStorage.getItem('nws-crt')==='1')document.documentElement.className+=' crt';if(localStorage.getItem('nws-glow')==='1')document.documentElement.className+=' glow'}catch(e){}</script><script>(function(){function show(){var h=(location.hash||'#home').slice(1);if(!document.querySelector('[data-pg="'+h+'"]'))h='home';[].forEach.call(document.querySelectorAll(".npage"),function(e){e.hidden=e.getAttribute('data-pg')!==h});window.scrollTo(0,0);setTimeout(function(){window.dispatchEvent(new Event('resize'))},50)}window.addEventListener('hashchange',show);show();})();</script>`;
   fs.writeFileSync(out, `<title>NWS</title>\n<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">\n<style>\n${css}\nhtml{padding:0!important}\n</style>\n<body data-ticker="Normal">${body}\n${js}\n${nav}`.replace('<body data-ticker="Normal"><body', '<body'));

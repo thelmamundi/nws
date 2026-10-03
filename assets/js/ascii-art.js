@@ -17,19 +17,39 @@
   function hash(a, b, s) { var h = (a * 374761393 + b * 668265263 + s * 2147483647) | 0; h = (h ^ (h >>> 13)) * 1274126177 | 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; }
   function vn(x, y, s) { var xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf); function h(i, j) { return hash(((i % 32) + 32) % 32, j, s); } return (h(xi, yi) * (1 - u) + h(xi + 1, yi) * u) * (1 - v) + (h(xi, yi + 1) * (1 - u) + h(xi + 1, yi + 1) * u) * v; }
   var GLOW = { domicile: ['a', 1.0], exaltation: ['h', 1.25], detriment: ['b', 0.8], fall: ['d', 0.55], peregrine: ['k', 0.28] };
-  /* surface at longitude u (radians; this is what turns) and latitude v (-1..1); strong blobs so the spin reads in text */
+  /* ── surfaces: per-planet textures. u = longitude (radians; this is what turns), v = latitude (-1..1). Returns a brightness offset, about -0.5 .. +0.5.
+     Noise is periodic around the planet so there is no seam as it turns. ── */
+  function vp(x, y, s, P) {
+    var xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, uu = xf * xf * (3 - 2 * xf), vv = yf * yf * (3 - 2 * yf);
+    function h(i, j) { return hash(((i % P) + P) % P, j, s); }
+    return (h(xi, yi) * (1 - uu) + h(xi + 1, yi) * uu) * (1 - vv) + (h(xi, yi + 1) * (1 - uu) + h(xi + 1, yi + 1) * uu) * vv;
+  }
+  function fb(x, v, s, P) { var y = (v * 0.5 + 0.5) * P * 0.5; return vp(x * P, y, s, P) * 0.55 + vp(x * P * 2, y * 2, s + 1, P * 2) * 0.3 + vp(x * P * 4, y * 4, s + 2, P * 4) * 0.15; }
+  function craters(x, v, s, n) {                                   /* cellular craters: dark floor, bright rim */
+    var gx = x * n, gy = (v * 0.5 + 0.5) * n * 0.55, xi = Math.floor(gx), yi = Math.floor(gy), out = 0, i, j;
+    for (j = -1; j <= 1; j++) for (i = -1; i <= 1; i++) {
+      var cx = xi + i, cy = yi + j, px = cx + hash(((cx % n) + n) % n, cy, s) * 0.8 + 0.1, py = cy + hash(((cx % n) + n) % n, cy, s + 7) * 0.8 + 0.1, r = 0.14 + 0.26 * hash(((cx % n) + n) % n, cy, s + 3);
+      if (hash(((cx % n) + n) % n, cy, s + 5) < 0.45) continue;
+      var d = Math.hypot(gx - px, (gy - py) * 1.1);
+      if (d < r) out -= 0.32 * (1 - d / r); else out += 0.24 * Math.exp(-Math.pow((d - r) / 0.07, 2));
+    }
+    return out;
+  }
+  function spot(x, v, cx, cy, rx, ry) { var dx = Math.abs(x - cx); if (dx > 0.5) dx = 1 - dx; return Math.max(0, 1 - Math.hypot(dx / rx, (v - cy) / ry)); }
   function feature(id, u, v) {
-    var x = (u / 6.2832 + 0.5) * 32, blob = (vn(x * 0.55, v * 3.2, 4) - 0.5);
+    var x = ((u / 6.2832) % 1 + 1) % 1, f, t;
     switch (id) {
-      case 'jupiter': return Math.sin(v * 11 + 1.4 * vn(x * 0.4, v * 4, 1)) * 0.2 + blob * 0.5 + (Math.pow((u - 0.6) / 0.3, 2) + Math.pow((v + 0.3) / 0.1, 2) < 1 ? -0.5 : 0);
-      case 'saturn': return Math.sin(v * 8 + vn(x * 0.3, v * 3, 2)) * 0.12 + blob * 0.3;
-      case 'mars': return (Math.abs(v) > 0.82 ? 0.5 : 0) + blob * 0.9;
-      case 'moon': case 'mercury': return blob * 0.7 - (vn(x * 1.3, v * 9, 5) > 0.72 ? 0.3 : 0);
-      case 'venus': return (vn(x * 0.3 + v * 2, v * 4, 6) - 0.5) * 0.5;
-      case 'uranus': case 'neptune': return Math.sin(v * 7 + vn(x * 0.3, v * 3, 7)) * 0.12 + blob * 0.4;
-      case 'pluto': return blob * 0.8;
-      case 'sun': return (vn(x * 1.6, v * 12, 9) - 0.5) * 0.5;
-      default: return 0;
+      case 'sun': return (fb(x, v, 9, 8) - 0.5) * 0.45 - spot(x, v, 0.3, 0.25, 0.05, 0.1) * 0.55 - spot(x, v, 0.72, -0.2, 0.04, 0.08) * 0.5;
+      case 'mercury': return (fb(x, v, 5, 6) - 0.5) * 0.5 + craters(x, v, 5, 12);
+      case 'moon': return (fb(x, v, 3, 3) > 0.52 ? -0.26 : 0) + (fb(x, v, 4, 8) - 0.5) * 0.25 + craters(x, v, 6, 14) * 0.8;
+      case 'venus': t = fb(x + v * 0.35, v, 6, 5); return Math.sin(v * 7 + t * 5) * 0.1 + (t - 0.5) * 0.35;
+      case 'mars': f = (fb(x, v, 8, 4) - 0.5) * 0.55 - (fb(x, v, 2, 3) > 0.55 ? 0.3 : 0) + craters(x, v, 8, 10) * 0.45; return f + Math.max(0, (Math.abs(v) - 0.8) / 0.12) * 0.6;
+      case 'jupiter': t = fb(x * 1.5, v, 1, 6); return Math.sin(v * 13 + 2.4 * t) * 0.2 + (t - 0.5) * 0.35 - spot(x, v, 0.62, -0.32, 0.07, 0.12) * 0.42 + spot(x, v, 0.62, -0.32, 0.12, 0.2) * 0.1;
+      case 'saturn': t = fb(x, v, 2, 5); return Math.sin(v * 9 + t * 2) * 0.09 + (t - 0.5) * 0.14;
+      case 'uranus': return Math.sin(v * 6) * 0.04 + (0.5 - Math.abs(v)) * 0.12 + (fb(x, v, 7, 4) - 0.5) * 0.06;
+      case 'neptune': t = fb(x, v, 11, 5); return Math.sin(v * 8 + t * 3) * 0.1 + (t - 0.5) * 0.2 - spot(x, v, 0.4, -0.3, 0.06, 0.1) * 0.35;
+      case 'pluto': return (fb(x, v, 12, 5) - 0.5) * 0.6 + spot(x, v, 0.45, 0.1, 0.13, 0.22) * 0.4 - (fb(x, v, 13, 3) > 0.6 ? 0.2 : 0);
+      default: return (fb(x, v, 3, 5) - 0.5) * 0.4;
     }
   }
   var BM = {};
@@ -70,7 +90,7 @@
           var inRing = false, behind = false;
           if (ring) { var q2 = Math.hypot(dx * Rc / Rr, dy / 0.3); inRing = q2 > 1.45 && q2 < 2.2 && !(q2 > 1.75 && q2 < 1.85); behind = dy < 0; }
           if (d <= 1 && !(inRing && !behind)) {
-            var nz = Math.sqrt(Math.max(0, 1 - dx * dx - dy * dy)), l = Math.max(0, dx * L[0] + dy * L[1] + nz * L[2]), u2 = Math.atan2(dx, nz) + spin * 2.2, f = feature(name, u2, dy),
+            var nz = Math.sqrt(Math.max(0, 1 - dx * dx - dy * dy)), l = Math.max(0, dx * L[0] + dy * L[1] + nz * L[2]) * (0.6 + 0.4 * Math.pow(nz, 0.55)), u2 = Math.atan2(dx, nz) + spin * 2.2, f = feature(name, u2, dy),
                 v2 = name === 'sun' ? 0.8 + f : Math.max(0, Math.min(1, 0.04 + l * 0.92 + f)), tt = v2 * (RAMP.length - 1), b0 = Math.floor(tt), qn = Math.min(RAMP.length - 1, b0 + ((tt - b0) > bth(xx + bx, y + by) ? 1 : 0));
             ch = RAMP.charAt(qn); cl = v2 > 0.8 ? 'h' : v2 > 0.5 ? 'a' : v2 > 0.22 ? 'b' : 'd';
           } else if (inRing) { ch = behind ? '-' : '='; cl = behind ? 'd' : 'a'; }

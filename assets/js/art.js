@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
-   ART: bitmap dithering + ASCII, both driven by the active theme's colours.
+   ART: ordered dithering, driven by the active theme's colours.
+   DOS blue + LITERAL LEGEND: soft 4-tone dither between --art-bg and --art-ink (optional --art-mid). Other schemes: 1-bit bitmap. Cell size: --art-cell (px).
 
    <div data-art="orb|moon" data-size="200">    procedural shaded sphere, drawn as a 1-bit Bayer-dithered bitmap
                                                 or as ASCII (the BITMAP/ASCII switch in the dock decides)
@@ -22,11 +23,23 @@
     return m;
   })(8);
 
-  function mode() { try { return localStorage.getItem('nws-art') === 'ascii' ? 'ascii' : 'bitmap'; } catch (e) { return 'bitmap'; } }
+  /* DOS blue and LITERAL LEGEND use the soft 4-tone ordered dither; every other scheme uses the 1-bit bitmap */
+  function mode() { var t = root.getAttribute('data-theme') || 'dos'; return (t === 'dos' || t === 'legend') ? 'dither' : 'bitmap'; }
+  function cellPx() { var v = parseInt(cssv('--art-cell'), 10); return v > 0 ? v : 2; }
+  var LEVELS = 4;
+  function mix(a, b, k) { return [Math.round(a[0] + (b[0] - a[0]) * k), Math.round(a[1] + (b[1] - a[1]) * k), Math.round(a[2] + (b[2] - a[2]) * k)]; }
+  /* one pixel: l = brightness 0..1 (or <0 for paper), X/Y = cell position for the Bayer threshold */
+  function pixel(l, X, Y, p, m) {
+    if (l < 0) return p.bg;
+    var th = (BAY[Y & 7][X & 7] + 0.5) / 64, q = p.flip ? 1 - l : l;
+    if (m !== 'dither') return q > th ? p.ink : p.bg;
+    var t = q * (LEVELS - 1), b = Math.floor(t), k = Math.min(1, (b + ((t - b) > th ? 1 : 0)) / (LEVELS - 1));
+    return p.mid ? (k < .5 ? mix(p.bg, p.mid, k * 2) : mix(p.mid, p.ink, (k - .5) * 2)) : mix(p.bg, p.ink, k);
+  }
   function cssv(n) { return getComputedStyle(root).getPropertyValue(n).trim(); }
   function hex(c) { c = c.replace('#', ''); if (c.length === 3) c = c.replace(/./g, '$&$&'); return [parseInt(c.substr(0, 2), 16), parseInt(c.substr(2, 2), 16), parseInt(c.substr(4, 2), 16)]; }
   function lumOf(rgb) { return (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255; }
-  function palette() { var bg = hex(cssv('--art-bg') || '#000000'), ink = hex(cssv('--art-ink') || '#ffb000'); return { bg: bg, ink: ink, flip: lumOf(bg) > lumOf(ink) }; }
+  function palette() { var bg = hex(cssv('--art-bg') || '#000000'), ink = hex(cssv('--art-ink') || '#ffb000'), mid = cssv('--art-mid'); return { bg: bg, ink: ink, mid: mid ? hex(mid) : null, flip: lumOf(bg) > lumOf(ink) }; }
 
   /* ── tiny value noise for planet texture ── */
   function h2(x, y) { var n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return n - Math.floor(n); }
@@ -70,9 +83,7 @@
     var n = Math.round(size / cell); cv.width = n; cv.height = n; cv.style.width = n * cell + 'px'; cv.style.height = n * cell + 'px';
     var x = cv.getContext('2d'), img = x.createImageData(n, n), d = img.data, i = 0, X, Y;
     for (Y = 0; Y < n; Y++) for (X = 0; X < n; X++, i += 4) {
-      var l = fn(X / (n - 1) * 2 - 1, Y / (n - 1) * 2 - 1), on = false;
-      if (l >= 0) { var th = (BAY[Y & 7][X & 7] + 0.5) / 64; on = p.flip ? (1 - l) > th : l > th; }
-      var c = on ? p.ink : p.bg; d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255;
+      var c = pixel(fn(X / (n - 1) * 2 - 1, Y / (n - 1) * 2 - 1), X, Y, p, mode()); d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255;
     }
     x.putImageData(img, 0, 0);
   }
@@ -98,7 +109,7 @@
     var fn = function (u, v) { return SCENES[scene](u, v, t, o); }, p = palette(), m = mode();
     host.removeAttribute('data-mode'); host.setAttribute('data-mode', m);
     if (m === 'ascii') { if (host._cv) { host._cv = null; } ascii(host, fn, Math.round(size / 8), p); }
-    else { if (host._pre) { host._pre = null; } bitmap(host, fn, size, +host.getAttribute('data-cell') || 3, p); }
+    else { if (host._pre) { host._pre = null; } bitmap(host, fn, size, cellPx(), p); }
   }
   var last = 0;
   function loop(ts) {
@@ -112,7 +123,7 @@
 
   /* ── <img class="dither"> ── */
   function dither(img) {
-    var box = img.parentNode, w = Math.round(box.clientWidth || img.clientWidth || 160), cell = +img.getAttribute('data-cell') || 2;
+    var box = img.parentNode, w = Math.round(box.clientWidth || img.clientWidth || 160), cell = cellPx();
     var src = new Image(); src.crossOrigin = 'anonymous';
     src.onload = function () {
       try {
@@ -130,7 +141,7 @@
           var g = cv.getContext('2d'), im = g.createImageData(cw, ch), d = im.data, k = 0;
           for (Y = 0; Y < ch; Y++) for (X = 0; X < cw; X++, k += 4) {
             var l = L[Y * cw + X]; l = Math.min(1, Math.max(0, (l - 0.5) * 1.2 + 0.5));
-            var th = (BAY[Y & 7][X & 7] + 0.5) / 64, on = p.flip ? (1 - l) > th : l > th, c = on ? p.ink : p.bg;
+            var c = pixel(l, X, Y, p, mode());
             d[k] = c[0]; d[k + 1] = c[1]; d[k + 2] = c[2]; d[k + 3] = 255;
           }
           g.putImageData(im, 0, 0);

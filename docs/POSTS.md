@@ -3,7 +3,7 @@
 An evergreen post explains an idea once. The **Sky Link** card on the page finds the nearest real sky event for the topic whenever someone opens it, so the post never needs updating.
 
 1. Copy `src/pages/post.html` to `src/pages/<your-slug>.html`.
-2. Set the title, eyebrow and lead in the `{{hero ...}}` line. The ASCII planet in the header is picked from the words in the title.
+2. Set the title, eyebrow and lead in the `{{hero ...}}` line. `art="glyph:mercury"` sets the spinning glyph in the header: use the planet or sign the post is about (`glyph:venus`, `glyph:scorpio`, `glyph:north_node` ...). Use `art="mercury"` for a spinning planet instead.
 3. Set the topic on the Sky Link line: `{{widget name="skylink" title="Sky Link" ... opts="topic=love"}}`.
 4. Write the article inside `.post-content`.
 5. `node build.js`.
