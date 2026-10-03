@@ -1048,6 +1048,112 @@
     out.innerHTML = html;
   } };
 
+
+  /* ───────────────────────── SKY LINK (evergreen articles) ─────────────────────────
+     An article names its topic (data-opts="topic=communication"). The card finds that topic's ruling planet and
+     points at the CLOSEST real phenomenon to this moment, last or next (station, sign change, lunation, exact aspect),
+     so the article never goes stale. With a chart linked, a second card shows where it lands in the reader's own chart. */
+  var TOPICS = {
+    communication: ['mercury', 'COMMUNICATION & CONTRACTS'], contracts: ['mercury', 'CONTRACTS & PAPERWORK'], technology: ['mercury', 'TECHNOLOGY & TRAVEL'], learning: ['mercury', 'LEARNING & WRITING'],
+    love: ['venus', 'LOVE & RELATIONSHIPS'], money: ['venus', 'MONEY & VALUES'], beauty: ['venus', 'BEAUTY & ART'],
+    drive: ['mars', 'DRIVE & CONFLICT'], energy: ['mars', 'ENERGY & ACTION'],
+    luck: ['jupiter', 'LUCK & GROWTH'], travel: ['jupiter', 'BELIEF & EXPANSION'],
+    discipline: ['saturn', 'DISCIPLINE & BOUNDARIES'], career: ['saturn', 'CAREER & STRUCTURE'],
+    change: ['uranus', 'CHANGE & DISRUPTION'], dreams: ['neptune', 'DREAMS & ILLUSION'], power: ['pluto', 'POWER & TRANSFORMATION'],
+    emotions: ['moon', 'EMOTIONS & HOME'], rhythm: ['moon', 'RHYTHM & CYCLES'], identity: ['sun', 'IDENTITY & VITALITY'], purpose: ['node', 'DIRECTION & PURPOSE']
+  };
+  var slCache = {};
+  function bis(id, a, b, target) {                                       /* time when the planet crosses a longitude boundary or station, refined to ~1 minute */
+    for (var i = 0; i < 18; i++) { var m = (a + b) / 2; if (target(m)) b = m; else a = m; }
+    return (a + b) / 2;
+  }
+  function prevIngress(id, t, maxDays) {
+    var step = 6 * H, cur = t, sg = Math.floor(S.lon(id, cur) / 30);
+    for (var i = 0; i < maxDays * 4; i++) {
+      var back = cur - step, sb = Math.floor(S.lon(id, back) / 30);
+      if (sb !== sg) { var te = bis(id, back, cur, function (m) { return Math.floor(S.lon(id, m) / 30) === sg; }); return { type: 'ingress', t: te, a: id, sign: sg, dir: S.wrap180(S.lon(id, cur) - S.lon(id, back)) >= 0 ? 1 : -1 }; }
+      cur = back;
+    }
+    return null;
+  }
+  function prevStation(id, t) {
+    var from = t - 1100 * DAY, last = null, guard = 0, st = S.nextStation(id, from, 1100);
+    while (st && st.t < t && guard++ < 14) { last = st; st = S.nextStation(id, st.t + DAY, 1100); }
+    return last;
+  }
+  function prevLunation(t) { var from = t - 36 * DAY, last = null, guard = 0, l = S.nextLunation(from, [0, 2], 40); while (l && l.t < t && guard++ < 4) { last = l; l = S.nextLunation(l.t + DAY, [0, 2], 40); } return last; }
+  function slEvents(id, t) {
+    var key = id + Math.floor(t / (6 * H)); if (slCache[key]) return slCache[key];
+    var out = [];
+    function add(kind, e) { if (e) out.push(e); }
+    if (id === 'moon') { add(0, S.nextLunation(t, [0, 2], 40)); add(0, prevLunation(t)); }
+    else {
+      if (id !== 'node' && id !== 'sun') { add(0, S.nextStation(id, t, 1100)); add(0, prevStation(id, t)); }
+      add(0, S.nextIngress(id, t, id === 'pluto' ? 3000 : 1200)); add(0, prevIngress(id, t, id === 'pluto' ? 700 : 1000));
+    }
+    slCache = {}; slCache[key] = out; return out;
+  }
+  function slLabel(e) {
+    var A = S.BY_ID[e.a || 'moon'];
+    if (e.type === 'station') return gl(e.a) + ' STATIONS ' + (e.dir > 0 ? 'DIRECT' : 'RETROGRADE');
+    if (e.type === 'ingress') return gl(e.a) + ' ' + (e.dir > 0 ? 'ENTERS' : 'RE-ENTERS') + ' ' + signG(e.sign) + ' ' + S.SIGNS[e.sign].name.toUpperCase();
+    if (e.type === 'lunation') return g('☽︎') + ' ' + e.name.toUpperCase() + ' ' + signG(e.sign);
+    return esc(S.eventPlain(e));
+  }
+  function slSign(e) { return e.type === 'station' ? Math.floor(S.lon(e.a, e.t) / 30) : e.sign; }
+  function ordinal(n) { return n + (['TH', 'ST', 'ND', 'RD'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)]); }
+  function whenAgo(e, t) { return e.t > t ? 'IN <span class="cd" data-t="' + Math.round(e.t) + '">' + S.countdown(e.t - t) + '</span>' : short(t - e.t) + ' AGO'; }
+  var slN = 0;
+  W.skylink = { render: function (el, c, o) {
+    var topic = TOPICS[o.topic] || null, id = topic ? topic[0] : (o.planet && S.BY_ID[o.planet] ? o.planet : null);
+    if (!id) { var tp = window.SkyTopic && window.SkyTopic.detect({ title: (doc.querySelector('.doc-title') || {}).textContent || doc.title, tags: [], excerpt: '' }); id = tp && tp.planet ? tp.planet : 'sun'; }
+    var label = topic ? topic[1] : id.toUpperCase(), body = S.BY_ID[id], p = c.pos[body.i], t = c.t;
+    if (acct.state === 'init') loadAccount();
+    if (!el._init) { el._init = true; el._uid = ++slN; el.innerHTML = '<div data-sl-a></div><div data-sl-b></div>'; }
+    var dg = id === 'node' ? null : S.dignity(id, p.sign), list = slEvents(id, t).slice().sort(function (a, b) { return Math.abs(a.t - t) - Math.abs(b.t - t); });
+    var nextE = list.filter(function (e) { return e.t > t; }).sort(function (a, b) { return a.t - b.t; })[0], lastE = list.filter(function (e) { return e.t <= t; }).sort(function (a, b) { return b.t - a.t; })[0];
+    var near = list[0], extra = c.events.filter(function (e) { return e.type === 'aspect' && e.t > t && (e.a === id || e.b === id) && id !== 'moon'; })[0];
+    function row(tag, e) { return e ? '<span class="k">' + tag + (near === e ? ' <span class="am">► CLOSEST</span>' : '') + '</span><span class="v">' + slLabel(e) + ' <span class="dm">' + stampLong(e.t).slice(0, 11) + ' · ' + whenAgo(e, t) + '</span></span>' : ''; }
+    var a = '<div class="sunken scr"><span class="hd">SKY LINK · ' + label + ' → ' + gl(id) + ' ' + body.name.toUpperCase() + '</span>' +
+      '<div class="kv"><span class="k">NOW</span><span class="v">' + gl(id) + ' ' + posHTML(p) + ' ' + (p.retro ? '<span class="red">RETROGRADE</span>' : '<span class="gr">DIRECT</span>') + '</span>' +
+      '<span class="k">SPEED</span><span class="v">' + (p.speed >= 0 ? '+' : '−') + Math.abs(p.speed).toFixed(id === 'moon' ? 1 : 3) + '°/day <span class="dm">' + Math.round(Math.abs(p.speed) / body.typical * 100) + '% of typical</span></span>' +
+      (dg ? '<span class="k">DIGNITY</span><span class="v">' + dg.toUpperCase() + '</span>' : '') + row('LAST', lastE) + row('NEXT', nextE) +
+      (extra ? '<span class="k">NEXT ASPECT</span><span class="v">' + evHTML(extra) + ' <span class="dm">' + stamp(extra.t, t) + ' · in ' + short(extra.t - t) + '</span></span>' : '') + '</div></div>' +
+      '<p class="note">Written once, true every time you open it: the card finds the nearest real ' + body.name + ' event to <em>today</em>. Times in ' + tzAbbr(t) + '.</p>';
+    el.querySelector('[data-sl-a]').innerHTML = a;
+    var B = el.querySelector('[data-sl-b]');
+    if (birth) {
+      var house = birth.asc !== null ? ((p.sign - birth.ascSign + 12) % 12) + 1 : 0, nat = birth.pos[body.i];
+      var mine = personalRows(c).filter(function (r) { return r.id === id; }).slice(0, 2), lines = [];
+      lines.push('<span class="k">YOUR NATAL</span><span class="v">' + gl(id) + ' ' + posHTML(nat) + '</span>');
+      lines.push('<span class="k">IT IS IN</span><span class="v">' + signG(p.sign) + ' ' + esc(p.signName.toUpperCase()) + (house ? ' <span class="am">your ' + ordinal(house) + ' house</span>' : ' <span class="dm">add a birth time for houses</span>') + '</span>');
+      [lastE, nextE].forEach(function (e, i) { if (!e) return; var sg = slSign(e), h = birth.asc !== null ? ((sg - birth.ascSign + 12) % 12) + 1 : 0; lines.push('<span class="k">' + (i ? 'NEXT LANDS' : 'LAST LANDED') + '</span><span class="v">' + signG(sg) + ' ' + esc(S.SIGNS[sg].name.toUpperCase()) + (h ? ' <span class="am">your ' + ordinal(h) + ' house</span>' : '') + '</span>'); });
+      mine.forEach(function (r) { lines.push('<span class="k">TOUCHING</span><span class="v">' + gl(r.id) + ' ' + g(r.asp.glyph) + ' ' + r.pt.label + ' <span class="dm">' + S.fmtOrb(r.orb) + (r.exact ? ' · exact ' + stamp(r.exact, t) : '') + '</span></span>'); });
+      if (!mine.length && id !== 'moon') lines.push('<span class="k">TOUCHING</span><span class="v dm">none of your planets right now</span>');
+      B.innerHTML = '<div class="sunken scr"><span class="hd">IN YOUR CHART · ' + label + '</span><div class="kv">' + lines.join('') + '</div></div>' +
+        '<p class="note">Houses are whole-sign from your rising sign. Saved in this browser only. <button type="button" class="chip-btn" data-act="skylinkClear">Unlink my chart</button></p>';
+      return;
+    }
+    if (!B._form) {
+      B._form = true; var u = 'sl' + el._uid, cities = CITIES.map(function (x, i) { return '<option value="' + i + '">' + esc(x[0]) + '</option>'; }).join('');
+      B.innerHTML = '<div class="sunken scr"><span class="hd">LINK YOUR OWN CHART</span><span class="dm">Add your birth date, time and place and this card shows where ' + body.name.toUpperCase() + ' lands in <em>your</em> chart: the house, the signs it is moving through, the planets it touches. Nothing leaves your browser.</span></div>' +
+        '<details class="bdetails" data-wrap><summary class="btn btn-primary">Link my chart</summary><form class="bform" data-bform novalidate>' +
+        '<label for="' + u + '-d">Birth date</label><input id="' + u + '-d" type="date" required>' +
+        '<label for="' + u + '-t">Birth time</label><input id="' + u + '-t" type="time"> <label class="inl" for="' + u + '-n"><input id="' + u + '-n" type="checkbox"> I don’t know it</label>' +
+        '<label for="' + u + '-c">Birth place</label><select id="' + u + '-c">' + cities + '</select>' +
+        '<span class="bbtns"><button type="submit" class="btn btn-primary">Link</button></span></form><p class="note" data-bnote>Saved only in this browser.</p></details>';
+      B.querySelector('#' + u + '-n').addEventListener('change', function (e) { B.querySelector('#' + u + '-t').disabled = e.target.checked; });
+      B.querySelector('[data-bform]').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var date = B.querySelector('#' + u + '-d').value, time = B.querySelector('#' + u + '-n').checked ? '' : B.querySelector('#' + u + '-t').value, cc = CITIES[+B.querySelector('#' + u + '-c').value];
+        if (!date) { B.querySelector('[data-bnote]').textContent = 'Enter your birth date.'; return; }
+        var ob = { date: date, time: time || null, tz: cc[1], lat: cc[2], lng: cc[3], city: +B.querySelector('#' + u + '-c').value, src: 'local' };
+        try { applyBirth(makeBirth(ob)); store('aw98_birth', JSON.stringify(ob)); } catch (err) { B.querySelector('[data-bnote]').textContent = 'That date or place did not work.'; return; }
+        B._form = false; schedule(true);
+      });
+    }
+  } };
+
   /* ───────────────────────── PUBLIC SKY STRIP (home) ───────────────────────── */
   W.strip = { render: function (el) {
     var c = ctx(Date.now(), 'live'), ph = S.moonPhase(c.t), act = S.activity(c.t), nx = nextEvent(c, null);
@@ -1430,6 +1536,7 @@
     flightType: function (v) { ui.flightTypes[v] = ui.flightTypes[v] ? 0 : 1; }, logWin: function (v) { ui.logWin = v; },
     speedMode: function (v) { ui.speedMode = v; }, radarWin: function (v) { ui.radarWin = +v; }, actWin: function (v) { ui.actWin = +v; }, seisWin: function (v) { ui.seisWin = +v; },
     live: function () { state.frozen = false; },
+    skylinkClear: function () { birth = null; try { localStorage.removeItem('aw98_birth'); sessionStorage.removeItem('aw98_acct'); } catch (e) { /* ignore */ } },
     step: function (v) { var base = nowMs(); state.frozen = true; state.ms = base + (+v) * 60000; if (Math.abs(state.ms - Date.now()) < 30000) state.frozen = false; },
     diffPreset: function (v) { var n = nowMs(); ui.diffB = n; ui.diffA = v === 'yday' ? n - DAY : v === 'week' ? n - 7 * DAY : n; if (v === 'tmrw') { ui.diffA = n; ui.diffB = n + DAY; } },
     geo: function () {

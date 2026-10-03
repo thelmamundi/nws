@@ -6,7 +6,7 @@
   var PAGES = { home: 'index.html', weather: 'weather.html', sky: 'sky.html', post: 'post.html', about: 'about.html' };
   function print(s, cls) { var d = doc.createElement('div'); if (cls) d.className = cls; d.textContent = s; out.appendChild(d); out.scrollTop = out.scrollHeight; }
   var C = {
-    help: function () { return ['HELP        this list', 'DIR         list pages', 'CD <page>    home | weather | sky | post | about', 'SKY         one-line sky report', 'CRT ON|OFF  scanlines', 'THEME <name> dos | bios | green | amber | paper | pink', 'DATE  VER  CLS']; },
+    help: function () { return ['HELP        this list', 'DIR         list pages', 'CD <page>    home | weather | sky | post | about', 'SKY         one-line sky report', 'CRT ON|OFF  scanlines   GLOW ON|OFF  void glow', 'THEME <name> dos | bios | green | amber | paper | pink', 'DATE  VER  CLS']; },
     dir: function () { return [' Volume in drive C is NWS', ' Directory of C:\\', '', 'INDEX    HTM   home', 'WEATHER  HTM   weather radar', 'SKY      HTM   sky desk', 'POST     HTM   a blog post', 'ABOUT    HTM   about me', '         5 file(s)']; },
     ver: function () { return ['NWS-DOS [Version 2.0]']; },
     date: function () { return [new Date().toString()]; },
@@ -20,7 +20,8 @@
       var n = (a[0] || '').toLowerCase(); if (!n) return ['USE: THEME dos|bios|green|amber|paper|pink'];
       return window.Nws && window.Nws.setTheme(n) ? ['COLOR SCHEME: ' + n.toUpperCase()] : ['BAD SCHEME: ' + a[0]];
     },
-    crt: function (a) { var v = (a[0] || '').toLowerCase(); if (v !== 'on' && v !== 'off') return ['USE: CRT ON|OFF']; window.Nws.setCrt(v === 'on'); return ['CRT ' + v.toUpperCase()]; },
+    crt: function (a) { var v = (a[0] || '').toLowerCase(); if (v !== 'on' && v !== 'off') return ['USE: CRT ON|OFF']; window.Nws.setFx('crt', v === 'on'); return ['CRT ' + v.toUpperCase()]; },
+    glow: function (a) { var v = (a[0] || '').toLowerCase(); if (v !== 'on' && v !== 'off') return ['USE: GLOW ON|OFF']; window.Nws.setFx('glow', v === 'on'); return ['GLOW ' + v.toUpperCase() + ' (void green and void amber)']; },
     cd: function (a) {
       var k = (a[0] || '').toLowerCase().replace(/\.htm.?$/, '').replace(/[\\/]/g, ''); if (!k || k === '..') k = 'home';
       if (!PAGES[k]) return ['PATH NOT FOUND: ' + (a[0] || '')];

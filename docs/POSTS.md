@@ -1,0 +1,18 @@
+# Writing an evergreen post
+
+An evergreen post explains an idea once. The **Sky Link** card on the page finds the nearest real sky event for the topic whenever someone opens it, so the post never needs updating.
+
+1. Copy `src/pages/post.html` to `src/pages/<your-slug>.html`.
+2. Set the title, eyebrow and lead in the `{{hero ...}}` line. The ASCII planet in the header is picked from the words in the title.
+3. Set the topic on the Sky Link line: `{{widget name="skylink" title="Sky Link" ... opts="topic=love"}}`.
+4. Write the article inside `.post-content`.
+5. `node build.js`.
+
+Topics (each maps to a planet): communication, contracts, technology, learning (Mercury) · love, money, beauty (Venus) · drive, energy (Mars) · luck, travel (Jupiter) · discipline, career (Saturn) · change (Uranus) · dreams (Neptune) · power (Pluto) · emotions, rhythm (Moon) · identity (Sun) · purpose (North Node). Or `opts="planet=venus"`.
+
+What the card shows
+- **NOW**: sign, degree, direct or retrograde, speed, dignity.
+- **LAST / NEXT**: the nearest station, sign change, lunation (Moon) or exact aspect, with a countdown. The closest one is marked.
+- **Link your own chart**: birth date, time and place (saved only in the browser) add a second card with the house it is moving through, where the last and next events land in your chart, and which of your planets it touches. Houses need a birth time.
+
+To add a topic, edit `TOPICS` in `assets/js/widgets.js`.

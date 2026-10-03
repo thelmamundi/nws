@@ -14,4 +14,4 @@ Pages: `src/pages/*.html` inside `src/partials/layout.html`. `node build.js` wri
 Styling: `assets/css/legacy.css` is the old theme's CSS (instrument internals); `assets/css/dos-skin.css` re-skins it. Placeholders to replace: intro/about copy, link buttons, post tiles, archive rows.
 Layout credit: CC-LINK by CC DebtDeath (linked in the footer). Font: VT323 (OFL).
 
-Writing up changes: see `docs/CHANGES.md`.
+Docs: `docs/CHANGES.md` (log), `docs/REQUESTS.md` (how to ask), `docs/FROM-WS.md` (old site inventory), `docs/POSTS.md` (evergreen posts).
