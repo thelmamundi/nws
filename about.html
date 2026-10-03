@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/legacy.css">
 <link rel="stylesheet" href="assets/css/dos-skin.css">
+<script>try{var t=localStorage.getItem("nws-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 </head>
 <body data-ticker="Normal">
 <a class="skip" href="#main">Skip to content</a>
@@ -28,6 +29,7 @@
               <li><a class="nav-btn" href="index.html">Home</a></li>
               <li><a class="nav-btn" href="weather.html">Weather</a></li>
               <li><a class="nav-btn" href="sky.html">Sky</a></li>
+              <li><a class="nav-btn" href="post.html">Posts</a></li>
               <li><details open><summary class="nav-btn">About</summary>
                 <div class="tree-view"><ul>
                   <li><a class="nav-btn" href="about.html">about me</a></li>
@@ -137,7 +139,11 @@
     <div class="start-banner" aria-hidden="true"><span>NWS<b>DOS</b></span></div>
     <nav class="start-items" aria-label="Start menu"><ul class="nav-list nav-menu">
       <li><a class="nav-btn" href="index.html">Home</a></li><li><a class="nav-btn" href="weather.html">Weather</a></li>
-      <li><a class="nav-btn" href="sky.html">Sky</a></li><li><a class="nav-btn" href="about.html">About</a></li>
+      <li><a class="nav-btn" href="sky.html">Sky</a></li><li><a class="nav-btn" href="post.html">Posts</a></li><li><a class="nav-btn" href="about.html">About</a></li>
+      <li><details><summary class="nav-btn">Colors</summary><div class="tree-view"><ul>
+        <li><a class="nav-btn" href="#" data-theme-set="dos">DOS blue</a></li><li><a class="nav-btn" href="#" data-theme-set="bios">BIOS grey</a></li>
+        <li><a class="nav-btn" href="#" data-theme-set="phosphor">Green</a></li><li><a class="nav-btn" href="#" data-theme-set="amber">Amber</a></li><li><a class="nav-btn" href="#" data-theme-set="paper">Paper</a></li>
+      </ul></div></details></li>
     </ul></nav>
   </div>
   <div class="tasks" id="tasks" aria-label="Minimized windows"></div>
@@ -152,6 +158,9 @@
 <script src="assets/js/site.js"></script>
 <script src="assets/js/sky-topic.js"></script>
 <script src="assets/js/hero-art.js"></script>
+<script src="assets/js/teletext.js"></script>
+<script src="assets/js/post-screen.js"></script>
+<script src="assets/js/theme.js"></script>
 <script src="assets/js/console.js"></script>
 </body>
 </html>

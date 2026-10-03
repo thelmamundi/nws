@@ -3,11 +3,11 @@
   'use strict';
   var doc = document, box = doc.getElementById('console'); if (!box) return;
   var out = box.querySelector('.out'), form = box.querySelector('form'), input = box.querySelector('input'), hist = [], hi = -1;
-  var PAGES = { home: 'index.html', weather: 'weather.html', sky: 'sky.html', about: 'about.html' };
+  var PAGES = { home: 'index.html', weather: 'weather.html', sky: 'sky.html', post: 'post.html', about: 'about.html' };
   function print(s, cls) { var d = doc.createElement('div'); if (cls) d.className = cls; d.textContent = s; out.appendChild(d); out.scrollTop = out.scrollHeight; }
   var C = {
-    help: function () { return ['HELP        this list', 'DIR         list pages', 'CD <page>    home | weather | sky | about', 'SKY         one-line sky report', 'DATE  VER  CLS']; },
-    dir: function () { return [' Volume in drive C is NWS', ' Directory of C:\\', '', 'INDEX    HTM   home', 'WEATHER  HTM   weather radar', 'SKY      HTM   sky desk', 'ABOUT    HTM   about me', '         4 file(s)']; },
+    help: function () { return ['HELP        this list', 'DIR         list pages', 'CD <page>    home | weather | sky | post | about', 'SKY         one-line sky report', 'THEME <name> dos | bios | green | amber | paper', 'DATE  VER  CLS']; },
+    dir: function () { return [' Volume in drive C is NWS', ' Directory of C:\\', '', 'INDEX    HTM   home', 'WEATHER  HTM   weather radar', 'SKY      HTM   sky desk', 'POST     HTM   a blog post', 'ABOUT    HTM   about me', '         5 file(s)']; },
     ver: function () { return ['NWS-DOS [Version 2.0]']; },
     date: function () { return [new Date().toString()]; },
     cls: function () { out.innerHTML = ''; return []; },
@@ -15,6 +15,10 @@
       var S = window.AstroSky; if (!S) return ['SKY ENGINE NOT LOADED'];
       var t = Date.now(), p = S.positions(t, { dec: false }), m = p[1], ph = S.moonPhase(t), rx = p.filter(function (x) { return x.retro; }).map(function (x) { return x.name.toUpperCase(); });
       return ['MOON ' + m.deg + ' DEG ' + m.signName.toUpperCase() + '  ' + ph.name.toUpperCase() + ' ' + Math.round(ph.illum * 100) + '%', 'RETROGRADE: ' + (rx.join(', ') || 'NONE'), 'IMPACT: ' + S.activity(t).value + '/100'];
+    },
+    theme: function (a) {
+      var n = (a[0] || '').toLowerCase(); if (!n) return ['USE: THEME dos|bios|green|amber|paper'];
+      return window.Nws && window.Nws.setTheme(n) ? ['COLOR SCHEME: ' + n.toUpperCase()] : ['BAD SCHEME: ' + a[0]];
     },
     cd: function (a) {
       var k = (a[0] || '').toLowerCase().replace(/\.htm.?$/, '').replace(/[\\/]/g, ''); if (!k || k === '..') k = 'home';
