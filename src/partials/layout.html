@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NWS About</title>
+<title>{{title}}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="About me">
+<meta name="description" content="{{description}}">
 <meta name="theme-color" content="#0000aa">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230000aa'/%3E%3Cpath d='M3 12V4h2l6 5V4h2v8h-2L5 7v5z' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,10 +25,10 @@
         <div class="win-body">
           <nav aria-label="Main">
             <ul class="nav-list">
-              <li><a class="nav-btn" href="index.html">Home</a></li>
-              <li><a class="nav-btn" href="weather.html">Weather</a></li>
-              <li><a class="nav-btn" href="sky.html">Sky</a></li>
-              <li><details open><summary class="nav-btn">About</summary>
+              <li><a class="nav-btn{{here:home}}" href="index.html">Home</a></li>
+              <li><a class="nav-btn{{here:weather}}" href="weather.html">Weather</a></li>
+              <li><a class="nav-btn{{here:sky}}" href="sky.html">Sky</a></li>
+              <li><details{{open:about}}><summary class="nav-btn">About</summary>
                 <div class="tree-view"><ul>
                   <li><a class="nav-btn" href="about.html">about me</a></li>
                   <li><a class="nav-btn" href="about.html#find">where to find me</a></li>
@@ -75,35 +75,12 @@
     </aside>
 
     <main class="main" id="main">
-      <header class="masthead"><div class="masthead-main"><a href="index.html" class="wordart"><span class="wordart-glyph aw-day-glyph" aria-hidden="true"></span> NWS</a><p class="tagline">The sky, live, in your time zone.</p></div></header>
+      {{masthead}}
       <div class="onair" id="onair" role="region" aria-label="Current transits ticker">
         <a class="onair-sign" href="sky.html"><span class="lamp" aria-hidden="true"></span>ON AIR</a>
         <div class="onair-window"><div class="onair-track" id="onair-track"><span class="dim">CALCULATING THE SKY&hellip;</span></div></div>
       </div>
-<header class="doc-header has-art">
-  <div class="hdr-text">
-  <div class="doc-eyebrow"><span class="aw-day-glyph" aria-hidden="true"></span> <span class="chip" data-host>NWS</span> <span class="doc-eyebrow-tag">About</span></div>
-  <h1 class="doc-title">About Me</h1>
-  <div class="doc-subtitle">Placeholder copy. Swap in the real thing.</div>
-  
-  </div>
-  <pre class="hero-art" data-ascii-art data-art="glyph:pluto" aria-hidden="true"></pre>
-</header>
-<section class="box">
-  <h1>About Me</h1>
-  <div class="flex-columns">
-    <div class="flex-text">
-      <p>Placeholder copy: replace this. The page structure is the old Weathergirl 98 one (hero header, left rail, instruments, link-column footer) joined to the CC-LINK sections, on a DOS blue screen with black LED panels.</p>
-      <p>Try <em>sky</em> or <em>cd weather</em> in the console in the left rail.</p>
-    </div>
-    <div class="flex-image"><div class="art-frame"><div data-art="moon" data-size="168" data-cell="3"></div></div></div>
-  </div>
-</section>
-<section class="box" id="find">
-  <h2>Where To Find Me</h2>
-  <ul class="arrow-list"><li>neocities &mdash; <span class="dm">add link</span></li><li>mail &mdash; <span class="dm">add address</span></li></ul>
-</section>
-
+{{content}}
     </main>
 
   </div>

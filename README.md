@@ -1,15 +1,15 @@
 # nws
 
-The CC-LINK layout (mobile header, sidebar of menu + widgets, content sections, footer) rebuilt as a **DOS** site, with the LED sky instruments from `ws` moved in.
+Weathergirl 98's structure (hero header with ASCII planet, left rail, status strip, instruments, link-column footer) joined to the CC-LINK sections, on a DOS blue screen. Black is kept for the LED panels, ticker and page headers, so it frames the page without filling it. One look, no theme switcher.
 
-- **Themes** (none black): `dos` blue, `bios` grey, `phosphor` green, `amber` umber, `paper`. Dock at bottom right, or console `THEME green`.
-- **ASCII**: banner, tree menu, box-drawn frames, `[bar]` meters, and an ASCII renderer for all art.
-- **Bitmap dithering**: 8x8 Bayer, 1-bit, in the theme's ink/paper colours (`assets/js/art.js`). `data-art="orb|moon"` draws procedural spheres (the Moon is the live phase). Any `<img class="dither" src="...">` is dithered too. The dock's ART switch flips everything between BITMAP and ASCII.
-- **Console**: `HELP DIR CD THEME CRT ART SKY DATE CLS`, up/down for history.
-- **Instruments** (`assets/js/widgets.js`, engine copied from `ws`): ON AIR ticker, Sky Now, Current Conditions, Next Exact Thing, Flight Board, Planet Speedometer. Text mode: 3-letter body codes, no emoji.
+- **Pages:** `index` (home), `weather` (radar, impact, seismograph, traffic, time control), `sky` (conditions, flight board, next exact, changelog, lunar monitor, planetary clock, speedometer, status, compare, personal aspects), `about`.
+- **Instruments:** `assets/js/widgets.js` + `astro-engine.js`, copied from `ws`. Everything is computed in the browser.
+- **ASCII:** spinning planet in each header (`ascii-art.js`), tree menus, box frames, `C:\>` console in the left rail.
+- **Bitmap dithering:** `assets/js/art.js`. `data-art="orb|moon"` draws 1-bit Bayer-dithered spheres (the Moon is the live phase); any `<img class="dither">` is dithered too. Colours come from `--art-bg` / `--art-ink` in `assets/css/dos-skin.css`.
+- **Footer:** the old Jupiter-style link columns; pages that don't exist yet are marked SOON.
 
 ## Edit / run
-Pages are `src/pages/*.html` plus `src/partials/*`. `node build.js` writes the root `*.html` (committed, so any static host works). Preview: `python3 -m http.server`.
+Pages: `src/pages/*.html` inside `src/partials/layout.html`. `node build.js` writes the root `*.html` (committed, so any static host works). Preview with `python3 -m http.server`. `node build.js --single out.html` makes one self-contained file with all pages as tabs.
 
-Placeholders to replace: intro/about copy, link buttons, audio player ("Song of the Now"), your own images (use `class="dither"`).
+Styling: `assets/css/legacy.css` is the old theme's CSS (instrument internals); `assets/css/dos-skin.css` re-skins it. Placeholders to replace: intro/about copy, link buttons, post tiles, archive rows.
 Layout credit: CC-LINK by CC DebtDeath (linked in the footer). Font: VT323 (OFL).

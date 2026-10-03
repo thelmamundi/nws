@@ -1,160 +1,191 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dos">
+<html lang="en">
 <head>
 <meta charset="utf-8">
+<title>NWS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>~/home</title>
-<meta name="description" content="DOS edition">
-<meta name="author" content="name">
+<meta name="description" content="Live sky instruments in a DOS-era terminal">
 <meta name="theme-color" content="#0000aa">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230000aa'/%3E%3Cpath d='M3 12V4h2l6 5V4h2v8h-2L5 7v5z' fill='%23fff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="assets/css/dos.css">
-<script>
-  /* apply the saved look before first paint (no flash) */
-  (function () { try {
-    var t = localStorage.getItem('nws-theme'); if (t) document.documentElement.setAttribute('data-theme', t);
-    if (localStorage.getItem('nws-crt') !== '0') document.documentElement.className += ' crt flicker';
-  } catch (e) { document.documentElement.className += ' crt flicker'; } })();
-</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/legacy.css">
+<link rel="stylesheet" href="assets/css/dos-skin.css">
 </head>
-<body>
+<body data-ticker="Normal">
+<a class="skip" href="#main">Skip to content</a>
 
-  <!-- header that only shows up on mobile -->
-  <header class="mobile-only">
-    <div><p>///</p></div>
-    <div><a href="index.html">home</a></div>
-    <div><a href="#menu">menu</a></div>
-  </header>
+<div class="page">
+  <div class="layout">
 
-  <!-- DOS title strip (desktop) -->
-  <div class="titlebar"><span class="lhs">C:\NWS\INDEX.HTM</span><span class="rhs"><span id="tb-clock">0000-00-00 00:00:00</span> &nbsp; <a href="#console">F1=HELP</a></span></div>
-  <main>
-    <div class="sidebar">
-
-      <!-- sidebar menu. in mobile-view, this moves to the end of the page. -->
-      <nav id="menu">
-        <a href="index.html" class="category">&lt; home &gt;</a>
-
-        <details>
-          <summary class="category">&lt; about &gt;</summary>
-          <div class="tree-view">
-            <ul>
-              <li><a href="about.html">about me</a></li>
-              <li><a href="about.html#find">where to find me</a></li>
+    <aside class="side" aria-label="Site navigation">
+      <section class="win">
+        <div class="win-title"><span class="win-ico" aria-hidden="true">&#9776;</span><span class="win-name">Navigation</span></div>
+        <div class="win-body">
+          <nav aria-label="Main">
+            <ul class="nav-list">
+              <li><a class="nav-btn" href="index.html">Home</a></li>
+              <li><a class="nav-btn" href="weather.html">Weather</a></li>
+              <li><a class="nav-btn" href="sky.html">Sky</a></li>
+              <li><details><summary class="nav-btn">About</summary>
+                <div class="tree-view"><ul>
+                  <li><a class="nav-btn" href="about.html">about me</a></li>
+                  <li><a class="nav-btn" href="about.html#find">where to find me</a></li>
+                </ul></div></details></li>
+              <li><details><summary class="nav-btn">Works</summary>
+                <div class="tree-view"><ul>
+                  <li><span class="nav-btn is-soon">projects <em class="soon">SOON</em></span></li>
+                  <li><span class="nav-btn is-soon">old posts <em class="soon">SOON</em></span></li>
+                  <li><span class="nav-btn is-soon">creations <em class="soon">SOON</em></span></li>
+                </ul></div></details></li>
+              <li><span class="nav-btn is-soon">Blog Site <em class="soon">SOON</em></span></li>
+              <li><span class="nav-btn is-soon">Links <em class="soon">SOON</em></span></li>
+              <li><span class="nav-btn is-soon">Sitemap <em class="soon">SOON</em></span></li>
             </ul>
-          </div>
-        </details>
+          </nav>
+        </div>
+      </section>
 
-        <details>
-          <summary class="category">&lt; works &gt;</summary>
-          <div class="tree-view">
-            <ul>
-              <li><span class="soon">projects</span></li>
-              <li><span class="soon">old posts</span></li>
-              <li><span class="soon">creations</span></li>
-            </ul>
-          </div>
-        </details>
+      <section class="win" data-widget="mini" data-title="Sky Now">
+        <div class="win-title"><span class="win-ico" aria-hidden="true">&#9790;&#65038;</span><span class="win-name">Sky Now</span></div>
+        <div class="win-body led"><div class="mini-body" data-body>&hellip;</div></div>
+      </section>
 
-        <a href="sky.html" class="category">&lt; sky &gt;</a>
-        <span class="category soon">&lt; blog site &gt;</span>
-        <span class="category soon">&lt; links &gt;</span>
-        <span class="category soon">&lt; sitemap &gt;</span>
-      </nav>
+      <section class="win win-counter">
+        <div class="win-title"><span class="win-name">Visit Counter</span></div>
+        <div class="win-body">
+          <div class="odometer" id="odometer" aria-label="Your visits to this site">000001</div>
+          <div class="odo-note">your visits (this browser only)</div>
+        </div>
+      </section>
 
-      <!-- widgets START -->
-      <div class="widget">
-        <h3>Moon</h3>
-        <center><div data-art="moon" data-size="216" data-cell="3"></div></center>
-        <p class="note" style="text-align:center">live phase, drawn in the current art mode</p>
+      <div class="badges" aria-label="Site badges">
+        <span class="badge b-any">BEST VIEWED<br>IN ANY BROWSER</span>
+        <span class="badge b-rss">80 x 25<br>TEXT MODE</span>
+        <span class="badge b-live">SKY: LIVE<br><i class="lamp" aria-hidden="true"></i></span>
+        <span class="badge b-priv">NO<br>TRACKING</span>
       </div>
 
-      <div class="widget">
-        <h3>Sky Now</h3>
-        <div data-widget="mini"></div>
+      <section class="win console" id="console">
+        <div class="win-title"><span class="win-name">C:\&gt; Console</span></div>
+        <div class="win-body"><div class="out" aria-live="polite"></div>
+          <form autocomplete="off"><label for="cmd">C:\&gt;</label><input id="cmd" type="text" spellcheck="false" autocapitalize="off" placeholder="help"></form></div>
+      </section>
+    </aside>
+
+    <main class="main" id="main">
+      
+      <div class="onair" id="onair" role="region" aria-label="Current transits ticker">
+        <a class="onair-sign" href="sky.html"><span class="lamp" aria-hidden="true"></span>ON AIR</a>
+        <div class="onair-window"><div class="onair-track" id="onair-track"><span class="dim">CALCULATING THE SKY&hellip;</span></div></div>
       </div>
+<header class="doc-header home-header has-art">
+  <div class="hdr-text">
+  <div class="doc-eyebrow"><span class="aw-day-glyph" aria-hidden="true"></span> <span class="chip" data-host>NWS</span> <span class="doc-eyebrow-tag">Home</span></div>
+  <h1 class="doc-title">NWS</h1>
+  <div class="doc-subtitle">The sky, live, in your time zone.</div>
+  <div class="mast" id="mast">
+    <span class="chip mast-chip"><span class="aw-day-glyph" id="mast-glyph" aria-hidden="true"></span></span>
+    <span class="chip mast-chip" id="mast-date">&hellip;</span>
+    <span class="chip mast-chip" id="mast-time">&hellip;</span>
+    <span class="chip mast-chip mast-chip-dim" id="mast-label">Next up</span>
+    <span class="chip mast-chip mast-chip-value" id="mast-value">&hellip;</span>
+  </div>
+  </div>
+  <pre class="hero-art" data-ascii-art data-art="day" aria-hidden="true"></pre>
+</header>
 
-      <div class="widget">
-        <h3>Song of the Now</h3>
-        <pre class="ascii" style="font-size:16px;line-height:1">   ┌──────────────────┐
-   │ ▐▌ ▌▐ ▐▌ ▌▐ ▐▌ ▌▐│
-   │ ▐▌ ▌▐ ▐▌ ▌▐ ▐▌ ▌▐│
-   └──────────────────┘</pre>
-        <p>Walking Into Sunshine<br><span class="dm">Central Line</span></p>
-        <p class="note">Drop an &lt;audio&gt; tag here to bring the player back.</p>
-      </div>
+<div class="status-strip sunken scr" data-widget="strip" role="status"><div data-body>Reading the sky&hellip;</div></div>
 
-      <div class="widget console" id="console">
-        <h3>Console</h3>
-        <div class="out" aria-live="polite"></div>
-        <form autocomplete="off"><label for="cmd">C:\&gt;</label><input id="cmd" type="text" spellcheck="false" autocapitalize="off" placeholder="help"></form>
-      </div>
-    </div>
-    <!-- widgets END -->
-
-    <div class="content">
-
-      <div class="onair"><span class="tag">ON AIR</span><div class="onair-track" data-widget="ticker"></div></div>
-
-      <section>
-        <h1>Logging on to the Network...</h1>
-        <div class="flex-columns">
-          <div class="flex-text">
-<pre aria-label="nws" style="font-size:30px;line-height:.9">█   █  █   █   ████
+<section class="box">
+  <h1>Logging on to the Network...</h1>
+  <div class="flex-columns">
+    <div class="flex-text">
+<pre class="ascii-banner" aria-label="nws">█   █  █   █   ████
 ██  █  █   █  █    
 █ █ █  █ █ █   ███ 
 █  ██  ██ ██      █
 █   █  █   █  ████ </pre>
-            <p></p>
-            <p>My name is me, <strong>meby if you're nasty</strong>; and I am a sexy, thought-provoking internet feline looking to make the world a better place with every breath I take in it. <a href="about.html">You can learn more about me here.</a> Please stop by, take a look around, and interact. I have worked to make this a tremendous space for everyone, but more specifically ... me!</p>
-          </div>
-          <div class="flex-image">
-            <div class="art-frame"><div data-art="orb" data-spin data-size="216" data-cell="3"></div></div>
-            <p class="note">orb.exe &mdash; dithered or ASCII, your call (dock, bottom right)</p>
-          </div>
-        </div>
-      </section>
+      <p>My name is me, <strong>meby if you're nasty</strong>; and I am a sexy, thought-provoking internet feline looking to make the world a better place with every breath I take in it. <a href="about.html">You can learn more about me here.</a> Please stop by, take a look around, and interact. I have worked to make this a tremendous space for everyone, but more specifically ... me!</p>
+    </div>
+    <div class="flex-image">
+      <div class="art-frame"><div data-art="orb" data-spin data-size="216" data-cell="3"></div></div>
+    </div>
+  </div>
+</section>
 
-      <section2>
-        <div class="onair" style="box-shadow:none;border-style:solid;border-width:2px">
-          <div class="onair-track"><span class="inner" style="animation-duration:40s">
-            <a href="#">[ neocities ]</a> <a href="#">[ firefox now ]</a> <a href="#">[ girls4notepad ]</a> <a href="#">[ discord now ]</a> <a href="#">[ apple fatal error ]</a> <a href="#">[ explicit content ]</a> <a href="#">[ best viewed 800x600 ]</a> <a href="#">[ no ai ]</a>
-          </span></div>
-        </div>
-      </section2>
+<div class="marquee"><span>
+  <a href="#">[ neocities ]</a> <a href="#">[ firefox now ]</a> <a href="#">[ girls4notepad ]</a> <a href="#">[ discord now ]</a> <a href="#">[ apple fatal error ]</a> <a href="#">[ explicit content ]</a> <a href="#">[ best viewed 800x600 ]</a> <a href="#">[ no ai ]</a>
+</span></div>
 
-      <section>
-        <h1>Sky Now</h1>
-        <div data-widget="conditions" data-compact></div>
-      </section>
+<section class="section">
+  <h2 class="section-label">Latest</h2>
+  <div class="tri">
+    <article class="tile"><div class="tile-thumb tile-art"><div data-art="moon" data-size="132" data-cell="3"></div></div><div class="tile-body"><div class="tile-eyebrow">Moon</div><div class="tile-title">Placeholder post one</div><div class="tile-meta">2026-10-03</div><div class="tile-excerpt">Replace these tiles with real posts. Thumbnails can be dithered automatically.</div></div></article>
+    <article class="tile tile-big"><div class="tile-thumb tile-art"><div data-art="orb" data-spin data-size="168" data-cell="3"></div></div><div class="tile-body"><div class="tile-eyebrow">Featured</div><div class="tile-title">Placeholder featured post</div><div class="tile-meta">2026-10-03</div><div class="tile-excerpt">The middle tile is the featured one, same as the old layout.</div></div></article>
+    <article class="tile"><div class="tile-thumb tile-art"><div data-art="orb" data-size="132" data-cell="3"></div></div><div class="tile-body"><div class="tile-eyebrow">Sky</div><div class="tile-title">Placeholder post two</div><div class="tile-meta">2026-10-03</div><div class="tile-excerpt">Short excerpt goes here.</div></div></article>
+  </div>
+</section>
 
-      <section>
-        <h2>Celestial Flight Board</h2>
-        <div data-widget="flight" data-compact></div>
-      </section>
+<section class="section">
+  <h2 class="section-label">The sky now</h2>
+  <div class="grid-2">
+    <section class="win win-widget" data-widget="conditions" data-opts="compact">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9737;&#65038;</span><span class="win-name">Current Conditions</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Current Conditions">_</button></span></div>
+  <div class="win-body">
+    <p class="win-q">What is happening right now?</p>
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+    <section class="win win-widget" data-widget="flight" data-opts="compact">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9992;&#65038;</span><span class="win-name">Celestial Flight Board</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Celestial Flight Board">_</button></span></div>
+  <div class="win-body">
+    <p class="win-q">What happens next?</p>
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+  </div>
+  <section class="win win-widget" data-widget="since" data-opts="home">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#8635;</span><span class="win-name">Since Your Last Visit</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Since Your Last Visit">_</button></span></div>
+  <div class="win-body">
+    <p class="win-q">What moved while you were away?</p>
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+</section>
 
-      <section2>
-        <section>
-          <h1>Updates</h1>
-          <ul class="arrow-list">
-            <li><i>2026-10-03</i> &harr; DOS edition: blue-screen themes, ASCII, bitmap dither, a console. The LED instruments moved in.</li>
-            <li><i>2024-06-24</i> &harr; Added Linkback Buttons</li>
-            <li><i>2024-06-21</i> &harr; Redebuting website. Happy summer! Summer Song is Walking into Sunshine by London's Central Line!</li>
-          </ul>
-        </section>
-      </section2>
+<section class="section">
+  <h2 class="section-label">My weather</h2>
+  <section class="win win-widget" data-widget="share" data-opts="general,compact">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9732;&#65038;</span><span class="win-name">3-Day Forecast Card</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize 3-Day Forecast Card">_</button></span></div>
+  <div class="win-body">
+    <p class="win-q">What does my next three days look like, in a post I can share?</p>
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+</section>
 
-      <div class="half-width">
-        <section>
-          <h2>Link Back To Me</h2>
-          <p><b>Copy the markup, put it on your site.</b></p>
+<section class="box">
+  <h1>Updates</h1>
+  <ul class="arrow-list">
+    <li><i>2026-10-03</i> &harr; DOS edition. Blue screen, black LED panels, ASCII and bitmap dither.</li>
+    <li><i>2024-06-24</i> &harr; Added Linkback Buttons</li>
+    <li><i>2024-06-21</i> &harr; Redebuting website. Happy summer! Summer Song is Walking into Sunshine by London's Central Line!</li>
+  </ul>
+</section>
+
+<div class="half-width">
+  <section class="box">
+    <h2>Link Back To Me</h2>
+    <p>Copy a button, put it on your site.</p>
 <pre>+------------+ +------------+
 | ### N W S  | | C:\&gt; _     |
 +------------+ +------------+</pre>
-          <p>Let me know if you link back to me &mdash; and if I like your site, I might link back to you!</p>
-        </section>
-        <section>
-          <h2>How Do Into Cube?</h2>
+    <p>Let me know if you link back to me &mdash; and if I like your site, I might link back to you!</p>
+  </section>
+  <section class="box">
+    <h2>How Do Into Cube?</h2>
 <pre aria-label="cube">     +--------+
     /        /|
    /        / |
@@ -163,27 +194,68 @@
   |        | /
   |        |/
   +--------+</pre>
-        </section>
-      </div>
+  </section>
+</div>
 
-      <section>
-        <h2>Title</h2>
-        <p>Lorem ipsum dolor sit amet, adipiscing elit. Nullam dignissim convallis est. Quisque aliquam. Donec faucibus. Nunc iaculis suscipit dui. Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl.</p>
-        <hr>
-        <p class="note">Any &lt;img class="dither" src="..."&gt; placed here is redrawn as a 1-bit ordered-dither bitmap (or ASCII) in the active theme's colours.</p>
-      </section>
+<section class="section">
+  <h2 class="section-label">Archive</h2>
+  <div class="win">
+    <div class="win-title"><span class="win-ico" aria-hidden="true">&#128193;</span><span class="win-name">C:&#92;NEWS&#92;ARCHIVE</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize">_</button></span></div>
+    <div class="win-body"><div class="rows">
+      <div class="row"><div class="row-ico">&#9632;</div><div><div class="row-title">Placeholder post one</div><div class="row-meta">2026-10-03</div><div class="row-excerpt">Archive rows list older posts.</div></div></div>
+      <div class="row"><div class="row-ico">&#9632;</div><div><div class="row-title">Placeholder post two</div><div class="row-meta">2026-09-28</div><div class="row-excerpt">Another one.</div></div></div>
+    </div></div>
+  </div>
+</section>
+
+    </main>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>NWS</h4><ul>
+        <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li>
+        <li><span class="f-soon">Contact <em class="soon">SOON</em></span></li><li><span class="f-soon">RSS feed <em class="soon">SOON</em></span></li></ul></div>
+      <div class="footer-col"><h4>Sky desk</h4><ul>
+        <li><a href="weather.html">Weather</a></li><li><a href="sky.html">Sky</a></li>
+        <li><span class="f-soon">My Weather <em class="soon">SOON</em></span></li><li><span class="f-soon">Resources <em class="soon">SOON</em></span></li>
+        <li><span class="f-soon">Archive <em class="soon">SOON</em></span></li><li><span class="f-soon">Lab <em class="soon">SOON</em></span></li></ul></div>
+      <div class="footer-col"><h4>Readings &amp; Shop</h4><ul>
+        <li><span class="f-soon">Readings <em class="soon">SOON</em></span></li><li><span class="f-soon">Shop <em class="soon">SOON</em></span></li></ul></div>
+      <div class="footer-col"><h4>Broadcast &amp; Members</h4><ul>
+        <li><span class="f-soon">Watch <em class="soon">SOON</em></span></li><li><span class="f-soon">Field Reports <em class="soon">SOON</em></span></li><li><span class="f-soon">Membership <em class="soon">SOON</em></span></li></ul></div>
+      <div class="footer-col"><h4>Policies</h4><ul>
+        <li><span class="f-soon">Privacy <em class="soon">SOON</em></span></li><li><span class="f-soon">Terms <em class="soon">SOON</em></span></li></ul></div>
     </div>
-  </main>
-
-  <footer>
-    <p>me (c) 2024-2026</p>
-    <p class="footer-tray">THEME: DOS BIOS GREEN AMBER PAPER &middot; CONSOLE: TYPE HELP</p>
-    <p class="template-credits"><a href="https://debtdeath.neocities.org/">+ cc-link layout by cc debtdeath +</a></p>
+    <div class="footer-bottom">
+      <p>&copy; 2024-2026 NWS &nbsp;|&nbsp; <span class="chip" data-host>NWS</span> &nbsp;|&nbsp; <a href="#top" onclick="window.scrollTo(0,0);return false;">Back to top</a> &nbsp;|&nbsp; <a href="https://debtdeath.neocities.org/">+ cc-link layout by cc debtdeath +</a></p>
+      <p class="fine">Sky positions are computed live in your browser from approximate orbital elements (good to a few arc-minutes for the Moon, about a tenth of a degree for the slow planets). For entertainment and education. Times are shown in your local time.</p>
+    </div>
   </footer>
+</div>
 
-  <script src="assets/js/astro-engine.js"></script>
-  <script src="assets/js/art.js"></script>
-  <script src="assets/js/widgets.js"></script>
-  <script src="assets/js/theme.js"></script>
+<div class="taskbar" id="taskbar">
+  <button type="button" class="start-btn" id="start-btn" aria-haspopup="true" aria-expanded="false"><span class="start-logo" aria-hidden="true">&#9737;&#65038;</span> Start</button>
+  <div class="start-menu" id="start-menu" hidden>
+    <div class="start-banner" aria-hidden="true"><span>NWS<b>DOS</b></span></div>
+    <nav class="start-items" aria-label="Start menu"><ul class="nav-list nav-menu">
+      <li><a class="nav-btn" href="index.html">Home</a></li><li><a class="nav-btn" href="weather.html">Weather</a></li>
+      <li><a class="nav-btn" href="sky.html">Sky</a></li><li><a class="nav-btn" href="about.html">About</a></li>
+    </ul></nav>
+  </div>
+  <div class="tasks" id="tasks" aria-label="Minimized windows"></div>
+  <div class="tray" aria-hidden="true"><span class="tray-moon" id="tray-moon">&#9790;&#65038;</span><span class="tray-clock" id="tray-clock">--:--</span></div>
+</div>
+
+<script src="assets/js/pixel-glyphs.js"></script>
+<script src="assets/js/astro-engine.js"></script>
+<script src="assets/js/ascii-art.js"></script>
+<script src="assets/js/art.js"></script>
+<script src="assets/js/widgets.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/sky-topic.js"></script>
+<script src="assets/js/hero-art.js"></script>
+<script src="assets/js/console.js"></script>
 </body>
 </html>

@@ -1,69 +1,68 @@
-<!--meta title: ~/home | description: DOS edition -->
-  <main>
-{{sidebar}}
-    <div class="content">
+<!--meta title: NWS | description: Live sky instruments in a DOS-era terminal | home -->
+{{hero eyebrow="Home" title="NWS" lead="The sky, live, in your time zone." mast home art="day"}}
 
-      <div class="onair"><span class="tag">ON AIR</span><div class="onair-track" data-widget="ticker"></div></div>
+<div class="status-strip sunken scr" data-widget="strip" role="status"><div data-body>Reading the sky&hellip;</div></div>
 
-      <section>
-        <h1>Logging on to the Network...</h1>
-        <div class="flex-columns">
-          <div class="flex-text">
-<pre aria-label="nws" style="font-size:30px;line-height:.9">█   █  █   █   ████
-██  █  █   █  █    
-█ █ █  █ █ █   ███ 
-█  ██  ██ ██      █
-█   █  █   █  ████ </pre>
-            <p></p>
-            <p>My name is me, <strong>meby if you're nasty</strong>; and I am a sexy, thought-provoking internet feline looking to make the world a better place with every breath I take in it. <a href="about.html">You can learn more about me here.</a> Please stop by, take a look around, and interact. I have worked to make this a tremendous space for everyone, but more specifically ... me!</p>
-          </div>
-          <div class="flex-image">
-            <div class="art-frame"><div data-art="orb" data-spin data-size="216" data-cell="3"></div></div>
-            <p class="note">orb.exe &mdash; dithered or ASCII, your call (dock, bottom right)</p>
-          </div>
-        </div>
-      </section>
+<section class="box">
+  <h1>Logging on to the Network...</h1>
+  <div class="flex-columns">
+    <div class="flex-text">
+<pre class="ascii-banner" aria-label="nws">{{banner}}</pre>
+      <p>My name is me, <strong>meby if you're nasty</strong>; and I am a sexy, thought-provoking internet feline looking to make the world a better place with every breath I take in it. <a href="about.html">You can learn more about me here.</a> Please stop by, take a look around, and interact. I have worked to make this a tremendous space for everyone, but more specifically ... me!</p>
+    </div>
+    <div class="flex-image">
+      <div class="art-frame"><div data-art="orb" data-spin data-size="216" data-cell="3"></div></div>
+    </div>
+  </div>
+</section>
 
-      <section2>
-        <div class="onair" style="box-shadow:none;border-style:solid;border-width:2px">
-          <div class="onair-track"><span class="inner" style="animation-duration:40s">
-            <a href="#">[ neocities ]</a> <a href="#">[ firefox now ]</a> <a href="#">[ girls4notepad ]</a> <a href="#">[ discord now ]</a> <a href="#">[ apple fatal error ]</a> <a href="#">[ explicit content ]</a> <a href="#">[ best viewed 800x600 ]</a> <a href="#">[ no ai ]</a>
-          </span></div>
-        </div>
-      </section2>
+<div class="marquee"><span>
+  <a href="#">[ neocities ]</a> <a href="#">[ firefox now ]</a> <a href="#">[ girls4notepad ]</a> <a href="#">[ discord now ]</a> <a href="#">[ apple fatal error ]</a> <a href="#">[ explicit content ]</a> <a href="#">[ best viewed 800x600 ]</a> <a href="#">[ no ai ]</a>
+</span></div>
 
-      <section>
-        <h1>Sky Now</h1>
-        <div data-widget="conditions" data-compact></div>
-      </section>
+<section class="section">
+  <h2 class="section-label">Latest</h2>
+  <div class="tri">
+    <article class="tile"><div class="tile-thumb tile-art"><div data-art="moon" data-size="132" data-cell="3"></div></div><div class="tile-body"><div class="tile-eyebrow">Moon</div><div class="tile-title">Placeholder post one</div><div class="tile-meta">2026-10-03</div><div class="tile-excerpt">Replace these tiles with real posts. Thumbnails can be dithered automatically.</div></div></article>
+    <article class="tile tile-big"><div class="tile-thumb tile-art"><div data-art="orb" data-spin data-size="168" data-cell="3"></div></div><div class="tile-body"><div class="tile-eyebrow">Featured</div><div class="tile-title">Placeholder featured post</div><div class="tile-meta">2026-10-03</div><div class="tile-excerpt">The middle tile is the featured one, same as the old layout.</div></div></article>
+    <article class="tile"><div class="tile-thumb tile-art"><div data-art="orb" data-size="132" data-cell="3"></div></div><div class="tile-body"><div class="tile-eyebrow">Sky</div><div class="tile-title">Placeholder post two</div><div class="tile-meta">2026-10-03</div><div class="tile-excerpt">Short excerpt goes here.</div></div></article>
+  </div>
+</section>
 
-      <section>
-        <h2>Celestial Flight Board</h2>
-        <div data-widget="flight" data-compact></div>
-      </section>
+<section class="section">
+  <h2 class="section-label">The sky now</h2>
+  <div class="grid-2">
+    {{widget name="conditions" title="Current Conditions" ico="&#9737;&#65038;" q="What is happening right now?" opts="compact"}}
+    {{widget name="flight" title="Celestial Flight Board" ico="&#9992;&#65038;" q="What happens next?" opts="compact"}}
+  </div>
+  {{widget name="since" title="Since Your Last Visit" ico="&#8635;" q="What moved while you were away?" opts="home"}}
+</section>
 
-      <section2>
-        <section>
-          <h1>Updates</h1>
-          <ul class="arrow-list">
-            <li><i>2026-10-03</i> &harr; DOS edition: blue-screen themes, ASCII, bitmap dither, a console. The LED instruments moved in.</li>
-            <li><i>2024-06-24</i> &harr; Added Linkback Buttons</li>
-            <li><i>2024-06-21</i> &harr; Redebuting website. Happy summer! Summer Song is Walking into Sunshine by London's Central Line!</li>
-          </ul>
-        </section>
-      </section2>
+<section class="section">
+  <h2 class="section-label">My weather</h2>
+  {{widget name="share" title="3-Day Forecast Card" ico="&#9732;&#65038;" q="What does my next three days look like, in a post I can share?" opts="general,compact"}}
+</section>
 
-      <div class="half-width">
-        <section>
-          <h2>Link Back To Me</h2>
-          <p><b>Copy the markup, put it on your site.</b></p>
+<section class="box">
+  <h1>Updates</h1>
+  <ul class="arrow-list">
+    <li><i>2026-10-03</i> &harr; DOS edition. Blue screen, black LED panels, ASCII and bitmap dither.</li>
+    <li><i>2024-06-24</i> &harr; Added Linkback Buttons</li>
+    <li><i>2024-06-21</i> &harr; Redebuting website. Happy summer! Summer Song is Walking into Sunshine by London's Central Line!</li>
+  </ul>
+</section>
+
+<div class="half-width">
+  <section class="box">
+    <h2>Link Back To Me</h2>
+    <p>Copy a button, put it on your site.</p>
 <pre>+------------+ +------------+
 | ### N W S  | | C:\&gt; _     |
 +------------+ +------------+</pre>
-          <p>Let me know if you link back to me &mdash; and if I like your site, I might link back to you!</p>
-        </section>
-        <section>
-          <h2>How Do Into Cube?</h2>
+    <p>Let me know if you link back to me &mdash; and if I like your site, I might link back to you!</p>
+  </section>
+  <section class="box">
+    <h2>How Do Into Cube?</h2>
 <pre aria-label="cube">     +--------+
     /        /|
    /        / |
@@ -72,14 +71,16 @@
   |        | /
   |        |/
   +--------+</pre>
-        </section>
-      </div>
+  </section>
+</div>
 
-      <section>
-        <h2>Title</h2>
-        <p>Lorem ipsum dolor sit amet, adipiscing elit. Nullam dignissim convallis est. Quisque aliquam. Donec faucibus. Nunc iaculis suscipit dui. Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl.</p>
-        <hr>
-        <p class="note">Any &lt;img class="dither" src="..."&gt; placed here is redrawn as a 1-bit ordered-dither bitmap (or ASCII) in the active theme's colours.</p>
-      </section>
-    </div>
-  </main>
+<section class="section">
+  <h2 class="section-label">Archive</h2>
+  <div class="win">
+    <div class="win-title"><span class="win-ico" aria-hidden="true">&#128193;</span><span class="win-name">C:&#92;NEWS&#92;ARCHIVE</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize">_</button></span></div>
+    <div class="win-body"><div class="rows">
+      <div class="row"><div class="row-ico">&#9632;</div><div><div class="row-title">Placeholder post one</div><div class="row-meta">2026-10-03</div><div class="row-excerpt">Archive rows list older posts.</div></div></div>
+      <div class="row"><div class="row-ico">&#9632;</div><div><div class="row-title">Placeholder post two</div><div class="row-meta">2026-09-28</div><div class="row-excerpt">Another one.</div></div></div>
+    </div></div>
+  </div>
+</section>

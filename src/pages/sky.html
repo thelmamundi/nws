@@ -1,16 +1,13 @@
-<!--meta title: ~/sky | description: Live sky instruments -->
-  <main>
-{{sidebar}}
-    <div class="content">
-      <div class="onair"><span class="tag">ON AIR</span><div class="onair-track" data-widget="ticker"></div></div>
-
-      <section>
-        <h1>Sky Desk</h1>
-        <p>Every panel is computed in your browser from public orbital elements. Nothing is sent anywhere.</p>
-      </section>
-      <section><h2>Current Conditions</h2><div data-widget="conditions"></div></section>
-      <section><h2>Next Exact Thing</h2><div data-widget="nextexact"></div></section>
-      <section><h2>Celestial Flight Board</h2><div data-widget="flight"></div></section>
-      <section><h2>Planet Speedometer</h2><div data-widget="speed"></div></section>
-    </div>
-  </main>
+<!--meta title: NWS Sky | description: Positions, exact moments and what happens next -->
+{{hero eyebrow="Sky" title="The Sky Desk" lead="Positions, exact moments, and what happens next, in your time zone." mast art="glyph:sun"}}
+{{widget name="conditions" title="Current Conditions" ico="&#9737;&#65038;" q="What is happening right now?"}}
+{{widget name="flight" title="Celestial Flight Board" ico="&#9992;&#65038;" q="What happens next?"}}
+{{widget name="nextexact" title="Next Exact Thing" ico="&#9201;&#65038;" q="What is the next exact moment?"}}
+{{widget name="scrub" title="Time Control" ico="&#9201;&#65038;" q="What did (or will) the sky look like at another moment?"}}
+{{widget name="changelog" title="Sky Changelog" ico="&#9998;&#65038;" q="What changed?"}}
+{{widget name="moon" title="Lunar Motion Monitor" ico="&#9790;&#65038;" q="What is the Moon doing?"}}
+{{widget name="clock" title="Planetary Clock" ico="&#9201;&#65038;" q="Whose hour is it?"}}
+{{widget name="speed" title="Planet Speedometer" ico="&#9201;&#65038;" q="How fast is each planet moving?"}}
+{{widget name="status" title="Celestial System Status" ico="&#9881;&#65038;" q="Is anything unusual going on?"}}
+{{widget name="diff" title="Compare Sky" ico="&#8644;" q="What differs between two moments?"}}
+{{widget name="personal" title="Your Active Personal Aspects" ico="&#9733;&#65038;" q="What is touching your own chart? (birth details stay in this browser)"}}

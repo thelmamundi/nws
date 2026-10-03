@@ -26,7 +26,7 @@
   function cssv(n) { return getComputedStyle(root).getPropertyValue(n).trim(); }
   function hex(c) { c = c.replace('#', ''); if (c.length === 3) c = c.replace(/./g, '$&$&'); return [parseInt(c.substr(0, 2), 16), parseInt(c.substr(2, 2), 16), parseInt(c.substr(4, 2), 16)]; }
   function lumOf(rgb) { return (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255; }
-  function palette() { var bg = hex(cssv('--bg')), ink = hex(cssv('--hi')); return { bg: bg, ink: ink, flip: lumOf(bg) > lumOf(ink) }; }
+  function palette() { var bg = hex(cssv('--art-bg') || '#000000'), ink = hex(cssv('--art-ink') || '#ffb000'); return { bg: bg, ink: ink, flip: lumOf(bg) > lumOf(ink) }; }
 
   /* ── tiny value noise for planet texture ── */
   function h2(x, y) { var n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return n - Math.floor(n); }
@@ -143,7 +143,7 @@
   function redithers() { Array.prototype.forEach.call(doc.querySelectorAll('img.dither'), function (i) { if (i.complete) dither(i); }); }
 
   function init() {
-    hosts = Array.prototype.slice.call(doc.querySelectorAll('[data-art]'));
+    hosts = Array.prototype.slice.call(doc.querySelectorAll('[data-art]:not([data-ascii-art])'));
     redraw();
     Array.prototype.forEach.call(doc.querySelectorAll('img.dither'), function (i) { i.addEventListener('load', function () { dither(i); }); });
     if (!REDUCED) requestAnimationFrame(loop);
