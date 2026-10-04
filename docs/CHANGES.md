@@ -1,12 +1,16 @@
 # Change log
 
-Write your next requests in the area's own `REQUESTS.md` (see `areas/README.md`), or in **Requests** below for anything site-wide (one bullet each, say which scheme and where). Each round I move them into a numbered entry with **Comes with / Added / Changed / Fixed / Removed**.
+Requests come in chat, one large batch at a time. After each batch I add a numbered entry here with **Comes with / Added / Changed / Fixed / Removed**. (`areas/` has a README per theme, page, part and widget if you ever want to point at one.)
 Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
 
-## Requests (write here)
-- (empty)
+## Round 12 (current)
+**Comes with:** the site exactly as in Round 11.
+**Changed**
+- The header planet is the WS one again (the original `ascii-art.js` from the old site's main page: the spinning ASCII planet that changes with the planetary day). Its colours follow each scheme's tokens: lit side, highlight, shadow and glow use the scheme's accent, white, complement, dim and grey.
+**Removed:** the per-planet textures and limb darkening added in Round 9 (the planets looked different from the WS one).
+**Process:** requests are one batch in chat; the Requests sections in the log and the per-area `REQUESTS.md` files are optional.
 
-## Round 11 (current)
+## Round 11
 **Comes with:** the site exactly as in Round 10, plus the `areas/` folders.
 **Added**
 - `areas/`: one folder per theme (6), page (5), shared part (10) and instrument (21). Each has a `README.md` (what it is, the files it lives in, a line to paste into a new chat) and a `REQUESTS.md`. Index: `areas/README.md`.
