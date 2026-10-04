@@ -1,12 +1,20 @@
 # Change log
 
-Write your next requests in **Requests** below (one bullet each, say which scheme and where). Each round I move them into a numbered entry with **Comes with / Added / Changed / Fixed / Removed**.
+Write your next requests in the area's own `REQUESTS.md` (see `areas/README.md`), or in **Requests** below for anything site-wide (one bullet each, say which scheme and where). Each round I move them into a numbered entry with **Comes with / Added / Changed / Fixed / Removed**.
 Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
 
 ## Requests (write here)
 - (empty)
 
-## Round 10 (current)
+## Round 11 (current)
+**Comes with:** the site exactly as in Round 10, plus the `areas/` folders.
+**Added**
+- `areas/`: one folder per theme (6), page (5), shared part (10) and instrument (21). Each has a `README.md` (what it is, the files it lives in, a line to paste into a new chat) and a `REQUESTS.md`. Index: `areas/README.md`.
+- `CLAUDE.md` at the repo root: the working rules every chat picks up (build command, area convention, the log format, where colours live).
+**Changed:** nothing on the site.
+**Removed:** nothing.
+
+## Round 10
 **Comes with:** 6 schemes (DOS blue, BIOS, void green, void amber, paper, LITERAL LEGEND); pages home, weather, sky, post, about; full instrument set; Sky Link; console; Start menu > Colors.
 **Added**
 - Nav sub-menus say `< OPEN >` and `< CLOSE >` instead of arrows (all schemes).
