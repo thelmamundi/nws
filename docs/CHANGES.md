@@ -3,7 +3,16 @@
 Requests come in chat, one large batch at a time. After each batch I add a numbered entry here with **Comes with / Added / Changed / Fixed / Removed**. (`areas/` has a README per theme, page, part and widget if you ever want to point at one.)
 Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
 
-## Round 16 (current)
+## Round 16b (current)
+**Comes with:** Round 16, plus these LITERAL LEGEND changes from your annotated screenshot.
+**Changed** (LITERAL LEGEND only)
+- **Page background** (the nebula outside the windows) is half size: 336 x 224 tiles instead of 672 x 448.
+- **Both chart wheels** (Current Sky Chart, Transit Chart): the inside of the wheel and the desk around it now show that same small nebula instead of flat pink. The silver body and pink ring stay. Aspect lines, house numbers and the horizon axis are lighter (pink and light blue, white conjunctions) so they read on the dark.
+- **Nav buttons, small buttons, tabs, badges** use the finer dither again (1x pixel, was 1.5x).
+- **Window title bars** (the pink gradient bars) are chunkier: 3 shades per step instead of 8 and a 2x pixel, still not as coarse as the Round 15 wheel ring.
+**Not done:** I could not read the cut-off note under the Windows shield or tell what the shield, the bridge photo and the BPP gradient chart were pointing at. Tell me which element each one is for.
+
+## Round 16
 **Comes with:** the site as in Round 15, with the Charts page wheels redrawn.
 **Changed** (both wheels on the Charts page: **Current Sky Chart** and **Transit Chart**, `assets/js/chart-wheel.js`)
 - **Wheel body is silver** (Win98 grey, white and dark-grey bevels) in every theme. The theme colour goes on the **sign ring segments** (solid element colours), the aspect lines, markers and hub.
