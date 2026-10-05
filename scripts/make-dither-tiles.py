@@ -56,7 +56,7 @@ def clouds(W=256, H=192, seed=7):
     return uri(im)
 # pink family (a touch redder than magenta) + two blues
 TILES = [
-  ('--dz-bar',     ramp(['#7a0a58', '#c0105f', '#ff3f8e', '#ff80b8', '#ffc2e0'], 320, 8, 'x', 3)),    # title bars: dark to light, left to right
+  ('--dz-bar',     ramp(['#7a0a58', '#c0105f', '#ff3f8e', '#ff80b8', '#ffc2e0'], 640, 8, 'x', 8)),    # title bars: dark to light, left to right
   ('--dz-btn',     ramp(['#fff0f8', '#ffa8d0'], 8, 10, 'y', 10)),                                    # raised buttons: top to bottom
   ('--dz-btn-on',  ramp(['#ff3f8e', '#ff80b8'], 8, 10, 'y', 10)),                                    # pressed / current
   ('--dz-rainbow', ramp(['#ff3f8e', '#ff7ab5', '#8fd0ff', '#5b84ff', '#ff7ab5', '#ff3f8e'], 240, 8, 'x', 14)),   # title text: pink to blue and back

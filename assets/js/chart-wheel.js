@@ -21,12 +21,12 @@
     phosphor: { desk: '#000000', well: '#dff0df', ring: ['#0a4a1a', '#0f6a26', '#14862f', '#1fa63c'], glyph: '#e8ffe8', mk: 'circle',  mkInk: ['#0a4a1a', '#14862f', '#0f6a26', '#000000'], hard: '#0a5a1f', soft: '#1fa63c', conj: '#0a4a1a', hub: 'ring' },
     amber:    { desk: '#000000', well: '#f4e8d0', ring: ['#6a3c00', '#8a5000', '#a86a00', '#c88a00'], glyph: '#fff0cc', mk: 'diamond', mkInk: ['#6a3c00', '#a86a00', '#8a5000', '#000000'], hard: '#8a4a00', soft: '#d09020', conj: '#6a3c00', hub: 'ring' },
     paper:    { desk: '#f1ecdc', well: '#fffaf0', ring: ['#2b2f8f', '#12155e', '#4a4fb0', '#0b6f86'], glyph: '#fffaf0', mk: 'circle',  mkInk: ['#c1272d', '#2b2f8f', '#12155e', '#0b6f86'], hard: '#c1272d', soft: '#0b6f86', conj: '#12155e', hub: 'cross' },
-    legend:   { desk: null, well: null, dim: '#ff9ac8', ring: ['#7a0a58', '#c0105f', '#ff3f8e', '#ff7ab5'], glyph: '#ffffff', mk: 'square',  mkInk: ['#7a0a58', '#2a4fd6', '#7a0a58', '#580034'], hard: '#ff3f8e', soft: '#8fd0ff', conj: '#ffffff', hub: 'heart' }
+    legend:   { desk: '#000000', well: '#ffe6f1', ring: ['#7a0a58', '#c0105f', '#ff3f8e', '#ff7ab5'], glyph: '#ffffff', mk: 'square',  mkInk: ['#7a0a58', '#2a4fd6', '#7a0a58', '#580034'], hard: '#c0105f', soft: '#2a6aff', conj: '#580034', hub: 'heart', stars: true }
   };
   Object.keys(SKINS).forEach(function (k) {
     var s = SKINS[k], key;
     for (key in SILVER) s[key] = SILVER[key];
-    ['face', 'hi', 'lo', 'dk', 'line', 'desk', 'well', 'dim', 'glyph', 'hard', 'soft', 'conj'].forEach(function (p) { if (s[p]) s[p] = hex(s[p]); });
+    ['face', 'hi', 'lo', 'dk', 'line', 'desk', 'well', 'glyph', 'hard', 'soft', 'conj'].forEach(function (p) { s[p] = hex(s[p]); });
     s.ring = s.ring.map(hex); s.mkInk = s.mkInk.map(hex);
   });
   function skin() { return SKINS[document.documentElement.getAttribute('data-theme')] || SKINS.dos; }
@@ -51,7 +51,7 @@
 
   /* ── pixel buffer ── */
   function Buf() { this.d = new Uint8ClampedArray(N * N * 4); }
-  Buf.prototype.set = function (x, y, c) { if (!c || x < 0 || y < 0 || x >= N || y >= N) return; var i = (y * N + x) * 4; this.d[i] = c[0]; this.d[i + 1] = c[1]; this.d[i + 2] = c[2]; this.d[i + 3] = 255; };
+  Buf.prototype.set = function (x, y, c) { if (x < 0 || y < 0 || x >= N || y >= N) return; var i = (y * N + x) * 4; this.d[i] = c[0]; this.d[i + 1] = c[1]; this.d[i + 2] = c[2]; this.d[i + 3] = 255; };
   Buf.prototype.line = function (x0, y0, x1, y1, c, pat) {
     x0 = Math.round(x0); y0 = Math.round(y0); x1 = Math.round(x1); y1 = Math.round(y1);
     var dx = Math.abs(x1 - x0), dy = Math.abs(y1 - y0), sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1, err = dx - dy, k = 0;
@@ -109,12 +109,12 @@
           var fr = lon - Math.round(lon), dpx = Math.abs(fr) * RAD * r, deg = ((Math.round(lon) % 360) + 360) % 360, len = deg % 10 === 0 ? 9 : deg % 5 === 0 ? 6 : 4;
           if (dpx < 0.6 && (R.s - r) < len + 2.5 && (R.s - r) > 2.5) col = S.line;
         }
-        if (band === 'well' && r > R.hub + 1) { var dl = ((lon % 30) + 30) % 30; if (Math.min(dl, 30 - dl) * RAD * r < 0.6 && ((x + y) & 1) === 0 && r - edge[0] > 2.2 && edge[1] - r > 2.2) col = S.dim || S.lo; }
+        if (band === 'well' && r > R.hub + 1) { var dl = ((lon % 30) + 30) % 30; if (Math.min(dl, 30 - dl) * RAD * r < 0.6 && ((x + y) & 1) === 0 && r - edge[0] > 2.2 && edge[1] - r > 2.2) col = S.lo; }
       }
       b.set(x, y, col);
     }
     /* horizon axis (ASC to DSC) */
-    b.line(C - R.s + 3, C, C - R.a, C, S.dim || S.lo, 2); b.line(C + R.a, C, C + R.s - 3, C, S.dim || S.lo, 2);
+    b.line(C - R.s + 3, C, C - R.a, C, S.lo, 2); b.line(C + R.a, C, C + R.s - 3, C, S.lo, 2);
     /* aspect lines */
     var rAsp = R.a - 5;
     (spec.aspects || []).forEach(function (a) {
@@ -133,7 +133,7 @@
     var rs = (R.f + R.s) / 2;
     SIGNS.forEach(function (nm, i) { var p = pos(i * 30 + 15, asc, rs); b.bits(glyph(nm, GL), GL, p[0], p[1], S.glyph); });
     /* house numbers */
-    for (var hn = 1; hn <= 12; hn++) { var hp = pos(Math.floor(asc / 30) * 30 + (hn - 1) * 30 + 15, asc, bi ? (R.a + R.n2) / 2 : R.a - 14); b.num(hn, hp[0], hp[1], S.dim || S.lo); }
+    for (var hn = 1; hn <= 12; hn++) { var hp = pos(Math.floor(asc / 30) * 30 + (hn - 1) * 30 + 15, asc, bi ? (R.a + R.n2) / 2 : R.a - 14); b.num(hn, hp[0], hp[1], S.lo); }
     /* planet buttons: outer ring, then the inner (natal) ring. 32 px glyph in a raised silver button */
     function ring(list, rMid, box) {
       spread(list, Math.min(34, (box + 3) / rMid / RAD));
