@@ -2,7 +2,7 @@
 
 An evergreen post explains an idea once. The **Sky Link** card on the page finds the nearest real sky event for the topic whenever someone opens it, so the post never needs updating.
 
-1. Copy `src/pages/post.html` to `src/pages/<your-slug>.html`.
+1. Copy `src/pages/post-pluto.html` to `src/pages/post-<your-slug>.html` (names starting `post-` get the article header font and the Posts highlight).
 2. Set the title, eyebrow and lead in the `{{hero ...}}` line. `art="glyph:mercury"` sets the spinning glyph in the header: use the planet or sign the post is about (`glyph:venus`, `glyph:scorpio`, `glyph:north_node` ...). Use `art="mercury"` for a spinning planet instead.
 3. Set the topic on the Sky Link line: `{{widget name="skylink" title="Sky Link" ... opts="topic=love"}}`.
 4. Write the article inside `.post-content`.
@@ -16,3 +16,5 @@ What the card shows
 - **Link your own chart**: birth date, time and place (saved only in the browser) add a second card with the house it is moving through, where the last and next events land in your chart, and which of your planets it touches. Houses need a birth time.
 
 To add a topic, edit `TOPICS` in `assets/js/widgets.js`.
+
+Add the article to the archive rows in `src/pages/posts.html` (and the home tiles if you want it featured).

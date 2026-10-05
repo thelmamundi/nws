@@ -24,6 +24,7 @@ Site-wide or cross-area changes: write them under **Requests** in `docs/CHANGES.
 | [`pages/home`](pages/home/README.md) | Header with intro, PUBLIC SKY strip, Celestial System Status, 88x31 button bar, Latest tiles, Sky Now, forecast card, Updates, Link Back, Archive |
 | [`pages/weather`](pages/weather/README.md) | Weather radar page: Since Your Last Visit, Current Aspects, Conditions, Flight Board, Radar, Impact Forecast, Seismograph, Traffic, Time Control |
 | [`pages/sky`](pages/sky/README.md) | Sky desk page: the full instrument set |
+| [`pages/posts`](pages/posts/README.md) | Posts archive and the six articles |
 | [`pages/post`](pages/post/README.md) | Article template with the live Sky Link card (topic planet, closest phenomenon, link your own chart) |
 | [`pages/about`](pages/about/README.md) | About page (placeholder copy) and Where To Find Me |
 

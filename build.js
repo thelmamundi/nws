@@ -42,10 +42,11 @@ for (const f of fs.readdirSync(path.join(__dirname, 'src/pages'))) {
     .replace(/\{\{hero ([^}]*)\}\}/g, (_, s) => hero(attrs(s)))
     .replace(/\{\{widget ([^}]*)\}\}/g, (_, s) => widget(attrs(s)))
     .replace(/\{\{banner\}\}/g, BANNER);
+  if (/^post(-|$)/.test(page)) body = body.replace('<header class="doc-header', '<header class="doc-header doc-article');   /* article pages: Super VCR Mono title */
   const mast = home ? '' : `<header class="masthead"><div class="masthead-main"><a href="index.html" class="wordart"><span class="wordart-glyph aw-day-glyph" aria-hidden="true"></span> NWS</a><p class="tagline">The sky, live, in your time zone.</p></div></header>`;
   const html = layout.replace('{{content}}', body).replace('{{masthead}}', mast)
     .replace(/\{\{title\}\}/g, m[1]).replace(/\{\{description\}\}/g, m[2])
-    .replace(/\{\{here:(\w+)\}\}/g, (_, k) => k === page ? ' is-current' : '').replace(/\{\{open:(\w+)\}\}/g, (_, k) => k === page ? ' open' : '');
+    .replace(/\{\{here:(\w+)\}\}/g, (_, k) => (k === page || (k === 'posts' && page.indexOf('post') === 0)) ? ' is-current' : '').replace(/\{\{open:(\w+)\}\}/g, (_, k) => k === page ? ' open' : '');
   fs.writeFileSync(path.join(__dirname, page + '.html'), html);
   console.log('built', page + '.html');
 }
@@ -53,7 +54,7 @@ for (const f of fs.readdirSync(path.join(__dirname, 'src/pages'))) {
 /* ── single-file build for previewing in one document (all pages as tabs, everything inlined):  node build.js --single out.html ── */
 if (process.argv.includes('--single')) {
   const out = process.argv[process.argv.indexOf('--single') + 1];
-  const pages = ['index', 'weather', 'sky', 'post', 'about'], cut = (h, a, b) => h.slice(h.indexOf(a) + a.length, h.indexOf(b));
+  const pages = ['index'].concat(fs.readdirSync(path.join(__dirname, 'src/pages')).map(f => f.replace(/\.html$/, '')).filter(n => n !== 'index').sort()), cut = (h, a, b) => h.slice(h.indexOf(a) + a.length, h.indexOf(b));
   const first = R('index.html');
   const mainOpen = '<main class="main" id="main">', pre = first.slice(first.indexOf('<body'), first.indexOf(mainOpen) + mainOpen.length);
   const ON = /<div class="onair" id="onair"[\s\S]*?<\/div><\/div>\n\s*<\/div>\n/;
@@ -65,7 +66,7 @@ if (process.argv.includes('--single')) {
   }).join('\n');
   const post = first.slice(first.indexOf('</main>'), first.indexOf('<script src='));
   let body = (pre + onair + secs + post).replace(/<body[^>]*>/, '');
-  body = body.replace(/\{\{[^}]*\}\}/g, '').replace(/href="(index|weather|sky|post|about)\.html(#\w+)?"/g, (m, p, h) => `href="#${p === 'index' ? 'home' : p}"`);
+  body = body.replace(/\{\{[^}]*\}\}/g, '').replace(new RegExp('href="(' + pages.join('|') + ')\\.html(#\\w+)?"', 'g'), (m, p, h) => `href="#${p === 'index' ? 'home' : p}"`);
   const MIME = { gif: 'image/gif', png: 'image/png', ttf: 'font/ttf', woff2: 'font/woff2', otf: 'font/otf' };
   const inline = (txt) => txt.replace(/url\((["']?)(?:\.\.\/|assets\/)((?:img\/ll|fonts)\/[\w.-]+\.(?:gif|png|ttf|woff2|otf))\1\)/g, (m, q, f) =>
     `url(data:${MIME[f.split('.').pop()]};base64,${fs.readFileSync(path.join(__dirname, 'assets', f)).toString('base64')})`);

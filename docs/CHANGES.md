@@ -3,7 +3,23 @@
 Requests come in chat, one large batch at a time. After each batch I add a numbered entry here with **Comes with / Added / Changed / Fixed / Removed**. (`areas/` has a README per theme, page, part and widget if you ever want to point at one.)
 Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
 
-## Round 13 (current)
+## Round 14 (current)
+**Comes with:** the site as in Round 13, with Super VCR Mono limited to article titles and five new articles.
+**Added**
+- **Posts** page (`posts.html`, nav button "Posts"): an archive of all six articles with their spice rating.
+- Five satirical planet hot-take articles, each with its own live Sky Link card (topic planet, closest phenomenon, link your own chart) and a matching spinning glyph in the header:
+  - *Pluto Was Never Demoted* (power)
+  - *The Saturn Return Is Just a Performance Review* (discipline)
+  - *Venus Is Not About Love. It Is About Taste.* (money)
+  - *The Moon Does Not Care About Your Ritual* (rhythm)
+  - *Jupiter Is Not Luck. It Is Compound Interest.* (luck)
+  The Mercury article is the sixth. Home tiles and the archive link to them. All are placeholder satire.
+**Changed**
+- **Super VCR Mono is used only for the big header title on article pages.** Everything else, including all other page titles, section labels, window title bars and the Sky Link card, is Perfect DOS VGA 437 (titles 48 px, section labels and title bars 16 px, post headings 32 px).
+- The Posts button highlights on every article page; the console `cd posts` works.
+**Fixed:** the Super VCR font briefly applied to all headings (Round 13); it is now scoped as above.
+
+## Round 13
 **Comes with:** the site exactly as in Round 12, with new fonts.
 **Added**
 - **Perfect DOS VGA 437** (Win version) is the main font everywhere: body text, LED screens, tables, buttons, nav, the ticker, chart labels, the ASCII graphs and the forecast card. It is an 8x16 bitmap font, so text is 16 px (big countdown 48 px, big readouts 32 px) to stay crisp.

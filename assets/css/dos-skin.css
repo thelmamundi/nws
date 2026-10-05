@@ -356,12 +356,12 @@ html[data-theme="legend"] { --ll-space: url("../img/ll/space.gif"); background-c
 .win-widget[data-widget="skylink"] .kv { grid-template-columns: max-content 1fr; gap: 2px 14px; }
 
 
-/* ═══ TYPE: Perfect DOS VGA 437 (main text) and Super VCR Mono (headings) ═══
+/* ═══ TYPE: Perfect DOS VGA 437 everywhere; Super VCR Mono only for the big title in the black header panel on article pages ═══
    Perfect DOS is an 8x16 bitmap font: sizes of 16 / 32 / 48 px stay crisp. Super VCR Mono is a 12 px grid: 12 / 24 / 36 / 48 px.
-   VT323 stays as the fallback for characters these two do not have (hearts, arrows, planet signs use the symbol font). */
+   VT323 stays as the fallback for characters these fonts do not have (hearts, arrows; planet signs use the symbol font). */
 @font-face { font-family: "PerfectDOS"; src: url("../fonts/PerfectDOS437Win.ttf") format("truetype"); font-display: swap; }
 @font-face { font-family: "SuperVCR"; src: url("../fonts/SuperVCRMono.ttf") format("truetype"); font-display: swap; }
-:root { --ui: "PerfectDOS", "VT323", "Courier New", monospace; --lcd: "PerfectDOS", "VT323", "Courier New", monospace; --head: "SuperVCR", "VT323", "Courier New", monospace; }
+:root { --ui: "PerfectDOS", "VT323", "Courier New", monospace; --lcd: "PerfectDOS", "VT323", "Courier New", monospace; --vcr: "SuperVCR", "VT323", "Courier New", monospace; }
 body, button, input, select, textarea { font-family: var(--ui); }
 body { font-size: 16px; line-height: 1.25; letter-spacing: 0; }
 .win-body, .win-q, .note, .odo-note, .nav-btn, .tree-view .nav-btn, .btn, .tabs button, .chip-btn, .start-btn, .tasks button, input, select, textarea, .chip, .mast-chip, .mast-chip-dim, .doc-eyebrow,
@@ -375,12 +375,14 @@ body { font-size: 16px; line-height: 1.25; letter-spacing: 0; }
 pre.hero-art { font: 12px/12px var(--ui); letter-spacing: 0; }
 .ascii-graph, .seis-r, .card-ascii, pre, .post-content pre { font-family: var(--ui); font-size: 16px; line-height: 16px; letter-spacing: 0; } .card-ascii { line-height: 20px; }
 .tweet-box { font: 16px/1.25 var(--ui); }
-/* headings: Super VCR Mono */
-.doc-header .doc-title, .home-header .doc-title, .doc-title, .wordart { font-family: var(--head); font-size: 36px; line-height: 1.2; letter-spacing: 0; text-transform: uppercase; }
-.wordart { font-size: 24px; }
-.section-label, .box > h1, .box > h2, .footer-col h4, .post-content h2, .post-content h3, .post-content h4, .intro-h, .mode h3, .rc-body b { font-family: var(--head); font-size: 24px; line-height: 1.2; letter-spacing: 0; text-transform: uppercase; }
-.win-title { font-family: var(--head); font-size: 12px; letter-spacing: 0; text-transform: uppercase; }
-.post-content h2, .post-content h3 { font-size: 24px; } .post-content h4 { font-size: 12px; }
-.start-banner span { font-family: var(--head); font-size: 12px; }
+/* headings: Perfect DOS too, bigger or spaced out */
+.doc-header .doc-title, .home-header .doc-title, .doc-title { font-family: var(--ui); font-size: 48px; line-height: 1.1; letter-spacing: 0; text-transform: uppercase; }
+.wordart { font-family: var(--ui); font-size: 32px; line-height: 1.1; letter-spacing: 0; text-transform: uppercase; }
+.section-label, .box > h1, .box > h2, .footer-col h4, .post-content h4, .mode h3, .rc-body b, .win-title, .start-banner span { font-family: var(--ui); font-size: 16px; line-height: 1.25; letter-spacing: 2px; text-transform: uppercase; }
+.win-title { letter-spacing: 1px; }
+.intro-h { font-family: var(--ui); font-size: 32px; line-height: 1.1; letter-spacing: 0; text-transform: uppercase; }
+.post-content h2, .post-content h3 { font-family: var(--ui); font-size: 32px; line-height: 1.1; letter-spacing: 0; text-transform: uppercase; } .post-content h3 { font-size: 16px; letter-spacing: 2px; }
+/* Super VCR Mono: the header title on article pages only (build.js adds .doc-article to post headers) */
+.doc-article .doc-title, .doc-header.doc-article .doc-title { font-family: var(--vcr); font-size: 36px; line-height: 1.25; letter-spacing: 0; text-transform: uppercase; }
 /* LITERAL LEGEND keeps dogica for its clock digits only */
-@media (max-width: 860px) { .doc-header .doc-title, .home-header .doc-title, .doc-title { font-size: 24px; } }
+@media (max-width: 860px) { .doc-header .doc-title, .home-header .doc-title, .doc-title { font-size: 32px; } .post-content h2, .post-content h3 { font-size: 16px; letter-spacing: 2px; } .doc-article .doc-title { font-size: 24px; } }
