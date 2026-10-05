@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NWS Jupiter</title>
+<title>NWS Charts</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Jupiter Is Not Luck. It Is Compound Interest.">
+<meta name="description" content="Current sky wheel and transit wheel, styled per theme">
 <meta name="theme-color" content="#0000aa">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230000aa'/%3E%3Cpath d='M3 12V4h2l6 5V4h2v8h-2L5 7v5z' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,8 +30,8 @@
               <li><a class="nav-btn" href="index.html">Home</a></li>
               <li><a class="nav-btn" href="weather.html">Weather</a></li>
               <li><a class="nav-btn" href="sky.html">Sky</a></li>
-              <li><a class="nav-btn" href="charts.html">Charts</a></li>
-              <li><a class="nav-btn is-current" href="posts.html">Posts</a></li>
+              <li><a class="nav-btn is-current" href="charts.html">Charts</a></li>
+              <li><a class="nav-btn" href="posts.html">Posts</a></li>
               <li><details><summary class="nav-btn">About</summary>
                 <div class="tree-view"><ul>
                   <li><a class="nav-btn" href="about.html">about me</a></li>
@@ -85,58 +85,42 @@
         <a class="onair-sign" href="sky.html"><span class="lamp" aria-hidden="true"></span>ON AIR</a>
         <div class="onair-window"><div class="onair-track" id="onair-track"><span class="dim">CALCULATING THE SKY&hellip;</span></div></div>
       </div>
-<header class="doc-header doc-article has-art">
+<header class="doc-header has-art">
   <div class="hdr-text">
-  <div class="doc-eyebrow"><span class="aw-day-glyph" aria-hidden="true"></span> <span class="chip" data-host>NWS</span> <span class="doc-eyebrow-tag">Hot take</span></div>
-  <h1 class="doc-title">Jupiter Is Not Luck. It Is Compound Interest.</h1>
-  <div class="doc-subtitle">Hot take &middot; evergreen &middot; 4 min read</div>
-  
+  <div class="doc-eyebrow"><span class="aw-day-glyph" aria-hidden="true"></span> <span class="chip" data-host>NWS</span> <span class="doc-eyebrow-tag">Charts</span></div>
+  <h1 class="doc-title">Chart Wheels</h1>
+  <div class="doc-subtitle">The sky now, and the sky now against a birth chart. Each theme draws its own.</div>
+  <div class="mast" id="mast">
+    <span class="chip mast-chip"><span class="aw-day-glyph" id="mast-glyph" aria-hidden="true"></span></span>
+    <span class="chip mast-chip" id="mast-date">&hellip;</span>
+    <span class="chip mast-chip" id="mast-time">&hellip;</span>
+    <span class="chip mast-chip mast-chip-dim" id="mast-label">Next up</span>
+    <span class="chip mast-chip mast-chip-value" id="mast-value">&hellip;</span>
+  </div>
   
   </div>
-  <pre class="hero-art" data-ascii-art data-art="glyph:jupiter" aria-hidden="true"></pre>
+  <pre class="hero-art" data-ascii-art data-art="day" aria-hidden="true"></pre>
 </header>
-
-<section class="win win-widget" data-widget="skylink" data-opts="topic=luck">
-  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9738;&#65038;</span><span class="win-name">Sky Link</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Sky Link">_</button></span></div>
+<section class="win win-widget" data-widget="scrub">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9201;&#65038;</span><span class="win-name">Time Control</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Time Control">_</button></span></div>
   <div class="win-body">
-    <p class="win-q">Where is this topic in the sky right now? (Written once. Always current.)</p>
+    <p class="win-q">Move both charts to another moment.</p>
     <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
   </div>
 </section>
-
-<article class="win doc">
-  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9791;</span><span class="win-name">jupiter.htm</span></div>
-  <div class="win-body paper">
-    <div class="post-content">
-<p>Jupiter is called the Great Benefic, and people assume that means gifts. It means growth. Growth is neutral about what it grows.</p>
-<h2>One sign a year</h2>
-<p>Jupiter takes about 12 years to circle the Sun and sits in one sign for roughly a year. That makes it a yearly theme: this is the area where opportunity gets louder. It returns to its birth position every twelve years, at 12, 24, 36, 48 and so on.</p>
-<table>
-<thead><tr><th>Age</th><th>Jupiter return</th></tr></thead>
-<tbody>
-<tr><td>12</td><td>First</td></tr>
-<tr><td>24</td><td>Second</td></tr>
-<tr><td>36</td><td>Third</td></tr>
-<tr><td>48</td><td>Fourth</td></tr>
-</tbody></table>
-<h2>The take</h2>
-<p>A good Jupiter year is a multiplier. Multiply a habit of showing up and you get a lucky year. Multiply a habit of avoiding things and you get an expensive one. The luck was never in the planet. It was in what you handed it to multiply.</p>
-<blockquote>Jupiter does not bring you something new. It brings more of what you already are.</blockquote>
-<pre>  SPICE  [########--]  8/10</pre>
-<p class="note">Satire placeholder, written to fill the layout. The Sky Link card above is real and live.</p>
-    </div>
-    <p class="doc-tags">Filed under: <a href="posts.html">#Jupiter</a> <a href="posts.html">#HotTake</a></p>
-    <p class="doc-actions"><a class="btn" href="posts.html">&#9668; All posts</a></p>
+<section class="win win-widget" data-widget="chartnow">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9737;&#65038;</span><span class="win-name">Current Sky Chart</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Current Sky Chart">_</button></span></div>
+  <div class="win-body">
+    <p class="win-q">Where is everything right now?</p>
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
   </div>
-</article>
-
-<section class="section">
-  <h2 class="section-label">See also</h2>
-  <div class="win"><div class="win-body"><div class="rows">
-    <div class="row"><a class="row-link" href="post.html" aria-label="Open post"></a><div class="row-ico">&#9632;</div><div><div class="row-title">Why Everyone Blames Mercury</div><div class="row-meta">Hot take &middot; Mercury</div><div class="row-excerpt">Retrograde is a scheduled review, not a curse.</div></div></div>
-    <div class="row"><a class="row-link" href="post-pluto.html" aria-label="Open post"></a><div class="row-ico">&#9632;</div><div><div class="row-title">Pluto Was Never Demoted</div><div class="row-meta">Hot take &middot; Pluto</div><div class="row-excerpt">Astronomers changed a category. Astrology kept the paperwork. Why the smallest world in the chart still has the loudest vote.</div></div></div>
-    <div class="row"><a class="row-link" href="post-saturn.html" aria-label="Open post"></a><div class="row-ico">&#9632;</div><div><div class="row-title">The Saturn Return Is Just a Performance Review</div><div class="row-meta">Hot take &middot; Saturn</div><div class="row-excerpt">Everyone treats it like a curse. It is closer to a meeting that was on your calendar for twenty-nine years.</div></div></div>
-  </div></div></div>
+</section>
+<section class="win win-widget" data-widget="charttransit">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9678;</span><span class="win-name">Transit Chart</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Transit Chart">_</button></span></div>
+  <div class="win-body">
+    <p class="win-q">What is the sky now touching in a birth chart?</p>
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
 </section>
 
     </main>

@@ -3,7 +3,24 @@
 Requests come in chat, one large batch at a time. After each batch I add a numbered entry here with **Comes with / Added / Changed / Fixed / Removed**. (`areas/` has a README per theme, page, part and widget if you ever want to point at one.)
 Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
 
-## Round 14 (current)
+## Round 15 (current)
+**Comes with:** the site as in Round 14, plus a Charts page.
+**Added**
+- **Charts** page (nav button "Charts", Start menu, console `cd charts`) with Time Control, a **Current Sky Chart** and a **Transit Chart**.
+  - **Current Sky Chart:** a wheel with the Ascendant on the left, signs counter-clockwise, whole-sign houses 1-12, planet markers with a leader tick to the true degree, a degree-tick ring, and aspect lines (red = hard, blue = easy; dotted = easy, doubled = under 1 degree). Next to it: a planet table (position, house, retrograde) and the aspects in orb. Rising sign uses your time-zone city (add a city on the Sky page for a precise one).
+  - **Transit Chart:** a bi-wheel: the sky now on the outer ring, a natal chart on the inner ring, and lines for transit-to-natal aspects within 3 degrees, with a table of the tightest ones. It shows a sample natal chart until you link yours (birth details stay in the browser; same store as Sky Link and Personal Aspects).
+  - Both follow Time Control.
+- **A chart style per theme**, drawn pixel by pixel on a 168 x 168 grid and scaled up crisp, with Windows 98 mechanics (raised and sunken bevels lit from the top left, Bayer dither fills, a limited palette) but none of the Windows chrome:
+  - DOS blue: silver Win98 bevels on a teal desk, raised square planet buttons, a white sunken planet track, red/green/blue/teal sign segments dithered into silver.
+  - BIOS: grey bevels around a blue setup-screen well, yellow lines, squares.
+  - Void green and void amber: single-colour phosphor, dither densities for the four elements, circle or diamond markers, ring hub.
+  - Paper: ink on cream with hatched desk, engraved ring, round markers and a cross hub.
+  - LITERAL LEGEND: a dithered pink angular gradient sign ring, black starfield desk, light-blue easy aspects, pink hard aspects, a heart hub.
+- `areas/` folders for `pages/charts`, `widgets/chartnow`, `widgets/charttransit`.
+**Changed:** the old Radar, Impact Forecast, Seismograph and Speedometer are untouched.
+**Not done:** the old chart widgets are not restyled to the Win98 look yet (say if you want that next); no Midheaven/Ascendant angle labels and no Placidus houses (whole-sign only).
+
+## Round 14
 **Comes with:** the site as in Round 13, with Super VCR Mono limited to article titles and five new articles.
 **Added**
 - **Posts** page (`posts.html`, nav button "Posts"): an archive of all six articles with their spice rating.

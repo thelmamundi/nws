@@ -3,11 +3,11 @@
   'use strict';
   var doc = document, box = doc.getElementById('console'); if (!box) return;
   var out = box.querySelector('.out'), form = box.querySelector('form'), input = box.querySelector('input'), hist = [], hi = -1;
-  var PAGES = { home: 'index.html', weather: 'weather.html', sky: 'sky.html', post: 'post.html', posts: 'posts.html', about: 'about.html' };
+  var PAGES = { home: 'index.html', weather: 'weather.html', sky: 'sky.html', charts: 'charts.html', post: 'post.html', posts: 'posts.html', about: 'about.html' };
   function print(s, cls) { var d = doc.createElement('div'); if (cls) d.className = cls; d.textContent = s; out.appendChild(d); out.scrollTop = out.scrollHeight; }
   var C = {
-    help: function () { return ['HELP        this list', 'DIR         list pages', 'CD <page>    home | weather | sky | posts | about', 'SKY         one-line sky report', 'CRT ON|OFF  scanlines   GLOW ON|OFF  void glow', 'THEME <name> dos | bios | green | amber | paper | literal', 'DATE  VER  CLS']; },
-    dir: function () { return [' Volume in drive C is NWS', ' Directory of C:\\', '', 'INDEX    HTM   home', 'WEATHER  HTM   weather radar', 'SKY      HTM   sky desk', 'POSTS    HTM   hot takes (6 articles)', 'ABOUT    HTM   about me', '         5 file(s)']; },
+    help: function () { return ['HELP        this list', 'DIR         list pages', 'CD <page>    home | weather | sky | charts | posts | about', 'SKY         one-line sky report', 'CRT ON|OFF  scanlines   GLOW ON|OFF  void glow', 'THEME <name> dos | bios | green | amber | paper | literal', 'DATE  VER  CLS']; },
+    dir: function () { return [' Volume in drive C is NWS', ' Directory of C:\\', '', 'INDEX    HTM   home', 'WEATHER  HTM   weather radar', 'SKY      HTM   sky desk', 'CHARTS   HTM   chart wheels', 'POSTS    HTM   hot takes (6 articles)', 'ABOUT    HTM   about me', '         6 file(s)']; },
     ver: function () { return ['NWS-DOS [Version 2.0]']; },
     date: function () { return [new Date().toString()]; },
     cls: function () { out.innerHTML = ''; return []; },

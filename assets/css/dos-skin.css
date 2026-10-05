@@ -386,3 +386,11 @@ pre.hero-art { font: 12px/12px var(--ui); letter-spacing: 0; }
 .doc-article .doc-title, .doc-header.doc-article .doc-title { font-family: var(--vcr); font-size: 36px; line-height: 1.25; letter-spacing: 0; text-transform: uppercase; }
 /* LITERAL LEGEND keeps dogica for its clock digits only */
 @media (max-width: 860px) { .doc-header .doc-title, .home-header .doc-title, .doc-title { font-size: 32px; } .post-content h2, .post-content h3 { font-size: 16px; letter-spacing: 2px; } .doc-article .doc-title { font-size: 24px; } }
+
+
+/* ═══ Chart wheels ═══ */
+.chart-wrap { display: grid; grid-template-columns: minmax(260px, 504px) minmax(0, 1fr); gap: 16px; align-items: start; }
+.chart-pane { min-width: 0; }
+canvas.wheel { display: block; width: 100%; max-width: 504px; aspect-ratio: 1 / 1; height: auto; image-rendering: pixelated; border: 2px solid var(--line); background: var(--panel); }
+.chart-side .sunken { margin-bottom: 10px; }
+@media (max-width: 860px) { .chart-wrap { grid-template-columns: minmax(0, 1fr); } }

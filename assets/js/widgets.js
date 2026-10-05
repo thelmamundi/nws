@@ -1154,6 +1154,66 @@
     }
   } };
 
+
+  /* ───────────────────────── CHARTS: current-sky wheel and transit wheel (chart-wheel.js draws them) ───────────────────────── */
+  var SAMPLE = { date: '1990-05-17', time: '14:30', tz: 'America/New_York', lat: 40.71, lng: -74.01, src: 'sample' }, sampleChart = null;
+  function wheelPos(list) { return list.filter(function (p) { return true; }).map(function (p) { return { id: p.id, lon: p.lon, retro: !!p.retro }; }); }
+  function aspectsBetween(A, B, same, lim) {                       /* aspects between two position lists, tightest first */
+    var out = [];
+    A.forEach(function (p, i) { B.forEach(function (q, j) {
+      if (same && j <= i) return; if (p.id === 'node' || q.id === 'node') return;
+      var sep = S.sepAbs(p.lon, q.lon);
+      for (var k = 0; k < S.ASPECTS.length; k++) { var asp = S.ASPECTS[k], orb = Math.abs(sep - asp.angle), L = lim * ((p.id === 'moon' || q.id === 'moon') ? 0.7 : 1) * (asp.angle === 60 ? 0.7 : 1); if (orb <= L) { out.push({ a: p.lon, b: q.lon, ida: p.id, idb: q.id, type: asp.id, orb: orb }); break; } }
+    }); });
+    return out.sort(function (x, y) { return x.orb - y.orb; });
+  }
+  function aspName(id) { return S.ASPECT_BY_ID[id].glyph; }
+  function houseOf(sign, ascSign) { return ((sign - ascSign + 12) % 12) + 1; }
+  function chartShell(el, uid, side) {
+    if (!el._init) { el._init = true; el.innerHTML = '<div class="chart-wrap"><div class="chart-pane"><canvas class="wheel" data-wheel width="168" height="168" role="img" aria-label="Astrological chart wheel"></canvas></div><div class="chart-side" data-side></div></div><div data-after></div>'; }
+    return { cv: el.querySelector('[data-wheel]'), side: el.querySelector('[data-side]'), after: el.querySelector('[data-after]') };
+  }
+  W.chartnow = { render: function (el, c, o) {
+    var sh = chartShell(el), asc = S.ascendant(c.t, loc.lat, loc.lng), ascSign = Math.floor(asc / 30), pl = wheelPos(c.pos);
+    var asp = aspectsBetween(c.pos, c.pos, true, 6);
+    window.NwsChart && NwsChart.draw(sh.cv, { asc: asc, outer: pl, inner: null, aspects: asp.slice(0, 24) });
+    var rows = c.pos.map(function (p) { return '<tr><td class="t">' + g(p.glyph) + '</td><td class="ev">' + p.name.toUpperCase() + '</td><td class="t">' + posHTML(p) + '</td><td class="num">' + ordinal(houseOf(p.sign, ascSign)) + '</td><td class="' + (p.retro ? 'red' : 'dm') + '">' + (p.retro ? 'R' : '') + '</td></tr>'; }).join('');
+    sh.side.innerHTML = '<div class="sunken scr"><span class="hd">CURRENT SKY · ' + stampLong(c.t) + ' ' + tzAbbr(c.t) + '</span>' +
+      '<div class="kv"><span class="k">RISING</span><span class="v">' + signG(ascSign) + ' ' + esc(S.SIGNS[ascSign].name.toUpperCase()) + ' ' + Math.floor(asc % 30) + '°</span><span class="k">PLACE</span><span class="v">' + esc(loc.name) + '</span><span class="k">HOUSES</span><span class="v dm">whole sign</span></div></div>' +
+      '<div class="sunken"><table class="board"><thead><tr><th></th><th>BODY</th><th>POSITION</th><th>HSE</th><th>R</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+    sh.after.innerHTML = '<div class="sunken scr"><span class="hd">ASPECTS IN ORB · ' + asp.length + '</span>' + (asp.slice(0, 8).map(function (a) { return '<div>' + gl(a.ida) + ' ' + g(aspName(a.type)) + ' ' + gl(a.idb) + ' <span class="dm">' + S.fmtOrb(a.orb) + '</span></div>'; }).join('') || '<span class="dm">NONE</span>') + '</div>' +
+      '<p class="note">Wheel: Ascendant on the left, signs counter-clockwise, whole-sign houses. Red lines are hard aspects, blue are easy ones. Place: ' + (loc.approx ? 'your time zone (approximate): add your city on the Sky page for a precise rising sign.' : esc(loc.name) + '.') + '</p>';
+  } };
+  W.charttransit = { render: function (el, c, o) {
+    var sh = chartShell(el);
+    if (acct.state === 'init') loadAccount();
+    var useSample = !birth, nat = birth || (sampleChart || (sampleChart = makeBirth(SAMPLE))), natPos = nat.pos, asc = nat.asc !== null ? nat.asc : 0, ascSign = nat.asc !== null ? nat.ascSign : 0;
+    var asp = aspectsBetween(c.pos, natPos, false, 3);
+    window.NwsChart && NwsChart.draw(sh.cv, { asc: asc, outer: wheelPos(c.pos), inner: wheelPos(natPos), aspects: asp.slice(0, 22) });
+    var rows = asp.slice(0, 10).map(function (a) { return '<tr><td class="ev">' + gl(a.ida) + '</td><td class="t">' + g(aspName(a.type)) + '</td><td class="ev">' + gl(a.idb) + '</td><td class="num">' + S.fmtOrb(a.orb) + '</td></tr>'; }).join('');
+    var tp = c.pos.filter(function (p) { return p.id !== 'node'; }).map(function (p) { return gl(p.id) + ' ' + houseOf(p.sign, ascSign); }).join('  ');
+    sh.side.innerHTML = '<div class="sunken scr"><span class="hd">TRANSITS · ' + (useSample ? 'SAMPLE CHART' : 'YOUR CHART') + '</span><div class="kv"><span class="k">OUTER RING</span><span class="v">the sky now</span><span class="k">INNER RING</span><span class="v">' + (useSample ? 'sample natal' : 'your natal') + '</span><span class="k">RISING</span><span class="v">' + (nat.asc !== null ? signG(ascSign) + ' ' + esc(S.SIGNS[ascSign].name.toUpperCase()) : '<span class="dm">no birth time</span>') + '</span></div></div>' +
+      '<div class="sunken"><table class="board"><thead><tr><th>TRANSIT</th><th></th><th>NATAL</th><th>ORB</th></tr></thead><tbody>' + (rows || '<tr><td colspan="4" class="dm">NOTHING IN ORB</td></tr>') + '</tbody></table></div>';
+    var af = sh.after;
+    if (birth) { af.innerHTML = '<p class="note">Saved in this browser only. Transit houses count from your rising sign. <button type="button" class="chip-btn" data-act="skylinkClear">Unlink my chart</button></p>'; af._form = false; return; }
+    if (!af._form) {
+      af._form = true; var u = 'ct' + (++slN), cities = CITIES.map(function (x, i) { return '<option value="' + i + '">' + esc(x[0]) + '</option>'; }).join('');
+      af.innerHTML = '<div class="sunken scr"><span class="hd">SAMPLE NATAL CHART IS SHOWN</span><span class="dm">Link your own and the inner ring becomes your birth chart, and the lines show what the sky is touching right now. Nothing leaves your browser.</span></div>' +
+        '<details class="bdetails"><summary class="btn btn-primary">Link my chart</summary><form class="bform" data-bform novalidate>' +
+        '<label for="' + u + '-d">Birth date</label><input id="' + u + '-d" type="date" required><label for="' + u + '-t">Birth time</label><input id="' + u + '-t" type="time"> <label class="inl" for="' + u + '-n"><input id="' + u + '-n" type="checkbox"> I don’t know it</label>' +
+        '<label for="' + u + '-c">Birth place</label><select id="' + u + '-c">' + cities + '</select><span class="bbtns"><button type="submit" class="btn btn-primary">Link</button></span></form><p class="note" data-bnote>Saved only in this browser.</p></details>';
+      af.querySelector('#' + u + '-n').addEventListener('change', function (e) { af.querySelector('#' + u + '-t').disabled = e.target.checked; });
+      af.querySelector('[data-bform]').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var date = af.querySelector('#' + u + '-d').value, time = af.querySelector('#' + u + '-n').checked ? '' : af.querySelector('#' + u + '-t').value, ci = +af.querySelector('#' + u + '-c').value, cc = CITIES[ci];
+        if (!date) { af.querySelector('[data-bnote]').textContent = 'Enter your birth date.'; return; }
+        var ob = { date: date, time: time || null, tz: cc[1], lat: cc[2], lng: cc[3], city: ci, src: 'local' };
+        try { applyBirth(makeBirth(ob)); store('aw98_birth', JSON.stringify(ob)); } catch (err) { af.querySelector('[data-bnote]').textContent = 'That date or place did not work.'; return; }
+        af._form = false; schedule(true);
+      });
+    }
+  } };
+
   /* ───────────────────────── PUBLIC SKY STRIP (home) ───────────────────────── */
   W.strip = { render: function (el) {
     var c = ctx(Date.now(), 'live'), ph = S.moonPhase(c.t), act = S.activity(c.t), nx = nextEvent(c, null);
