@@ -3,7 +3,18 @@
 Requests come in chat, one large batch at a time. After each batch I add a numbered entry here with **Comes with / Added / Changed / Fixed / Removed**. (`areas/` has a README per theme, page, part and widget if you ever want to point at one.)
 Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
 
-## Round 12 (current)
+## Round 13 (current)
+**Comes with:** the site exactly as in Round 12, with new fonts.
+**Added**
+- **Perfect DOS VGA 437** (Win version) is the main font everywhere: body text, LED screens, tables, buttons, nav, the ticker, chart labels, the ASCII graphs and the forecast card. It is an 8x16 bitmap font, so text is 16 px (big countdown 48 px, big readouts 32 px) to stay crisp.
+- **Super VCR Mono** is the heading font: page titles (36 px), section labels, box headings, footer column headings, post headings (24 px) and window title bars (12 px).
+- Font credits in the footer fine print (Super VCR Mono is CC BY 4.0, so the credit is required); licence and readme files are in `assets/fonts/`.
+**Changed**
+- Text is a little smaller than the old VT323 (16 px instead of 19-24 px). The header planet is set at 12 px so it keeps its size.
+- Hearts, arrows and planet signs are not in these fonts and fall back to VT323 or the symbol font, as before.
+**Removed:** the LITERAL LEGEND fonts PixelOperator and Silkscreen. LITERAL LEGEND keeps dogica for its clock digits only. VT323 stays only as the fallback.
+
+## Round 12
 **Comes with:** the site exactly as in Round 11.
 **Changed**
 - The header planet is the WS one again (the original `ascii-art.js` from the old site's main page: the spinning ASCII planet that changes with the planetary day). Its colours follow each scheme's tokens: lit side, highlight, shadow and glow use the scheme's accent, white, complement, dim and grey.

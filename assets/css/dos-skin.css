@@ -53,7 +53,7 @@
   --art-bg: #000000; --art-ink: #8fd0ff; --soon-bg: #000000; --soon-fg: #ff5aa5;
   --btn: #ffc2e0; --btn-hi: #ffe6f1; --btn-lo: #ff9ac8; --btn-fg: #7a0a58; --btn-light: #ffffff; --btn-dark: #c0105f;
 }
-body { font: 20px/1.15 var(--ui); letter-spacing: .3px; color-scheme: dark; padding-bottom: 46px; -webkit-font-smoothing: none; }
+body { font: 16px/1.25 var(--ui); letter-spacing: 0; color-scheme: dark; padding-bottom: 46px; -webkit-font-smoothing: none; }
 * { font-weight: normal !important; }
 b, strong { color: var(--hi); }
 a { color: var(--link); text-decoration: none; border-bottom: 1px dotted currentColor; }
@@ -184,7 +184,6 @@ table.board { font-size: 22px; } .scr { font-size: 21px; }
 
 @media (max-width: 800px) {
   .layout { grid-template-columns: minmax(0, 1fr); } .half-width { grid-template-columns: 1fr; } .flex-columns { flex-direction: column; }
-  body { font-size: 19px; }
 }
 
 
@@ -263,21 +262,12 @@ html.glow[data-theme="phosphor"] canvas.dithered, html.glow[data-theme="amber"] 
 }
 /* END DITHER TILES */
 
-@font-face { font-family: "PixelOperator"; src: url("../fonts/PixelOperator.ttf") format("truetype"); font-display: swap; }
-@font-face { font-family: "Silkscreen"; src: url("../fonts/Silkscreen.ttf") format("truetype"); font-display: swap; }
 @font-face { font-family: "dogica"; src: url("../fonts/dogica.ttf") format("truetype"); font-display: swap; }
 /* the page: the nebula GIF tiled twice (offset, lightened together) so it reads as one dense starfield */
 html[data-theme="legend"] { --ll-space: url("../img/ll/space.gif"); background-color: #000; background-image: var(--ll-space), var(--ll-space); background-position: 0 0, 336px 224px; background-size: 672px 448px, 672px 448px; background-repeat: repeat, repeat; background-blend-mode: lighten; background-attachment: fixed, fixed; image-rendering: pixelated; }
-:root[data-theme="legend"] body { background: transparent; text-shadow: none; font: 16px/1.3 "PixelOperator", var(--ui); letter-spacing: 0; }
-:root[data-theme="legend"] { --ui: "PixelOperator", "VT323", monospace; }
-/* fonts from the Literal Legend page: PixelOperator (text), Silkscreen (chrome), dogica (clock). LED screens keep VT323. */
-:root[data-theme="legend"] .win-title, :root[data-theme="legend"] .nav-btn, :root[data-theme="legend"] .btn, :root[data-theme="legend"] .tabs button, :root[data-theme="legend"] .chip-btn, :root[data-theme="legend"] .badge,
-:root[data-theme="legend"] .section-label, :root[data-theme="legend"] .footer-col h4, :root[data-theme="legend"] .onair-sign, :root[data-theme="legend"] .start-btn, :root[data-theme="legend"] .tasks button { font-family: "Silkscreen", var(--ui); font-size: 11px; letter-spacing: 1px; line-height: 1.5; text-transform: uppercase; }
-:root[data-theme="legend"] .nav-btn { font-size: 12px; padding: 4px 8px; }
-:root[data-theme="legend"] .soon, :root[data-theme="legend"] .chip, :root[data-theme="legend"] .doc-eyebrow-tag { font-family: "Silkscreen", var(--ui); font-size: 9px; letter-spacing: 1px; }
+:root[data-theme="legend"] body { background: transparent; text-shadow: none; }
 :root[data-theme="legend"] .tray-clock, :root[data-theme="legend"] .b88-clock span { font-family: "dogica", var(--ui); font-size: 9px; letter-spacing: 0; }
 :root[data-theme="legend"] .win-body.led, :root[data-theme="legend"] .scr, :root[data-theme="legend"] .kv, :root[data-theme="legend"] .mast-chip, :root[data-theme="legend"] .doc-subtitle { font-family: var(--lcd); }
-:root[data-theme="legend"] .note, :root[data-theme="legend"] .win-q { font-size: 14px; }
 :root[data-theme="legend"] .win, :root[data-theme="legend"] .box, :root[data-theme="legend"] .tile, :root[data-theme="legend"] .footer { color: #7a0a58; --fg: #7a0a58; --hi: #580034; --dim: #a02a78; --hair: rgba(122,10,88,.3); --link: #7a0a58; }
 :root[data-theme="legend"] .win-body.led, :root[data-theme="legend"] .win-body.led .mini-body { color: #fff; }
 :root[data-theme="legend"] .win, :root[data-theme="legend"] .box, :root[data-theme="legend"] .tile, :root[data-theme="legend"] .art-frame { border: 3px double #ff3f8e; background-color: #ffe6f1; }
@@ -364,3 +354,33 @@ html[data-theme="legend"] { --ll-space: url("../img/ll/space.gif"); background-c
 
 /* ═══ Sky Link / evergreen posts ═══ */
 .win-widget[data-widget="skylink"] .kv { grid-template-columns: max-content 1fr; gap: 2px 14px; }
+
+
+/* ═══ TYPE: Perfect DOS VGA 437 (main text) and Super VCR Mono (headings) ═══
+   Perfect DOS is an 8x16 bitmap font: sizes of 16 / 32 / 48 px stay crisp. Super VCR Mono is a 12 px grid: 12 / 24 / 36 / 48 px.
+   VT323 stays as the fallback for characters these two do not have (hearts, arrows, planet signs use the symbol font). */
+@font-face { font-family: "PerfectDOS"; src: url("../fonts/PerfectDOS437Win.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "SuperVCR"; src: url("../fonts/SuperVCRMono.ttf") format("truetype"); font-display: swap; }
+:root { --ui: "PerfectDOS", "VT323", "Courier New", monospace; --lcd: "PerfectDOS", "VT323", "Courier New", monospace; --head: "SuperVCR", "VT323", "Courier New", monospace; }
+body, button, input, select, textarea { font-family: var(--ui); }
+body { font-size: 16px; line-height: 1.25; letter-spacing: 0; }
+.win-body, .win-q, .note, .odo-note, .nav-btn, .tree-view .nav-btn, .btn, .tabs button, .chip-btn, .start-btn, .tasks button, input, select, textarea, .chip, .mast-chip, .mast-chip-dim, .doc-eyebrow,
+.console .out, .footer, .footer .fine, .tile-eyebrow, .tile-meta, .row-meta, .tile-excerpt, .row-excerpt, .tile-title, .row-title, .scr, .status-strip.scr, table.board, [data-opts~="compact"] table.board,
+.mini-body, .post-content, .post-content table, .doc-feature figcaption, .doc-tags, .doc-actions, .intro p, .tray, .onair, .onair-sign, .tagline, .pill, .kv, .members-flag, .win-btns button, .b88-bar .b88 { font-size: 16px; letter-spacing: 0; }
+.nav-btn, .btn, .tabs button, .chip-btn, .start-btn { letter-spacing: 1px; }
+.badge, .soon, .nav-btn .soon, .f-soon .soon, .doc-eyebrow-tag { font-size: 12px; letter-spacing: 0; }
+.scr, table.board, .kv, .mini-body, .console .out { line-height: 1.25; }
+.led-time { font-size: 48px; letter-spacing: 0; } .led-small, .big-label, .odometer, .tile-big .tile-title { font-size: 32px; letter-spacing: 0; } .mini-body .big { font-size: 32px; }
+.doc-header .doc-subtitle { font-family: var(--ui); font-size: 16px; letter-spacing: 1px; line-height: 1.25; }
+pre.hero-art { font: 12px/12px var(--ui); letter-spacing: 0; }
+.ascii-graph, .seis-r, .card-ascii, pre, .post-content pre { font-family: var(--ui); font-size: 16px; line-height: 16px; letter-spacing: 0; } .card-ascii { line-height: 20px; }
+.tweet-box { font: 16px/1.25 var(--ui); }
+/* headings: Super VCR Mono */
+.doc-header .doc-title, .home-header .doc-title, .doc-title, .wordart { font-family: var(--head); font-size: 36px; line-height: 1.2; letter-spacing: 0; text-transform: uppercase; }
+.wordart { font-size: 24px; }
+.section-label, .box > h1, .box > h2, .footer-col h4, .post-content h2, .post-content h3, .post-content h4, .intro-h, .mode h3, .rc-body b { font-family: var(--head); font-size: 24px; line-height: 1.2; letter-spacing: 0; text-transform: uppercase; }
+.win-title { font-family: var(--head); font-size: 12px; letter-spacing: 0; text-transform: uppercase; }
+.post-content h2, .post-content h3 { font-size: 24px; } .post-content h4 { font-size: 12px; }
+.start-banner span { font-family: var(--head); font-size: 12px; }
+/* LITERAL LEGEND keeps dogica for its clock digits only */
+@media (max-width: 860px) { .doc-header .doc-title, .home-header .doc-title, .doc-title { font-size: 24px; } }

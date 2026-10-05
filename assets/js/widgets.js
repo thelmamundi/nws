@@ -1391,7 +1391,7 @@
     var hi = ui.actHover == null ? Math.round(clamp(nowI / (iw - 1), 0, 1) * n) : clamp(ui.actHover, 0, n);
     if (ui.actHover != null) { var hx = padL + Math.round(hi / n * (iw - 1)); for (Y = padT; Y < base; Y += 2) bPx(b, hx, Y, [255, 232, 140]); }
     bFlush(b);
-    var x = b.x; x.font = '15px "VT323","Courier New",monospace'; x.textBaseline = 'middle'; x.textAlign = 'right';
+    var x = b.x; x.font = '16px "PerfectDOS","VT323","Courier New",monospace'; x.textBaseline = 'middle'; x.textAlign = 'right';
     [['HEAVY', 65, '#ffe078'], ['BUSY', 42, '#ffb000'], ['MODERATE', 27, '#6fa8ff'], ['QUIET', 10, '#4b6fc9']].forEach(function (L) { x.fillStyle = L[2]; x.fillText(L[0], padL * cell - 8, (base - L[1] / SCALE * ih) * cell); });
     x.fillStyle = '#8fa8ff'; x.textAlign = 'center'; var ticks = 5;
     for (var k = 0; k <= ticks; k++) x.fillText(stamp(d.t0 + d.w * k / ticks, d.now), (padL + iw * k / ticks) * cell, b.h - 8);
@@ -1450,7 +1450,7 @@
     bFlush(b);
     var x = b.x;
     labels.forEach(function (lb) { lb.ga.forEach(function (nm, q) { if (PG) PG.draw(x, nm, 17 + q * 30, lb.cy * cell, 28, q === 1 ? 'rgb(255,190,60)' : 'rgb(215,228,255)'); }); });
-    x.font = '13px "VT323","Courier New",monospace'; x.textBaseline = 'middle'; x.fillStyle = '#8fa8ff'; x.textAlign = 'center';
+    x.font = '16px "PerfectDOS","VT323","Courier New",monospace'; x.textBaseline = 'middle'; x.fillStyle = '#8fa8ff'; x.textAlign = 'center';
     for (k = 0; k <= 5; k++) x.fillText(stamp(t0 + w * k / 5, c.t), (padL + iw * k / 5) * cell, R * rowCss + 14);
     x.textAlign = 'left'; x.fillStyle = '#cfe0ff'; x.fillText('NOW', nowX * cell + 4, 8);
     el.querySelector('[data-sr]').innerHTML = keys.map(function (kk) { return '<li>' + S.eventPlain({ type: 'aspect', a: series[kk].a, b: series[kk].b, aspect: series[kk].asp }) + '</li>'; }).join('');

@@ -12,7 +12,7 @@ Weathergirl 98's structure (hero header with ASCII planet, left rail, status str
 Pages: `src/pages/*.html` inside `src/partials/layout.html`. `node build.js` writes the root `*.html` (committed, so any static host works). Preview with `python3 -m http.server`. `node build.js --single out.html` makes one self-contained file with all pages as tabs.
 
 Styling: `assets/css/legacy.css` is the old theme's CSS (instrument internals); `assets/css/dos-skin.css` re-skins it. Placeholders to replace: intro/about copy, link buttons, post tiles, archive rows.
-Layout credit: CC-LINK by CC DebtDeath (linked in the footer). Font: VT323 (OFL).
+Layout credit: CC-LINK by CC DebtDeath (linked in the footer). Fonts: Perfect DOS VGA 437 (Zeh Fernando, free), Super VCR Mono (ASmolBoy, CC BY 4.0), VT323 (OFL, fallback).
 
 Docs: `docs/CHANGES.md` (log), `docs/REQUESTS.md` (how to ask), `docs/FROM-WS.md` (old site inventory), `docs/POSTS.md` (evergreen posts).
 
