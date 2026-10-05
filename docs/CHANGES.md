@@ -3,7 +3,17 @@
 Requests come in chat, one large batch at a time. After each batch I add a numbered entry here with **Comes with / Added / Changed / Fixed / Removed**. (`areas/` has a README per theme, page, part and widget if you ever want to point at one.)
 Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
 
-## Round 15 (current)
+## Round 16 (current)
+**Comes with:** the site as in Round 15, with the Charts page wheels redrawn.
+**Changed** (both wheels on the Charts page: **Current Sky Chart** and **Transit Chart**, `assets/js/chart-wheel.js`)
+- **Wheel body is silver** (Win98 grey, white and dark-grey bevels) in every theme. The theme colour goes on the **sign ring segments** (solid element colours), the aspect lines, markers and hub.
+- **Planet and sign glyphs are 32px** (up from about 16px). Planet buttons grew to fit; the wheel's radii were scaled to match.
+- **Pixelization halved:** the pixel grid is 336 x 336 (was 168 x 168), so each pixel is 1.5px on screen.
+- **No dither:** all fills are flat colour. Bevels, the ring and the house numbers are redrawn at the finer grid.
+- `chartShell` canvases in `widgets.js` now declare 336 x 336.
+**Removed:** Bayer dither fills on the wheels (sign ring, planet track, desk).
+
+## Round 15
 **Comes with:** the site as in Round 14, plus a Charts page.
 **Added**
 - **Charts** page (nav button "Charts", Start menu, console `cd charts`) with Time Control, a **Current Sky Chart** and a **Transit Chart**.

@@ -1170,7 +1170,7 @@
   function aspName(id) { return S.ASPECT_BY_ID[id].glyph; }
   function houseOf(sign, ascSign) { return ((sign - ascSign + 12) % 12) + 1; }
   function chartShell(el, uid, side) {
-    if (!el._init) { el._init = true; el.innerHTML = '<div class="chart-wrap"><div class="chart-pane"><canvas class="wheel" data-wheel width="168" height="168" role="img" aria-label="Astrological chart wheel"></canvas></div><div class="chart-side" data-side></div></div><div data-after></div>'; }
+    if (!el._init) { el._init = true; el.innerHTML = '<div class="chart-wrap"><div class="chart-pane"><canvas class="wheel" data-wheel width="336" height="336" role="img" aria-label="Astrological chart wheel"></canvas></div><div class="chart-side" data-side></div></div><div data-after></div>'; }
     return { cv: el.querySelector('[data-wheel]'), side: el.querySelector('[data-side]'), after: el.querySelector('[data-after]') };
   }
   W.chartnow = { render: function (el, c, o) {
