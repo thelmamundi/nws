@@ -20,6 +20,16 @@ Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
   - **Starting soon / Be right back / Thanks for watching** scenes: a centre card with a big title, subtitle, a countdown and the sky chart, on the theme background, with the ticker.
   - Controlled from the address, no editing: `overlay.html?scene=live|starting|brb|ending&title=My+Stream&sub=Tarot+night&mins=10` (or `&until=21:00`), `&theme=legend` (dos, bios, phosphor, amber, paper, legend), `&cam=0` hides the cam frame. Add the file in OBS as a Browser source with the local file option, width 1920, height 1080.
   - Scales to any browser source size. Not tested inside OBS (checked in headless Chromium with a transparent screenshot).
+- **YouTube kit** (`youtube.html`, built by `node build.js --youtube`; rendered by `node scripts/render-youtube.js`), all in the site skin with the real sky chart, planet glyph sprites and Bayer dither wipes. Output in `youtube/`:
+  - `intro.mp4` (6 s, 1080p): dither fade up from black, the live sky wheel grows and slides left, an "NWS" window types out your title with a cycling planet glyph, wipe to black.
+  - `end.mp4` (20 s): "thanks for watching" window, two empty VIDEO slots and a SUBSCRIBE ring where YouTube's end-screen elements go, a slowly turning wheel and a progress bar.
+  - `card.mp4` (2.5 s): chapter title card for transitions, with dither wipes in and out.
+  - `lowerthird.webm` (6 s, transparent) and `lowerthird.png`: a name / subtitle window that steps in and out.
+  - `bug.png` (transparent): the corner SUBSCRIBE watermark.
+  - `thumbnail.png` (1280 x 720): huge outlined title, "ON AIR" window with a planet glyph, the sky wheel floating on the starfield.
+  - Re-render with your own words and colours: `node scripts/render-youtube.js --title "Your Title" --sub "your line" --theme dos --only thumb` (themes dos, bios, phosphor, amber, paper, legend; `--only` takes intro,end,card,lower,bug,thumb). Needs `npm i playwright-core`, Chromium and ffmpeg. Motion is stepped at 12 frames per second on purpose; it is encoded at 30.
+  - The samples in `youtube/` use the title "Pluto was never demoted" and the LITERAL LEGEND colours.
+- The chart wheel takes a `clear: true` option that leaves the desk transparent.
 - `areas/pages/newtab/` README.
 
 ## Round 16

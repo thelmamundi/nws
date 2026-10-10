@@ -5,3 +5,5 @@ Gadget list and defaults: the `GADGETS` array in the extension block of `build.j
 Dashboard: `node build.js --dashboard` writes `dashboard.html` and `wallpaper/` (src/newtab/dashboard.*).
 
 Overlay: `node build.js --overlay` writes `overlay.html` (src/newtab/overlay.*).
+
+YouTube kit: `node build.js --youtube`, then `node scripts/render-youtube.js` (src/newtab/youtube.*). Output in youtube/.
