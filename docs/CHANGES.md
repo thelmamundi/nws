@@ -13,6 +13,8 @@ Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
   - Install: chrome://extensions, turn on Developer mode, Load unpacked, pick the `extension/` folder.
   - Source: `src/newtab/` (page, script, css). `extension/` is generated; do not edit it.
 - **Firefox build** (`extension-firefox/`, same page, manifest adds a Firefox add-on id). Install: about:debugging, This Firefox, Load Temporary Add-on, pick its `manifest.json`. Temporary add-ons are removed when Firefox closes; keeping it needs Mozilla signing (not set up) or Firefox Developer Edition / Nightly. Not tested in Firefox (not available here).
+- **Full-screen dashboard** (`dashboard.html`, built by `node build.js --dashboard`): one self-contained file (css, js, fonts and images inline) with all 16 gadgets on, packed into balanced columns and scaled to fit any window or screen size (it re-fits on resize and every minute). Host it anywhere, or open it from disk. Add `#bare` to the address to hide the top bar. The clock and a Colors picker sit in the top bar.
+- **Wallpaper Engine folder** (`wallpaper/`: `index.html`, `project.json`, `preview.jpg`), a web wallpaper with the same page. In Wallpaper Engine: Create Wallpaper or Open from file, pick `wallpaper/project.json`. It can't be clicked, so set colors beforehand (open `dashboard.html` in a browser, pick a colour, the choice is stored per page) and the personal-chart gadgets show the sample chart. Not tested inside Wallpaper Engine.
 - `areas/pages/newtab/` README.
 
 ## Round 16

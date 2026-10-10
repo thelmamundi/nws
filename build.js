@@ -51,6 +51,24 @@ for (const f of fs.readdirSync(path.join(__dirname, 'src/pages'))) {
   console.log('built', page + '.html');
 }
 
+/* ── full-screen dashboard (one self-contained html: host it, or use it as a Wallpaper Engine web wallpaper):  node build.js --dashboard  ->  dashboard.html + wallpaper/ ── */
+if (process.argv.includes('--dashboard')) {
+  const ALL = [['conditions', 'Current Conditions', '&#9737;&#65038;', 'compact'], ['nextexact', 'Next Exact Thing', '&#9201;&#65038;', ''], ['flight', 'Celestial Flight Board', '&#9992;&#65038;', 'compact'], ['chartnow', 'Current Sky Chart', '&#9737;&#65038;', ''],
+    ['moon', 'Lunar Motion Monitor', '&#9790;&#65038;', ''], ['clock', 'Planetary Clock', '&#9201;&#65038;', ''], ['personal', 'Your Active Personal Aspects', '&#9733;&#65038;', ''], ['charttransit', 'Transit Chart', '&#9678;', ''],
+    ['radar', 'Astrological Weather Radar', '&#9678;', 'window=24'], ['activity', 'Impact Forecast', '&#9650;&#65038;', ''], ['aspects', 'Current Aspects', '&#9678;', ''], ['speed', 'Planet Speedometer', '&#9201;&#65038;', ''],
+    ['status', 'Celestial System Status', '&#9881;&#65038;', ''], ['scrub', 'Time Control', '&#9201;&#65038;', ''], ['changelog', 'Sky Changelog', '&#9998;&#65038;', ''], ['since', 'Since Your Last Visit', '&#8635;', 'home']];
+  const MIME = { gif: 'image/gif', png: 'image/png', ttf: 'font/ttf', woff2: 'font/woff2', otf: 'font/otf' };
+  const inl = (txt) => txt.replace(/url\((["']?)(?:\.\.\/|assets\/)((?:img\/ll|fonts)\/[\w.-]+\.(?:gif|png|ttf|woff2|otf))\1\)/g, (m, q, f) => `url(data:${MIME[f.split('.').pop()]};base64,${fs.readFileSync(path.join(__dirname, 'assets', f)).toString('base64')})`);
+  const css = inl(['legacy', 'dos-skin'].map(n => R('assets/css', n + '.css')).join('\n')) + '\n' + R('src/newtab/dashboard.css');
+  const boot = R('src/newtab/boot.js'), js = ['pixel-glyphs', 'chart-wheel', 'starfield', 'astro-engine', 'ascii-art', 'art', 'widgets', 'site', 'theme'].map(n => R('assets/js', n + '.js')).concat([R('src/newtab/dashboard.js')]).map(s => `<script>\n${s}\n</script>`).join('\n');
+  const head = `<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">\n<style>\n${css}\n</style>\n<script>${boot}</script>`;
+  const html = R('src/newtab/dashboard.html').replace('{{head}}', () => head).replace('{{widgets}}', () => ALL.map(g => widget({ name: g[0], title: g[1], ico: g[2], opts: g[3] })).join('\n')).replace('{{scripts}}', () => js);
+  fs.writeFileSync(path.join(__dirname, 'dashboard.html'), html);
+  fs.mkdirSync(path.join(__dirname, 'wallpaper'), { recursive: true }); fs.writeFileSync(path.join(__dirname, 'wallpaper/index.html'), html);
+  fs.writeFileSync(path.join(__dirname, 'wallpaper/project.json'), JSON.stringify({ file: 'index.html', title: 'NWS Sky Dashboard', type: 'web', description: 'Every gadget of the sky, live.', tags: ['Abstract'], preview: 'preview.jpg' }, null, 2) + '\n');
+  console.log('dashboard -> dashboard.html, wallpaper/ (index.html + project.json)');
+}
+
 /* ── new-tab extension (Chrome / Edge / Brave, Manifest V3):  node build.js --extension  ->  extension/  (load it unpacked) ── */
 if (process.argv.includes('--extension')) {
   const GADGETS = [

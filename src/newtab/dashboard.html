@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWS Sky Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{{head}}
+</head>
+<body data-ticker="Normal">
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="db-stage" id="stage">
+  <header class="db-top win" id="db-top">
+    <div class="win-title"><span class="win-ico aw-day-glyph" aria-hidden="true"></span><span class="win-name">NWS &middot; The sky, live</span></div>
+    <div class="win-body db-bar">
+      <div class="nt-clock"><span id="nt-time">--:--</span><span id="nt-date"></span></div>
+      <div class="nt-ctl"><label>Colors <select id="nt-theme"><option value="dos">DOS blue</option><option value="bios">BIOS grey</option><option value="phosphor">Void green</option><option value="amber">Void amber</option><option value="paper">Paper</option><option value="legend">LITERAL LEGEND</option></select></label></div>
+    </div>
+  </header>
+  <main class="db-cols" id="db-cols">
+{{widgets}}
+  </main>
+</div>
+{{scripts}}
+</body>
+</html>

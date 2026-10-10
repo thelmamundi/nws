@@ -1,0 +1,20 @@
+/* Full-screen dashboard: every gadget in balanced columns, the whole stage scaled to fit the window (dashboard.js). */
+html, body { margin: 0; padding: 0 !important; overflow: hidden; height: 100%; }
+body { padding-bottom: 0 !important; }
+.db-stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; box-sizing: border-box; padding: 16px; }
+.db-top { margin-bottom: 16px; }
+.db-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.nt-clock { display: flex; align-items: baseline; gap: 12px; }
+.nt-clock #nt-time { font-size: 44px; line-height: 1; } .nt-clock #nt-date { font-size: 20px; opacity: .8; }
+.nt-ctl select { font: inherit; }
+.db-cols { column-gap: 16px; column-fill: balance; }
+.db-cols > .win { break-inside: avoid; margin: 0 0 16px; display: block; }
+.db-cols .win-q, .db-cols .win-btns { display: none; }
+.db-cols .win-body a[href$=".html"], .db-cols .win-body a[href*=".html#"] { display: none; }
+html.bare .db-top { display: none; }
+.db-cols .chart-wrap { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.db-cols .chart-side { font-size: 14px; }
+.db-cols .chart-side p, .db-cols .chart-side .note { display: none; }
+.db-cols .widget-body p.note, .db-cols .widget-body .foot { font-size: 14px; }
+.db-cols .radar-wrap { grid-template-columns: minmax(0, 1fr); }
+.db-cols .radar-wrap .scr { max-height: 180px; overflow: hidden; }
