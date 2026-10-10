@@ -1,0 +1,1 @@
+try { var t = localStorage.getItem('nws-theme'); if (t) document.documentElement.setAttribute('data-theme', t); if (localStorage.getItem('nws-crt') === '1') document.documentElement.className += ' crt'; if (localStorage.getItem('nws-glow') === '1') document.documentElement.className += ' glow'; } catch (e) { /* storage blocked */ }

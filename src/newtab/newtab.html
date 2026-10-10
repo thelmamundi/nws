@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New Tab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="assets/css/legacy.css">
+<link rel="stylesheet" href="assets/css/dos-skin.css">
+<link rel="stylesheet" href="newtab.css">
+<script src="boot.js"></script>
+</head>
+<body data-ticker="Normal">
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="nt">
+  <header class="nt-top win">
+    <div class="win-title"><span class="win-ico aw-day-glyph" aria-hidden="true"></span><span class="win-name">NWS</span></div>
+    <div class="win-body nt-bar">
+      <div class="nt-clock"><span id="nt-time">--:--</span><span id="nt-date"></span></div>
+      <form class="nt-search" action="https://www.google.com/search" method="get"><input name="q" type="search" placeholder="Search the web" autocomplete="off" aria-label="Search"><button class="btn" type="submit">Go</button></form>
+      <div class="nt-ctl">
+        <label>Colors <select id="nt-theme"><option value="dos">DOS blue</option><option value="bios">BIOS grey</option><option value="phosphor">Void green</option><option value="amber">Void amber</option><option value="paper">Paper</option><option value="legend">LITERAL LEGEND</option></select></label>
+        <button class="btn" type="button" id="nt-edit" aria-expanded="false">Gadgets</button>
+      </div>
+    </div>
+    <div class="win-body nt-picker" id="nt-picker" hidden>{{picker}}</div>
+  </header>
+  <main class="nt-grid" id="nt-grid">
+{{widgets}}
+  </main>
+</div>
+<script src="assets/js/pixel-glyphs.js"></script>
+<script src="assets/js/chart-wheel.js"></script>
+<script src="assets/js/starfield.js"></script>
+<script src="assets/js/astro-engine.js"></script>
+<script src="assets/js/ascii-art.js"></script>
+<script src="assets/js/art.js"></script>
+<script src="assets/js/widgets.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/theme.js"></script>
+<script src="newtab.js"></script>
+</body>
+</html>

@@ -51,6 +51,28 @@ for (const f of fs.readdirSync(path.join(__dirname, 'src/pages'))) {
   console.log('built', page + '.html');
 }
 
+/* ── new-tab extension (Chrome / Edge / Brave, Manifest V3):  node build.js --extension  ->  extension/  (load it unpacked) ── */
+if (process.argv.includes('--extension')) {
+  const GADGETS = [
+    ['conditions', 'Current Conditions', '&#9737;&#65038;', 'compact', 1], ['nextexact', 'Next Exact Thing', '&#9201;&#65038;', '', 1], ['flight', 'Celestial Flight Board', '&#9992;&#65038;', 'compact', 1],
+    ['chartnow', 'Current Sky Chart', '&#9737;&#65038;', '', 1], ['moon', 'Lunar Motion Monitor', '&#9790;&#65038;', '', 1], ['clock', 'Planetary Clock', '&#9201;&#65038;', '', 1],
+    ['personal', 'Your Active Personal Aspects', '&#9733;&#65038;', '', 1], ['charttransit', 'Transit Chart', '&#9678;', '', 0], ['radar', 'Astrological Weather Radar', '&#9678;', 'window=24', 0],
+    ['activity', 'Impact Forecast', '&#9650;&#65038;', '', 0], ['aspects', 'Current Aspects', '&#9678;', '', 0], ['speed', 'Planet Speedometer', '&#9201;&#65038;', '', 0],
+    ['status', 'Celestial System Status', '&#9881;&#65038;', '', 0], ['scrub', 'Time Control', '&#9201;&#65038;', '', 0], ['changelog', 'Sky Changelog', '&#9998;&#65038;', '', 0], ['since', 'Since Your Last Visit', '&#8635;', 'home', 0]
+  ];
+  const dir = path.join(__dirname, 'extension'); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(path.join(dir, 'assets/js'), { recursive: true });
+  const tpl = R('src/newtab/newtab.html')
+    .replace('{{picker}}', GADGETS.map(g => `<label><input type="checkbox" value="${g[0]}"> ${g[1]}</label>`).join('\n'))
+    .replace('{{widgets}}', GADGETS.map(g => widget({ name: g[0], title: g[1], ico: g[2], opts: g[3] }).replace('<section ', `<section data-default="${g[4]}" `)).join('\n'));
+  fs.writeFileSync(path.join(dir, 'newtab.html'), tpl);
+  ['boot.js', 'newtab.js', 'newtab.css'].forEach(f => fs.copyFileSync(path.join(__dirname, 'src/newtab', f), path.join(dir, f)));
+  for (const f of ['legacy', 'dos-skin']) { fs.mkdirSync(path.join(dir, 'assets/css'), { recursive: true }); fs.copyFileSync(path.join(__dirname, 'assets/css', f + '.css'), path.join(dir, 'assets/css', f + '.css')); }
+  for (const f of ['pixel-glyphs', 'chart-wheel', 'starfield', 'astro-engine', 'ascii-art', 'art', 'widgets', 'site', 'theme']) fs.copyFileSync(path.join(__dirname, 'assets/js', f + '.js'), path.join(dir, 'assets/js', f + '.js'));
+  for (const d of ['fonts', 'img']) fs.cpSync(path.join(__dirname, 'assets', d), path.join(dir, 'assets', d), { recursive: true });
+  fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify({ manifest_version: 3, name: 'NWS New Tab', version: '0.1.0', description: 'The sky, live, on every new tab.', chrome_url_overrides: { newtab: 'newtab.html' }, permissions: [] }, null, 2) + '\n');
+  console.log('extension -> extension/ (chrome://extensions > Developer mode > Load unpacked)');
+}
+
 /* ── single-file build for previewing in one document (all pages as tabs, everything inlined):  node build.js --single out.html ── */
 if (process.argv.includes('--single')) {
   const out = process.argv[process.argv.indexOf('--single') + 1];

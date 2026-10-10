@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New Tab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="assets/css/legacy.css">
+<link rel="stylesheet" href="assets/css/dos-skin.css">
+<link rel="stylesheet" href="newtab.css">
+<script src="boot.js"></script>
+</head>
+<body data-ticker="Normal">
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="nt">
+  <header class="nt-top win">
+    <div class="win-title"><span class="win-ico aw-day-glyph" aria-hidden="true"></span><span class="win-name">NWS</span></div>
+    <div class="win-body nt-bar">
+      <div class="nt-clock"><span id="nt-time">--:--</span><span id="nt-date"></span></div>
+      <form class="nt-search" action="https://www.google.com/search" method="get"><input name="q" type="search" placeholder="Search the web" autocomplete="off" aria-label="Search"><button class="btn" type="submit">Go</button></form>
+      <div class="nt-ctl">
+        <label>Colors <select id="nt-theme"><option value="dos">DOS blue</option><option value="bios">BIOS grey</option><option value="phosphor">Void green</option><option value="amber">Void amber</option><option value="paper">Paper</option><option value="legend">LITERAL LEGEND</option></select></label>
+        <button class="btn" type="button" id="nt-edit" aria-expanded="false">Gadgets</button>
+      </div>
+    </div>
+    <div class="win-body nt-picker" id="nt-picker" hidden><label><input type="checkbox" value="conditions"> Current Conditions</label>
+<label><input type="checkbox" value="nextexact"> Next Exact Thing</label>
+<label><input type="checkbox" value="flight"> Celestial Flight Board</label>
+<label><input type="checkbox" value="chartnow"> Current Sky Chart</label>
+<label><input type="checkbox" value="moon"> Lunar Motion Monitor</label>
+<label><input type="checkbox" value="clock"> Planetary Clock</label>
+<label><input type="checkbox" value="personal"> Your Active Personal Aspects</label>
+<label><input type="checkbox" value="charttransit"> Transit Chart</label>
+<label><input type="checkbox" value="radar"> Astrological Weather Radar</label>
+<label><input type="checkbox" value="activity"> Impact Forecast</label>
+<label><input type="checkbox" value="aspects"> Current Aspects</label>
+<label><input type="checkbox" value="speed"> Planet Speedometer</label>
+<label><input type="checkbox" value="status"> Celestial System Status</label>
+<label><input type="checkbox" value="scrub"> Time Control</label>
+<label><input type="checkbox" value="changelog"> Sky Changelog</label>
+<label><input type="checkbox" value="since"> Since Your Last Visit</label></div>
+  </header>
+  <main class="nt-grid" id="nt-grid">
+<section data-default="1" class="win win-widget" data-widget="conditions" data-opts="compact">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9737;&#65038;</span><span class="win-name">Current Conditions</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Current Conditions">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="1" class="win win-widget" data-widget="nextexact">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9201;&#65038;</span><span class="win-name">Next Exact Thing</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Next Exact Thing">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="1" class="win win-widget" data-widget="flight" data-opts="compact">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9992;&#65038;</span><span class="win-name">Celestial Flight Board</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Celestial Flight Board">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="1" class="win win-widget" data-widget="chartnow">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9737;&#65038;</span><span class="win-name">Current Sky Chart</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Current Sky Chart">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="1" class="win win-widget" data-widget="moon">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9790;&#65038;</span><span class="win-name">Lunar Motion Monitor</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Lunar Motion Monitor">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="1" class="win win-widget" data-widget="clock">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9201;&#65038;</span><span class="win-name">Planetary Clock</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Planetary Clock">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="1" class="win win-widget" data-widget="personal">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9733;&#65038;</span><span class="win-name">Your Active Personal Aspects</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Your Active Personal Aspects">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="0" class="win win-widget" data-widget="charttransit">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9678;</span><span class="win-name">Transit Chart</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Transit Chart">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="0" class="win win-widget" data-widget="radar" data-opts="window=24">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9678;</span><span class="win-name">Astrological Weather Radar</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Astrological Weather Radar">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="0" class="win win-widget" data-widget="activity">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9650;&#65038;</span><span class="win-name">Impact Forecast</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Impact Forecast">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="0" class="win win-widget" data-widget="aspects">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9678;</span><span class="win-name">Current Aspects</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Current Aspects">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="0" class="win win-widget" data-widget="speed">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9201;&#65038;</span><span class="win-name">Planet Speedometer</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Planet Speedometer">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="0" class="win win-widget" data-widget="status">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9881;&#65038;</span><span class="win-name">Celestial System Status</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Celestial System Status">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="0" class="win win-widget" data-widget="scrub">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9201;&#65038;</span><span class="win-name">Time Control</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Time Control">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="0" class="win win-widget" data-widget="changelog">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9998;&#65038;</span><span class="win-name">Sky Changelog</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Sky Changelog">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+<section data-default="0" class="win win-widget" data-widget="since" data-opts="home">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#8635;</span><span class="win-name">Since Your Last Visit</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize Since Your Last Visit">_</button></span></div>
+  <div class="win-body">
+    
+    <div class="widget-body" data-body><noscript>This panel is computed live in your browser, so it needs JavaScript.</noscript><span class="loading">Calculating&hellip;</span></div>
+  </div>
+</section>
+  </main>
+</div>
+<script src="assets/js/pixel-glyphs.js"></script>
+<script src="assets/js/chart-wheel.js"></script>
+<script src="assets/js/starfield.js"></script>
+<script src="assets/js/astro-engine.js"></script>
+<script src="assets/js/ascii-art.js"></script>
+<script src="assets/js/art.js"></script>
+<script src="assets/js/widgets.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/theme.js"></script>
+<script src="newtab.js"></script>
+</body>
+</html>

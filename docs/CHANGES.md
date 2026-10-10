@@ -3,7 +3,18 @@
 Requests come in chat, one large batch at a time. After each batch I add a numbered entry here with **Comes with / Added / Changed / Fixed / Removed**. (`areas/` has a README per theme, page, part and widget if you ever want to point at one.)
 Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
 
-## Round 16 (current)
+## Round 17 (current)
+**Comes with:** the site as in Round 16, plus a New Tab dashboard extension.
+**Added**
+- **NWS New Tab** (`extension/`, built by `node build.js --extension`): a Chrome / Edge / Brave extension that replaces the new tab page with a dashboard of the live gadgets. Same themes, fonts and window look as the site.
+  - Top bar: clock and date, a web search box, a **Colors** picker (all six schemes) and a **Gadgets** button.
+  - **Gadgets** lists 16 instruments with checkboxes; what you tick is remembered in this browser. Drag a gadget by its title bar to reorder.
+  - On by default: Current Conditions, Next Exact Thing, Celestial Flight Board, Current Sky Chart, Lunar Motion Monitor, Planetary Clock, Your Active Personal Aspects. Off by default: Transit Chart, Radar, Impact Forecast, Current Aspects, Planet Speedometer, System Status, Time Control, Sky Changelog, Since Your Last Visit.
+  - Install: chrome://extensions, turn on Developer mode, Load unpacked, pick the `extension/` folder.
+  - Source: `src/newtab/` (page, script, css). `extension/` is generated; do not edit it.
+- `areas/pages/newtab/` README.
+
+## Round 16
 **Comes with:** the site as in Round 15, with the Charts page wheels redrawn.
 **Changed** (both wheels on the Charts page: **Current Sky Chart** and **Transit Chart**, `assets/js/chart-wheel.js`)
 - **Wheel body is silver** (Win98 grey, white and dark-grey bevels) in every theme. The theme colour goes on the **sign ring segments** (solid element colours), the aspect lines, markers and hub.
