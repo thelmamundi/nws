@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" data-scene="live">
+<head>
+<meta charset="utf-8">
+<title>NWS Stream Overlay</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{{head}}
+</head>
+<body data-ticker="Normal">
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="ov-stage" id="stage">
+  <section class="win ov-title scene-live"><div class="win-title"><span class="win-ico aw-day-glyph" aria-hidden="true"></span><span class="win-name" id="ov-name">NWS</span></div>
+    <div class="win-body"><div class="ov-h" id="ov-h1">The sky, live</div><div class="ov-clock"><span id="ov-time">--:--</span><span id="ov-date"></span></div></div></section>
+  <div class="ov-col ov-left scene-live">
+{{left}}
+  </div>
+  <div class="ov-col ov-right scene-live">
+    <section class="win ov-cam" id="ov-cam"><div class="win-title"><span class="win-ico" aria-hidden="true">&#9679;</span><span class="win-name">Cam</span></div><div class="win-body ov-hole"></div></section>
+{{right}}
+  </div>
+  <section class="win ov-card scene-card"><div class="win-title"><span class="win-ico aw-day-glyph" aria-hidden="true"></span><span class="win-name" id="ov-cardname">NWS</span></div>
+    <div class="win-body"><div class="ov-big" id="ov-big">STARTING SOON</div><div class="ov-sub" id="ov-sub"></div><div class="ov-count" id="ov-count"></div><div class="ov-wheel">{{wheel}}</div></div></section>
+  <div class="onair ov-bar" id="onair" role="region" aria-label="Current transits ticker">
+    <a class="onair-sign" href="#"><span class="lamp" aria-hidden="true"></span>ON AIR</a>
+    <div class="onair-window"><div class="onair-track" id="onair-track"><span class="dim">CALCULATING THE SKY&hellip;</span></div></div>
+  </div>
+</div>
+{{scripts}}
+</body>
+</html>

@@ -69,6 +69,21 @@ if (process.argv.includes('--dashboard')) {
   console.log('dashboard -> dashboard.html, wallpaper/ (index.html + project.json)');
 }
 
+/* ── stream overlay (OBS browser source, 1920x1080, transparent live scene):  node build.js --overlay  ->  overlay.html ── */
+if (process.argv.includes('--overlay')) {
+  const wd = (n, t, ico, o) => widget({ name: n, title: t, ico, opts: o });
+  const MIME = { gif: 'image/gif', png: 'image/png', ttf: 'font/ttf', woff2: 'font/woff2', otf: 'font/otf' };
+  const inl = (txt) => txt.replace(/url\((["']?)(?:\.\.\/|assets\/)((?:img\/ll|fonts)\/[\w.-]+\.(?:gif|png|ttf|woff2|otf))\1\)/g, (m, q, f) => `url(data:${MIME[f.split('.').pop()]};base64,${fs.readFileSync(path.join(__dirname, 'assets', f)).toString('base64')})`);
+  const css = inl(['legacy', 'dos-skin'].map(n => R('assets/css', n + '.css')).join('\n')) + '\n' + R('src/newtab/overlay.css');
+  const js = ['pixel-glyphs', 'chart-wheel', 'starfield', 'astro-engine', 'ascii-art', 'art', 'widgets', 'site', 'theme'].map(n => R('assets/js', n + '.js')).concat([R('src/newtab/overlay.js')]).map(s => `<script>\n${s}\n</script>`).join('\n');
+  const head = `<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">\n<style>\n${css}\n</style>\n<script>${R('src/newtab/boot.js')}</script>`;
+  const left = [wd('conditions', 'Current Conditions', '&#9737;&#65038;', 'compact'), wd('nextexact', 'Next Exact Thing', '&#9201;&#65038;', '')].join('\n');
+  const right = [wd('chartnow', 'Current Sky Chart', '&#9737;&#65038;', ''), wd('moon', 'Lunar Motion Monitor', '&#9790;&#65038;', '')].join('\n');
+  const html = R('src/newtab/overlay.html').replace('{{head}}', () => head).replace('{{left}}', () => left).replace('{{right}}', () => right).replace('{{wheel}}', () => wd('chartnow', 'Current Sky Chart', '&#9737;&#65038;', '')).replace('{{scripts}}', () => js);
+  fs.writeFileSync(path.join(__dirname, 'overlay.html'), html);
+  console.log('overlay -> overlay.html');
+}
+
 /* ── new-tab extension (Chrome / Edge / Brave, Manifest V3):  node build.js --extension  ->  extension/  (load it unpacked) ── */
 if (process.argv.includes('--extension')) {
   const GADGETS = [

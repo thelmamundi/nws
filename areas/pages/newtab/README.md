@@ -3,3 +3,5 @@ Source: `src/newtab/` (newtab.html template, newtab.js, newtab.css, boot.js). Bu
 Gadget list and defaults: the `GADGETS` array in the extension block of `build.js`. Widgets are the same `W.*` renderers as the site (`assets/js/widgets.js`).
 
 Dashboard: `node build.js --dashboard` writes `dashboard.html` and `wallpaper/` (src/newtab/dashboard.*).
+
+Overlay: `node build.js --overlay` writes `overlay.html` (src/newtab/overlay.*).

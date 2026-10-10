@@ -1,0 +1,30 @@
+/* Stream overlay, 1920x1080. Transparent in the live scene; the other scenes use the theme background. dos-skin.css supplies the look. */
+html, body { margin: 0; padding: 0 !important; overflow: hidden; height: 100%; }
+body { padding-bottom: 0 !important; }
+html[data-scene="live"], html[data-scene="live"] body { background: transparent !important; background-image: none !important; }
+html[data-scene="live"] #bg { display: none; }
+.ov-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+.ov-stage .win-q, .ov-stage .win-btns { display: none; }
+.ov-stage .win-body a[href$=".html"], .ov-stage .win-body a[href*=".html#"] { display: none; }
+html[data-scene="live"] .scene-card, html:not([data-scene="live"]) .scene-live { display: none !important; }
+.ov-title { position: absolute; left: 16px; top: 16px; width: 760px; margin: 0; }
+.ov-h { font-size: 34px; } .ov-clock { display: flex; align-items: baseline; gap: 12px; margin-top: 6px; }
+.ov-clock #ov-time { font-size: 44px; line-height: 1; } .ov-clock #ov-date { font-size: 20px; opacity: .8; }
+.ov-col { position: absolute; top: 16px; bottom: 100px; width: 392px; overflow: hidden; display: flex; flex-direction: column; gap: 16px; }
+.ov-col > .win { margin: 0; flex: 0 0 auto; }
+.ov-left { left: 16px; top: 190px; } .ov-right { right: 16px; }
+.ov-cam { height: 300px; } .ov-cam .ov-hole { height: 250px; background: transparent !important; box-shadow: inset 0 0 0 2px var(--line, #fff); }
+html:not([data-scene="live"]) .ov-cam { display: none; } html[data-cam="0"] .ov-cam { display: none; }
+.ov-right .chart-side, .ov-right .win-q { display: none; }
+.ov-right .chart-wrap { grid-template-columns: minmax(0, 1fr); }
+.ov-bar { position: absolute; left: 16px; right: 16px; bottom: 16px; margin: 0; height: 64px; overflow: hidden; display: flex; align-items: stretch; font-size: 26px; }
+.ov-bar .onair-window { flex: 1; overflow: hidden; align-self: center; }
+.ov-card { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -52%); width: 1000px; margin: 0; text-align: center; }
+.ov-big { font-size: 64px; line-height: 1.1; margin-top: 8px; } .ov-sub { font-size: 28px; margin-top: 10px; opacity: .85; min-height: 34px; }
+.ov-count { font-size: 96px; line-height: 1.2; margin: 14px 0; }
+.ov-wheel { width: 420px; margin: 0 auto; } .ov-wheel .chart-side, .ov-wheel .win-q { display: none; } .ov-wheel .chart-wrap { grid-template-columns: minmax(0, 1fr); }
+.ov-col [data-ps], .ov-col .win-body p, .ov-col .win-body .note, .ov-card .win-body > .ov-wheel p { display: none !important; }
+html .ov-cam, html .ov-cam .win-body.ov-hole { background: transparent !important; box-shadow: none; }
+html .ov-cam .ov-hole { box-shadow: inset 0 0 0 2px var(--line, #fff); }
+.ov-left > .win:last-child, .ov-right > .win:last-child { flex: 1 1 auto; }
+.ov-wheel .chart-wrap > :not(:first-child), .ov-wheel .widget-body > :not(.chart-wrap) { display: none !important; }
