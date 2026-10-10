@@ -9,7 +9,7 @@
   var stage = document.getElementById('stage'), dz = document.getElementById('dz'), dctx = dz.getContext('2d');
   root.setAttribute('data-kind', kind); if (kind === 'lower' || kind === 'bug') root.setAttribute('data-clear', '1');
   if (window.Nws) window.Nws.setTheme(theme);
-  var DUR = { intro: 6, end: 20, card: 2.5, lower: 6, bug: 1, thumb: 1, credits: 18, chat: 10 }; window.ytDuration = DUR[kind] || 1;
+  var DUR = { intro: 9, end: 20, card: 2.5, lower: 6, bug: 1, thumb: 1, credits: 18, chat: 10 }; window.ytDuration = DUR[kind] || 1;
   var NAMES = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'], DAYG = ['sun', 'moon', 'mars', 'mercury', 'jupiter', 'venus', 'saturn'];
   var gname = q.get('glyph') || DAYG[new Date(at).getDay()];
   function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
@@ -47,13 +47,25 @@
   var scenes = {
     intro: function (t) {
       var ts = Math.floor(t * 12) / 12;
-      if (!built) { stage.innerHTML = win('w1', 1020, 400, 780, 0, 'NWS', '<div id="i-t" class="yt-big"></div><div id="i-s" class="yt-mid" style="margin-top:14px"></div>'); built = true; }
-      var sc = ease((ts - 0.3) / 1.2), slide = ease((ts - 2.4) / 0.7), size = Math.round((300 + 460 * sc - 80 * slide) / 8) * 8, cx = 960 + (-700 - 0) * slide + 700 * 0 , x = Math.round((960 - size / 2) + (-420) * slide);
-      wheel('wh', x, Math.round(540 - size / 2), size, 180 + ts * 40, 1, ts * 4);
-      var w1 = document.getElementById('w1'); w1.style.display = ts > 2.8 ? '' : 'none';
-      document.getElementById('i-t').innerHTML = glyph(NAMES[Math.floor(ts * 4) % 10], 84) + ' ' + typed(title.toUpperCase(), ts, 3.0, 14);
-      document.getElementById('i-s').textContent = ts > 4.1 ? (sub || 'live sky instruments') : '';
-      var p = ts < 1 ? 1 - ts : ts > 5.2 ? (ts - 5.2) / 0.8 : 0; cover(step(p, 16), black());
+      if (!built) {
+        stage.innerHTML = win('wp', 140, 190, 640, 600, 'PIXEL PLANET', '<div style="position:relative;height:550px;overflow:hidden;margin:-18px -24px"><canvas id="pp" style="position:absolute;left:-100px;top:-130px;width:840px;height:840px;image-rendering:pixelated"></canvas></div>') +
+          win('wa', 1140, 190, 640, 600, 'ASCII PLANET', '<div style="position:relative;height:550px;overflow:hidden;margin:-18px -24px"><pre id="aa" class="hero-art" style="position:absolute;left:-132px;top:-89px;margin:0;font-size:26px;line-height:26px;letter-spacing:0;color:var(--led)"></pre></div>') +
+          win('w1', 1020, 400, 780, 0, 'NWS', '<div id="i-t" class="yt-big"></div><div id="i-s" class="yt-mid" style="margin-top:14px"></div>'); built = true;
+      }
+      /* 0-1 dither up | 0.6-3.6 planet parade: pixel planet left, ASCII planet right | 3.4-4.4 wheel grows | 5.2-5.9 wheel slides, title types | 8.2-9 wipe out */
+      var par = ts >= 0.6 && ts < 3.6, k = Math.floor((ts - 0.6) / 0.3) % 10, id = NAMES[k < 0 ? 0 : k];
+      ['wp', 'wa'].forEach(function (e) { document.getElementById(e).style.display = par ? '' : 'none'; });
+      if (par) {
+        window.PlanetArt.draw(document.getElementById('pp'), { id: id, n: 96, cell: 5, phase: 0.5, seed: 1 + k });
+        document.getElementById('aa').innerHTML = window.AsciiArt.html(id, { cols: 58, rows: 28, t: Math.round(ts * 12) });
+        document.querySelector('#wp .win-name').textContent = 'PIXEL PLANET \u00B7 ' + id.toUpperCase(); document.querySelector('#wa .win-name').textContent = 'ASCII PLANET \u00B7 ' + id.toUpperCase();
+      }
+      var sc = ease((ts - 3.4) / 1.0), slide = ease((ts - 5.2) / 0.7), size = Math.round((300 + 460 * sc - 80 * slide) / 8) * 8, x = Math.round((960 - size / 2) + (-420) * slide);
+      wheel('wh', x, Math.round(540 - size / 2), size, 180 + ts * 40, ts >= 3.4 ? 1 : 0, ts * 4);
+      document.getElementById('w1').style.display = ts > 5.5 ? '' : 'none';
+      document.getElementById('i-t').innerHTML = glyph(NAMES[Math.floor(ts * 4) % 10], 84) + ' ' + typed(title.toUpperCase(), ts, 5.7, 18);
+      document.getElementById('i-s').textContent = ts > 7.0 ? (sub || 'live sky instruments') : '';
+      cover(step(ts < 1 ? 1 - ts : ts > 8.2 ? (ts - 8.2) / 0.8 : 0, 16), black());
     },
     card: function (t) {
       var ts = Math.floor(t * 12) / 12;

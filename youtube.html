@@ -1713,6 +1713,228 @@ html[data-kind][data-theme="legend"] { background-color: #000 !important; backgr
 
 </script>
 <script>
+/* ═══════════════════════════════════════════════════════════
+   PLANET ART: dithered planets with a glow that shows the planet's essential dignity, plus dithered glyph cards.
+   Everything is drawn on a cell grid with an 8x8 Bayer matrix (the theme's house dither), then scaled up with hard edges.
+
+     PlanetArt.draw(canvas, { id:'mars', n:96, cell:3, dignity:'domicile', phase:0.5, seed:1 })
+        id        sun moon mercury venus mars jupiter saturn uranus neptune pluto
+        dignity   domicile | exaltation | detriment | fall | peregrine | null  (null = no glow). Use AstroSky.dignity(id, signIndex).
+        phase     moon only, 0..1 (0 new, .5 full)
+     PlanetArt.glyph(canvas, { name:'saturn', n:96, cell:3, dignity:'fall' })      a pixel glyph with a gradient fill and the same glow
+   Glow language (amber and blue are a complementary pair, so strength reads at a glance):
+     domicile    big amber glow          exaltation  brightest: gold-white glow with soft rays
+     detriment   blue glow, weaker       fall        small deep-blue glow, dim
+     peregrine   a faint grey rim        (nothing)   no glow
+═══════════════════════════════════════════════════════════ */
+(function (root) {
+  'use strict';
+  var BAY = (function () { var m = [[0, 2], [3, 1]], n = 2; while (n < 8) { var q = []; for (var y = 0; y < n * 2; y++) { q.push([]); for (var x = 0; x < n * 2; x++) q[y].push(4 * m[y % n][x % n] + [[0, 2], [3, 1]][Math.floor(y / n)][Math.floor(x / n)]); } m = q; n *= 2; } return m; })();
+  function bth(x, y) { return (BAY[y & 7][x & 7] + 0.5) / 64; }
+  var PAL = {                                     /* four tones, dark to light */
+    sun: [[120, 40, 0], [235, 110, 0], [255, 176, 0], [255, 238, 170]],
+    moon: [[20, 26, 40], [78, 92, 120], [168, 182, 206], [238, 244, 255]],
+    mercury: [[26, 24, 22], [86, 80, 74], [160, 152, 140], [226, 218, 204]],
+    venus: [[70, 40, 8], [160, 104, 28], [232, 176, 80], [255, 233, 170]],
+    mars: [[40, 10, 6], [128, 40, 20], [214, 90, 40], [255, 176, 120]],
+    jupiter: [[56, 30, 12], [150, 90, 40], [222, 164, 90], [255, 228, 176]],
+    saturn: [[50, 38, 14], [136, 108, 50], [214, 182, 106], [255, 238, 178]],
+    uranus: [[10, 50, 70], [40, 130, 160], [110, 205, 225], [214, 248, 255]],
+    neptune: [[4, 14, 70], [14, 52, 170], [58, 120, 255], [170, 208, 255]],
+    pluto: [[26, 20, 24], [92, 76, 84], [170, 150, 150], [236, 220, 214]]
+  };
+  var GLOW = {
+    domicile:   { c: [255, 176, 0],  hi: [255, 224, 120], r: 0.95, a: 1.00, rays: 0 },
+    exaltation: { c: [255, 214, 110], hi: [255, 252, 232], r: 1.20, a: 1.00, rays: 1 },
+    detriment:  { c: [58, 141, 255], hi: [140, 190, 255], r: 0.75, a: 0.80, rays: 0 },
+    fall:       { c: [30, 62, 190],  hi: [70, 110, 230],  r: 0.50, a: 0.65, rays: 0 },
+    peregrine:  { c: [120, 130, 150], hi: [170, 180, 195], r: 0.24, a: 0.45, rays: 0 }
+  };
+  function hash(a, b, s) { var h = (a * 374761393 + b * 668265263 + s * 2147483647) | 0; h = (h ^ (h >>> 13)) * 1274126177 | 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; }
+  function vnoise(x, y, s) {                       /* value noise, wraps horizontally every 64 cells of x */
+    var xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    function h(i, j) { return hash(((i % 64) + 64) % 64, j, s); }
+    return (h(xi, yi) * (1 - u) + h(xi + 1, yi) * u) * (1 - v) + (h(xi, yi + 1) * (1 - u) + h(xi + 1, yi + 1) * u) * v;
+  }
+  function fbm(x, y, s) { return 0.55 * vnoise(x, y, s) + 0.3 * vnoise(x * 2.1, y * 2.1, s + 3) + 0.15 * vnoise(x * 4.3, y * 4.3, s + 7); }
+  /* surface feature in -1..1 at longitude u (radians) and latitude v (-1..1) */
+  function feature(id, u, v, s) {
+    var x = (u / 6.2832 + 0.5) * 64, f;
+    switch (id) {
+      case 'jupiter': f = Math.sin(v * 13 + 2.2 * fbm(x * 0.18, v * 4, s)) * 0.55 + (fbm(x * 0.6, v * 9, s + 1) - 0.5) * 0.5;
+        if (Math.pow((u - 0.9) / 0.32, 2) + Math.pow((v + 0.32) / 0.1, 2) < 1) f = -0.95; return f;
+      case 'saturn': return Math.sin(v * 9 + 1.2 * fbm(x * 0.2, v * 3, s)) * 0.3 + (fbm(x * 0.4, v * 6, s) - 0.5) * 0.25;
+      case 'mars': f = (fbm(x * 0.35, v * 5, s) - 0.5) * 1.2; if (Math.abs(v) > 0.84) f = 1; return f;
+      case 'moon': case 'mercury': f = (fbm(x * 0.7, v * 7, s) - 0.5) * 1.1; var cr = vnoise(x * 0.9, v * 9, s + 11); return cr > 0.7 ? f - 0.6 : f;
+      case 'venus': return (fbm(x * 0.25 + v * 2, v * 4, s) - 0.5) * 0.55;
+      case 'uranus': return (fbm(x * 0.15, v * 3, s) - 0.5) * 0.3 + (Math.abs(v) > 0.88 ? 0.4 : 0);
+      case 'neptune': f = Math.sin(v * 8 + fbm(x * 0.2, v * 3, s)) * 0.3 + (fbm(x * 0.4, v * 5, s) - 0.5) * 0.4; if (Math.pow((u + 0.6) / 0.3, 2) + Math.pow((v - 0.2) / 0.12, 2) < 1) f = -0.8; return f;
+      case 'pluto': f = (fbm(x * 0.5, v * 6, s) - 0.5) * 0.9; if (Math.pow((u - 0.4) / 0.45, 2) + Math.pow((v + 0.05) / 0.35, 2) < 1) f += 0.55; return f;
+      case 'sun': return (fbm(x * 1.4, v * 14, s) - 0.5) * 1.1;
+      default: return 0;
+    }
+  }
+  function build(o) {
+    o = o || {}; var id = PAL[o.id] ? o.id : 'moon', N = o.n || 96, cell = o.cell || 3, seed = o.seed || 7, pal = PAL[id], gl = GLOW[o.dignity] || null,
+        R = N * (id === 'sun' ? 0.25 : 0.2), cx = N / 2, cy = N / 2, ring = id === 'saturn';
+    if (ring) R = N * 0.17;
+    var L = [-0.5, -0.55, 0.67];
+    if (id === 'moon' && o.phase !== undefined) { var a = o.phase * 6.2832; L = [Math.sin(a), -0.2, -Math.cos(a)]; }
+    var ln = Math.hypot(L[0], L[1], L[2]); L = [L[0] / ln, L[1] / ln, L[2] / ln];
+    var buf = new Uint8ClampedArray(N * N * 4), x, y, tilt = -0.32, ct = Math.cos(tilt), st = Math.sin(tilt);
+    function put(X, Y, c, al) { var i = (Y * N + X) * 4; buf[i] = c[0]; buf[i + 1] = c[1]; buf[i + 2] = c[2]; buf[i + 3] = al === undefined ? 255 : al; }
+    for (y = 0; y < N; y++) for (x = 0; x < N; x++) {
+      var dx = x + 0.5 - cx, dy = y + 0.5 - cy, d = Math.hypot(dx, dy), th = Math.atan2(dy, dx), body = d <= R, rr = null, behind = false;
+      if (ring) {                                       /* ring-plane coordinates: rotate, squash */
+        var rx = dx * ct + dy * st, ry = (-dx * st + dy * ct) / 0.3; rr = Math.hypot(rx, ry) / R; behind = ry < 0;
+        if (rr < 1.38 || rr > 2.15 || (rr > 1.72 && rr < 1.8)) rr = null;
+      }
+      if (body && !(rr && !behind)) {
+        var nx = dx / R, ny = dy / R, nz = Math.sqrt(Math.max(0, 1 - nx * nx - ny * ny)), l = Math.max(0, nx * L[0] + ny * L[1] + nz * L[2]),
+            u = Math.atan2(nx, nz) + (o.rot || 0), f = feature(id, u, ny, seed), v;
+        if (id === 'sun') v = 0.62 + f * 0.45 + (nz < 0.35 ? -0.12 : 0); else v = 0.04 + l * 0.9 + f * 0.22 * (0.4 + l);
+        v = Math.max(0, Math.min(1, v)); var t = v * (pal.length - 1), b = Math.floor(t), q = Math.min(pal.length - 1, b + ((t - b) > bth(x, y) ? 1 : 0));
+        put(x, y, pal[q]); continue;
+      }
+      if (rr) {                                         /* ring tone: banded, dithered; the far half is darker */
+        var rv = (0.45 + 0.35 * Math.sin(rr * 26) + 0.25 * (hash(Math.floor(rr * 40), 3, seed) - 0.5)) * (behind ? 0.7 : 1); rv = Math.max(0, Math.min(1, rv));
+        var rt = rv * 3, rb = Math.floor(rt), rq = Math.min(3, rb + ((rt - rb) > bth(x, y) ? 1 : 0));
+        put(x, y, pal[Math.max(1, rq)]); continue;
+      }
+      if (gl && d > R) {                                /* dithered glow, brighter and denser close to the body */
+        var span = R * gl.r, e = 1 - (d - R) / span; if (e <= 0) continue;
+        var gv = gl.a * e * e; if (gl.rays) gv *= 0.7 + 0.3 * Math.pow(Math.abs(Math.cos(th * 4)), 0.6);
+        if (gv > bth(x, y)) put(x, y, gv > 0.55 ? gl.hi : gl.c);
+      }
+    }
+    return { buf: buf, N: N, cell: cell };
+  }
+  function draw(canvas, o) {
+    var r = build(o), N = r.N, cell = r.cell;
+    canvas.width = N * cell; canvas.height = N * cell;
+    var off = document.createElement('canvas'); off.width = N; off.height = N;
+    off.getContext('2d').putImageData(new ImageData(r.buf, N, N), 0, 0);
+    var cx2 = canvas.getContext('2d'); cx2.imageSmoothingEnabled = false; cx2.clearRect(0, 0, canvas.width, canvas.height); cx2.drawImage(off, 0, 0, canvas.width, canvas.height);
+    return canvas;
+  }
+  /* a pixel glyph (from PixelGlyphs rect data) with a vertical dithered gradient fill and the dignity glow behind it */
+  function glyph(canvas, o) {
+    o = o || {}; var PG = root.PixelGlyphs, name = o.name, N = o.n || 96, cell = o.cell || 3, gl = GLOW[o.dignity] || null, S = PG.size, i, x, y;
+    var bm = new Uint8Array(S * S); PG.rects(name).forEach(function (r) { for (var yy = r[1]; yy < r[1] + r[3]; yy++) for (var xx = r[0]; xx < r[0] + r[2]; xx++) bm[yy * S + xx] = 1; });
+    function near(gx, gy) { for (var yy = -2; yy <= 2; yy++) for (var xx = -2; xx <= 2; xx++) { var a = gx + xx, b = gy + yy; if (a >= 0 && b >= 0 && a < S && b < S && bm[b * S + a]) return true; } return false; }   /* a 2-cell black keyline keeps the glyph crisp against the glow */
+    var buf = new Uint8ClampedArray(N * N * 4), ox = Math.floor((N - S) / 2), oy = Math.floor((N - S) / 2), R = S * 0.5, cx = N / 2, cy = N / 2, top = o.top || [255, 250, 220], bot = o.bottom || [255, 176, 0];
+    for (y = 0; y < N; y++) for (x = 0; x < N; x++) {
+      var gx = x - ox, gy = y - oy, on = gx >= 0 && gy >= 0 && gx < S && gy < S && bm[gy * S + gx], d = Math.hypot(x + 0.5 - cx, y + 0.5 - cy), j = (y * N + x) * 4, c = null;
+      if (on) { var tt = gy / S, k = tt > bth(x, y) ? 1 : 0; c = k ? bot : top; }
+      else if (gl && !near(gx, gy)) { var e = 1 - (d - R * 0.55) / (R * gl.r * 1.6); if (e > 0) { var gv = gl.a * e * e * 0.9; if (gv > bth(x, y)) c = gv > 0.5 ? gl.hi : gl.c; } }
+      if (c) { buf[j] = c[0]; buf[j + 1] = c[1]; buf[j + 2] = c[2]; buf[j + 3] = 255; }
+    }
+    canvas.width = N * cell; canvas.height = N * cell;
+    var off = document.createElement('canvas'); off.width = N; off.height = N; off.getContext('2d').putImageData(new ImageData(buf, N, N), 0, 0);
+    var c2 = canvas.getContext('2d'); c2.imageSmoothingEnabled = false; c2.clearRect(0, 0, canvas.width, canvas.height); c2.drawImage(off, 0, 0, canvas.width, canvas.height);
+    return canvas;
+  }
+  root.PlanetArt = { build: build, draw: draw, glyph: glyph, ids: Object.keys(PAL), dignities: Object.keys(GLOW), palette: PAL, glow: GLOW };
+})(typeof self !== 'undefined' ? self : this);
+
+</script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   ASCII ART: a planet or a glyph drawn in text. Amber lit side, blue shadow, and a glow in the planet's dignity colour.
+   It is ALIVE: planets spin on their axis (their surface turns), glyphs spin like a coin, the dither grain slides, the glow twinkles,
+   and now and then a row slips sideways.
+
+     AsciiArt.html(id, { cols:54, rows:26, dignity:'domicile', t:0 })        -> HTML for a <pre> at frame t (pure: same input = same art)
+         id    a planet: sun moon mercury venus mars jupiter saturn uranus neptune pluto
+               or a glyph: 'glyph:scorpio', 'glyph:north_node', 'glyph:mars' ... (any name in pixel-glyphs.js)
+     AsciiArt.mount(el, { id, dignity, cols, rows, every:110 })              -> fills el and animates; returns { stop() }
+   Markup classes: a amber, h pale amber, b blue, d deep blue, k dim grey.   prefers-reduced-motion: draws once.
+═══════════════════════════════════════════════════════════ */
+(function (root) {
+  'use strict';
+  var BAY = (function () { var m = [[0, 2], [3, 1]], n = 2; while (n < 8) { var q = []; for (var y = 0; y < n * 2; y++) { q.push([]); for (var x = 0; x < n * 2; x++) q[y].push(4 * m[y % n][x % n] + [[0, 2], [3, 1]][Math.floor(y / n)][Math.floor(x / n)]); } m = q; n *= 2; } return m; })();
+  function bth(x, y) { return (BAY[((y % 8) + 8) % 8][((x % 8) + 8) % 8] + 0.5) / 64; }
+  var RAMP = ' .,:;-=+*#%@';
+  function hash(a, b, s) { var h = (a * 374761393 + b * 668265263 + s * 2147483647) | 0; h = (h ^ (h >>> 13)) * 1274126177 | 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; }
+  function vn(x, y, s) { var xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf); function h(i, j) { return hash(((i % 32) + 32) % 32, j, s); } return (h(xi, yi) * (1 - u) + h(xi + 1, yi) * u) * (1 - v) + (h(xi, yi + 1) * (1 - u) + h(xi + 1, yi + 1) * u) * v; }
+  var GLOW = { domicile: ['a', 1.0], exaltation: ['h', 1.25], detriment: ['b', 0.8], fall: ['d', 0.55], peregrine: ['k', 0.28] };
+  /* surface at longitude u (radians; this is what turns) and latitude v (-1..1); strong blobs so the spin reads in text */
+  function feature(id, u, v) {
+    var x = (u / 6.2832 + 0.5) * 32, blob = (vn(x * 0.55, v * 3.2, 4) - 0.5);
+    switch (id) {
+      case 'jupiter': return Math.sin(v * 11 + 1.4 * vn(x * 0.4, v * 4, 1)) * 0.2 + blob * 0.5 + (Math.pow((u - 0.6) / 0.3, 2) + Math.pow((v + 0.3) / 0.1, 2) < 1 ? -0.5 : 0);
+      case 'saturn': return Math.sin(v * 8 + vn(x * 0.3, v * 3, 2)) * 0.12 + blob * 0.3;
+      case 'mars': return (Math.abs(v) > 0.82 ? 0.5 : 0) + blob * 0.9;
+      case 'moon': case 'mercury': return blob * 0.7 - (vn(x * 1.3, v * 9, 5) > 0.72 ? 0.3 : 0);
+      case 'venus': return (vn(x * 0.3 + v * 2, v * 4, 6) - 0.5) * 0.5;
+      case 'uranus': case 'neptune': return Math.sin(v * 7 + vn(x * 0.3, v * 3, 7)) * 0.12 + blob * 0.4;
+      case 'pluto': return blob * 0.8;
+      case 'sun': return (vn(x * 1.6, v * 12, 9) - 0.5) * 0.5;
+      default: return 0;
+    }
+  }
+  var BM = {};
+  function bitmap(name) {                                         /* the glyph's own 48 x 48 pixel art as an on/off grid */
+    if (BM[name]) return BM[name]; var PG = root.PixelGlyphs, N = PG.size, b = new Uint8Array(N * N);
+    PG.rects(name).forEach(function (r) { for (var y = r[1]; y < r[1] + r[3]; y++) for (var x = r[0]; x < r[0] + r[2]; x++) b[y * N + x] = 1; });
+    var x0 = N, x1 = 0, y0 = N, y1 = 0, x, y; for (y = 0; y < N; y++) for (x = 0; x < N; x++) if (b[y * N + x]) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    b.cx = (x0 + x1 + 1) / 2; b.cy = (y0 + y1 + 1) / 2; b.s = Math.max(x1 - x0 + 1, y1 - y0 + 1) / 2 * 1.12;      /* centre and scale the glyph by its own bounds */
+    return (BM[name] = b);
+  }
+  function runs(cells) {                                           /* merge neighbouring characters of one class into one span */
+    var out = '', i = 0, n = cells.length;
+    while (i < n) { var c = cells[i][1], str = '', j = i; while (j < n && cells[j][1] === c) { str += cells[j][0]; j++; } out += c ? '<span class="' + c + '">' + str + '</span>' : str; i = j; }
+    return out;
+  }
+  function html(id, o) {
+    o = o || {}; var COLS = o.cols || 54, ROWS = o.rows || 26, t = o.t || 0, cx = COLS / 2, cy = ROWS / 2, g = GLOW[o.dignity] || null, out = '', y, x, bx = t % 8, by = (t >> 1) % 8;
+    var slip = {}; if (t % 17 === 9) slip[(hash(t, 1, 11) * ROWS) | 0] = (hash(t, 2, 11) < 0.5 ? -1 : 1);       /* a row slips sideways now and then */
+    var isGlyph = /^glyph:/.test(id), name = isGlyph ? id.slice(6) : id;
+    if (isGlyph && !(root.PixelGlyphs && root.PixelGlyphs.has(name))) isGlyph = false, name = 'moon';
+    var Rr = isGlyph ? 0.46 * ROWS : (name === 'saturn' ? 0.28 : 0.42) * ROWS, Rc = Rr * 2.08, ring = !isGlyph && name === 'saturn';
+    var L = [-0.5 + 0.1 * Math.sin(t * 0.13), -0.55, 0.67], ln = Math.hypot(L[0], L[1], L[2]); L = [L[0] / ln, L[1] / ln, L[2] / ln];
+    var spin = t * 0.09, cs = Math.cos(spin), faceUp = cs >= 0, sx = Math.max(Math.abs(cs), 0.045), bmp = isGlyph ? bitmap(name) : null, GN = isGlyph ? root.PixelGlyphs.size : 0;
+    for (y = 0; y < ROWS; y++) {
+      var cells = [], sh = slip[y] || 0;
+      for (x = 0; x < COLS; x++) {
+        var xx = x - sh, dx = (xx + 0.5 - cx) / Rc, dy = (y + 0.5 - cy) / Rr, d = Math.hypot(dx, dy), ch = ' ', cl = '';
+        if (isGlyph) {
+          /* the glyph turns like a coin about its vertical axis: its width follows cos, the back is the mirror image, the edge-on moment is a thin bright line */
+          var u = dx / sx, gx = Math.floor(bmp.cx + (faceUp ? u : -u) * bmp.s), gy = Math.floor(bmp.cy + dy * bmp.s), on = gx >= 0 && gy >= 0 && gx < GN && gy < GN && bmp[gy * GN + gx] && Math.abs(u) <= 1;
+          if (on) { var v = 0.5 + 0.45 * Math.abs(cs) - (dy > 0 ? 0.12 * dy : 0) + (faceUp ? 0 : -0.1), q = Math.min(RAMP.length - 1, Math.floor(v * (RAMP.length - 1) + bth(xx + bx, y + by))); ch = RAMP.charAt(Math.max(3, q)); cl = v > 0.78 ? 'h' : v > 0.5 ? 'a' : 'b'; }
+          else if (Math.abs(cs) < 0.06 && Math.abs(dx) < 0.012 && Math.abs(dy) < 0.9) { ch = '|'; cl = 'h'; }
+          else if (g) {                                                  /* the glow hugs the glyph: distance (in glyph pixels) to the nearest lit pixel */
+            var near = 99, kx, ky, rad = 7; for (ky = -rad; ky <= rad; ky += 2) for (kx = -rad; kx <= rad; kx += 2) { var qx = gx + kx, qy = gy + ky; if (qx >= 0 && qy >= 0 && qx < GN && qy < GN && bmp[qy * GN + qx]) { var dq = Math.hypot(kx, ky); if (dq < near) near = dq; } }
+            var e = 1 - near / (rad * Math.max(0.55, g[1])); if (e > 0 && e * e > bth(xx + t * 3, y + t * 5)) { ch = e > 0.5 ? '*' : '.'; cl = g[0]; }
+          }
+        } else {
+          var inRing = false, behind = false;
+          if (ring) { var q2 = Math.hypot(dx * Rc / Rr, dy / 0.3); inRing = q2 > 1.45 && q2 < 2.2 && !(q2 > 1.75 && q2 < 1.85); behind = dy < 0; }
+          if (d <= 1 && !(inRing && !behind)) {
+            var nz = Math.sqrt(Math.max(0, 1 - dx * dx - dy * dy)), l = Math.max(0, dx * L[0] + dy * L[1] + nz * L[2]), u2 = Math.atan2(dx, nz) + spin * 2.2, f = feature(name, u2, dy),
+                v2 = name === 'sun' ? 0.8 + f : Math.max(0, Math.min(1, 0.04 + l * 0.92 + f)), tt = v2 * (RAMP.length - 1), b0 = Math.floor(tt), qn = Math.min(RAMP.length - 1, b0 + ((tt - b0) > bth(xx + bx, y + by) ? 1 : 0));
+            ch = RAMP.charAt(qn); cl = v2 > 0.8 ? 'h' : v2 > 0.5 ? 'a' : v2 > 0.22 ? 'b' : 'd';
+          } else if (inRing) { ch = behind ? '-' : '='; cl = behind ? 'd' : 'a'; }
+          else if (g && d > 1) { var e2 = 1 - (d - 1) / g[1]; if (e2 > 0 && e2 * e2 > bth(xx + t * 3, y + t * 5)) { ch = e2 > 0.5 ? '*' : '.'; cl = g[0]; } }
+        }
+        cells.push([ch, ch === ' ' ? '' : cl]);
+      }
+      out += runs(cells) + '\n';
+    }
+    return out;
+  }
+  function mount(el, o) {
+    o = o || {}; var t = 0, timer = null, reduce = false; try { reduce = root.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { /* ignore */ }
+    function draw() { el.innerHTML = html(o.id, { cols: o.cols, rows: o.rows, dignity: o.dignity, t: t }); }
+    draw();
+    if (!reduce) timer = setInterval(function () { if (root.document && document.hidden) return; t++; draw(); }, o.every || 110);
+    return { stop: function () { if (timer) clearInterval(timer); } };
+  }
+  root.AsciiArt = { html: html, mount: mount };
+})(typeof self !== 'undefined' ? self : this);
+
+</script>
+<script>
 /* Colour schemes: dos (default), bios, phosphor (void glow), amber (void glow), paper, legend (LITERAL LEGEND).
    No buttons on the page. Pick from the Start menu > Colors or type THEME <name> in the console.
    A tiny inline script in each <head> applies the saved scheme before first paint. */
@@ -1773,7 +1995,7 @@ html[data-kind][data-theme="legend"] { background-color: #000 !important; backgr
   var stage = document.getElementById('stage'), dz = document.getElementById('dz'), dctx = dz.getContext('2d');
   root.setAttribute('data-kind', kind); if (kind === 'lower' || kind === 'bug') root.setAttribute('data-clear', '1');
   if (window.Nws) window.Nws.setTheme(theme);
-  var DUR = { intro: 6, end: 20, card: 2.5, lower: 6, bug: 1, thumb: 1, credits: 18, chat: 10 }; window.ytDuration = DUR[kind] || 1;
+  var DUR = { intro: 9, end: 20, card: 2.5, lower: 6, bug: 1, thumb: 1, credits: 18, chat: 10 }; window.ytDuration = DUR[kind] || 1;
   var NAMES = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'], DAYG = ['sun', 'moon', 'mars', 'mercury', 'jupiter', 'venus', 'saturn'];
   var gname = q.get('glyph') || DAYG[new Date(at).getDay()];
   function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
@@ -1811,13 +2033,25 @@ html[data-kind][data-theme="legend"] { background-color: #000 !important; backgr
   var scenes = {
     intro: function (t) {
       var ts = Math.floor(t * 12) / 12;
-      if (!built) { stage.innerHTML = win('w1', 1020, 400, 780, 0, 'NWS', '<div id="i-t" class="yt-big"></div><div id="i-s" class="yt-mid" style="margin-top:14px"></div>'); built = true; }
-      var sc = ease((ts - 0.3) / 1.2), slide = ease((ts - 2.4) / 0.7), size = Math.round((300 + 460 * sc - 80 * slide) / 8) * 8, cx = 960 + (-700 - 0) * slide + 700 * 0 , x = Math.round((960 - size / 2) + (-420) * slide);
-      wheel('wh', x, Math.round(540 - size / 2), size, 180 + ts * 40, 1, ts * 4);
-      var w1 = document.getElementById('w1'); w1.style.display = ts > 2.8 ? '' : 'none';
-      document.getElementById('i-t').innerHTML = glyph(NAMES[Math.floor(ts * 4) % 10], 84) + ' ' + typed(title.toUpperCase(), ts, 3.0, 14);
-      document.getElementById('i-s').textContent = ts > 4.1 ? (sub || 'live sky instruments') : '';
-      var p = ts < 1 ? 1 - ts : ts > 5.2 ? (ts - 5.2) / 0.8 : 0; cover(step(p, 16), black());
+      if (!built) {
+        stage.innerHTML = win('wp', 140, 190, 640, 600, 'PIXEL PLANET', '<div style="position:relative;height:550px;overflow:hidden;margin:-18px -24px"><canvas id="pp" style="position:absolute;left:-100px;top:-130px;width:840px;height:840px;image-rendering:pixelated"></canvas></div>') +
+          win('wa', 1140, 190, 640, 600, 'ASCII PLANET', '<div style="position:relative;height:550px;overflow:hidden;margin:-18px -24px"><pre id="aa" class="hero-art" style="position:absolute;left:-132px;top:-89px;margin:0;font-size:26px;line-height:26px;letter-spacing:0;color:var(--led)"></pre></div>') +
+          win('w1', 1020, 400, 780, 0, 'NWS', '<div id="i-t" class="yt-big"></div><div id="i-s" class="yt-mid" style="margin-top:14px"></div>'); built = true;
+      }
+      /* 0-1 dither up | 0.6-3.6 planet parade: pixel planet left, ASCII planet right | 3.4-4.4 wheel grows | 5.2-5.9 wheel slides, title types | 8.2-9 wipe out */
+      var par = ts >= 0.6 && ts < 3.6, k = Math.floor((ts - 0.6) / 0.3) % 10, id = NAMES[k < 0 ? 0 : k];
+      ['wp', 'wa'].forEach(function (e) { document.getElementById(e).style.display = par ? '' : 'none'; });
+      if (par) {
+        window.PlanetArt.draw(document.getElementById('pp'), { id: id, n: 96, cell: 5, phase: 0.5, seed: 1 + k });
+        document.getElementById('aa').innerHTML = window.AsciiArt.html(id, { cols: 58, rows: 28, t: Math.round(ts * 12) });
+        document.querySelector('#wp .win-name').textContent = 'PIXEL PLANET \u00B7 ' + id.toUpperCase(); document.querySelector('#wa .win-name').textContent = 'ASCII PLANET \u00B7 ' + id.toUpperCase();
+      }
+      var sc = ease((ts - 3.4) / 1.0), slide = ease((ts - 5.2) / 0.7), size = Math.round((300 + 460 * sc - 80 * slide) / 8) * 8, x = Math.round((960 - size / 2) + (-420) * slide);
+      wheel('wh', x, Math.round(540 - size / 2), size, 180 + ts * 40, ts >= 3.4 ? 1 : 0, ts * 4);
+      document.getElementById('w1').style.display = ts > 5.5 ? '' : 'none';
+      document.getElementById('i-t').innerHTML = glyph(NAMES[Math.floor(ts * 4) % 10], 84) + ' ' + typed(title.toUpperCase(), ts, 5.7, 18);
+      document.getElementById('i-s').textContent = ts > 7.0 ? (sub || 'live sky instruments') : '';
+      cover(step(ts < 1 ? 1 - ts : ts > 8.2 ? (ts - 8.2) / 0.8 : 0, 16), black());
     },
     card: function (t) {
       var ts = Math.floor(t * 12) / 12;
