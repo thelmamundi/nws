@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Renders the YouTube kit from youtube.html into youtube/ (needs Chromium + ffmpeg; run `node build.js --youtube` first).
    usage: node scripts/render-youtube.js [--theme legend] [--title "My Channel"] [--sub "live sky"] [--only intro,thumb,shoulder]
-   outputs (in youtube/<theme>/): shoulder-left.png, shoulder-right.png, intro.mp4, end.mp4, card.mp4, lowerthird.webm (transparent), lowerthird.png, bug.png, thumbnail.png
+   outputs (in youtube/<theme>/): credits.mp4, chat.mp4, chat.png, shoulder-left.png, shoulder-right.png, intro.mp4, end.mp4, card.mp4, lowerthird.webm (transparent), lowerthird.png, bug.png, thumbnail.png
    env: CHROME=/path/to/chrome (default: Playwright's Chromium), needs the `playwright-core` package (npm i playwright-core) */
 const fs = require('fs'), path = require('path'), cp = require('child_process');
 let pw; try { pw = require('playwright-core'); } catch (e) { try { pw = require('playwright'); } catch (e2) { console.error('npm i playwright-core first'); process.exit(1); } }
@@ -31,6 +31,8 @@ const want = n => !only.length || only.includes(n);
   if (want('intro')) await video('intro', 'intro', 'mp4');
   if (want('end')) await video('end', 'end', 'mp4');
   if (want('card')) await video('card', 'card', 'mp4');
+  if (want('credits')) await video('credits', 'credits', 'mp4');
+  if (want('chat')) { await video('chat', 'chat', 'mp4'); await still('chat', 'chat', 1920, 1080, 10); }
   if (want('lower')) { await video('lower', 'lowerthird', 'webm'); await still('lower', 'lowerthird', 1920, 1080, 2.5, true); }
   if (want('bug')) await still('bug', 'bug', 1920, 1080, 0, true);
   if (want('shoulder')) for (const side of ['left', 'right']) {   /* over-the-shoulder backdrop: the LED gadget wall with room for you (needs dashboard.html: node build.js --dashboard) */
