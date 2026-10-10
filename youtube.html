@@ -906,6 +906,15 @@ html[data-kind="thumb"] #dz, html[data-clear="1"] #dz { display: none; }
 .yt-thumb-sub { position: absolute; font-size: 44px; }
 .yt-stage > .win { position: absolute !important; }
 .yt-ring { font-size: 22px; letter-spacing: 0; }
+/* calmer windows: one flat frame, a plain title strip, the body is an LED screen */
+.yt-stage .win { border: 4px solid var(--line) !important; box-shadow: none !important; background: var(--bg) !important; }
+.yt-stage .win::before, .yt-stage .win::after { display: none !important; }
+.yt-stage .win-title { background: var(--bar) !important; background-image: none !important; color: var(--bar-fg) !important; text-shadow: none !important; font-size: 22px; padding: 4px 12px; letter-spacing: 2px; }
+.yt-stage .win-body { background: var(--panel) !important; color: var(--led, #ff9a3a) !important; text-shadow: none !important; border: 0; }
+.yt-stage .win-body * { color: inherit; }
+.yt-ring { color: var(--led, #fff); }
+/* the nebula once, big (not tiled) */
+html[data-kind][data-theme="legend"] { background-color: #000 !important; background-image: var(--ll-space) !important; background-size: cover !important; background-position: center top !important; background-repeat: no-repeat !important; background-blend-mode: normal !important; background-attachment: scroll !important; image-rendering: pixelated; }
 
 </style>
 <script>try { var t = localStorage.getItem('nws-theme'); if (t) document.documentElement.setAttribute('data-theme', t); if (localStorage.getItem('nws-crt') === '1') document.documentElement.className += ' crt'; if (localStorage.getItem('nws-glow') === '1') document.documentElement.className += ' glow'; } catch (e) { /* storage blocked */ }

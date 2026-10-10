@@ -7,3 +7,5 @@ Dashboard: `node build.js --dashboard` writes `dashboard.html` and `wallpaper/` 
 Overlay: `node build.js --overlay` writes `overlay.html` (src/newtab/overlay.*).
 
 YouTube kit: `node build.js --youtube`, then `node scripts/render-youtube.js` (src/newtab/youtube.*). Output in youtube/.
+
+Over-the-shoulder: dashboard.html?bare&shoulder=left|right&only=name,name (see scripts/render-youtube.js).
