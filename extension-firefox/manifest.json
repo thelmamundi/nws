@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "NWS New Tab",
+  "version": "0.1.0",
+  "description": "The sky, live, on every new tab.",
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "permissions": [],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "newtab@nws.local",
+      "strict_min_version": "115.0"
+    }
+  }
+}

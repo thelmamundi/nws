@@ -70,7 +70,11 @@ if (process.argv.includes('--extension')) {
   for (const f of ['pixel-glyphs', 'chart-wheel', 'starfield', 'astro-engine', 'ascii-art', 'art', 'widgets', 'site', 'theme']) fs.copyFileSync(path.join(__dirname, 'assets/js', f + '.js'), path.join(dir, 'assets/js', f + '.js'));
   for (const d of ['fonts', 'img']) fs.cpSync(path.join(__dirname, 'assets', d), path.join(dir, 'assets', d), { recursive: true });
   fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify({ manifest_version: 3, name: 'NWS New Tab', version: '0.1.0', description: 'The sky, live, on every new tab.', chrome_url_overrides: { newtab: 'newtab.html' }, permissions: [] }, null, 2) + '\n');
-  console.log('extension -> extension/ (chrome://extensions > Developer mode > Load unpacked)');
+  const ff = path.join(__dirname, 'extension-firefox'); fs.rmSync(ff, { recursive: true, force: true }); fs.cpSync(dir, ff, { recursive: true });
+  const mf = JSON.parse(fs.readFileSync(path.join(dir, 'manifest.json'), 'utf8')); mf.browser_specific_settings = { gecko: { id: 'newtab@nws.local', strict_min_version: '115.0' } };
+  fs.writeFileSync(path.join(ff, 'manifest.json'), JSON.stringify(mf, null, 2) + '\n');
+  console.log('extension -> extension/ (Chrome, Edge, Brave: chrome://extensions > Developer mode > Load unpacked)');
+  console.log('extension-firefox/ (Firefox: about:debugging > This Firefox > Load Temporary Add-on > pick its manifest.json)');
 }
 
 /* ── single-file build for previewing in one document (all pages as tabs, everything inlined):  node build.js --single out.html ── */

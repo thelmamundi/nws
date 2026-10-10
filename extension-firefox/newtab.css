@@ -1,0 +1,15 @@
+/* New-tab dashboard layout. Colours, fonts and window chrome come from dos-skin.css. */
+.nt { max-width: 1680px; margin: 0 auto; padding: 16px; }
+.nt-top { margin-bottom: 16px; }
+.nt-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.nt-clock { display: flex; align-items: baseline; gap: 12px; }
+.nt-clock #nt-time { font-size: 44px; line-height: 1; } .nt-clock #nt-date { font-size: 20px; opacity: .8; }
+.nt-search { display: flex; gap: 8px; flex: 1 1 280px; } .nt-search input { flex: 1; min-width: 0; font: inherit; padding: 6px 8px; }
+.nt-ctl { display: flex; gap: 12px; align-items: center; } .nt-ctl select { font: inherit; }
+.nt-picker { display: flex; flex-wrap: wrap; gap: 6px 20px; border-top: 1px dashed var(--hair, currentColor); }
+.nt-picker[hidden] { display: none; } .nt-picker label { white-space: nowrap; cursor: pointer; }
+.nt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; align-items: start; }
+.nt-grid > [hidden] { display: none; }
+.nt-grid .win-q { display: none; }
+@media (max-width: 480px) { .nt-grid { grid-template-columns: 1fr; } }
+.nt-grid .win-body a[href$=".html"], .nt-grid .win-body a[href*=".html#"] { display: none; }

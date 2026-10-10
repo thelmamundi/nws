@@ -12,6 +12,7 @@ Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
   - On by default: Current Conditions, Next Exact Thing, Celestial Flight Board, Current Sky Chart, Lunar Motion Monitor, Planetary Clock, Your Active Personal Aspects. Off by default: Transit Chart, Radar, Impact Forecast, Current Aspects, Planet Speedometer, System Status, Time Control, Sky Changelog, Since Your Last Visit.
   - Install: chrome://extensions, turn on Developer mode, Load unpacked, pick the `extension/` folder.
   - Source: `src/newtab/` (page, script, css). `extension/` is generated; do not edit it.
+- **Firefox build** (`extension-firefox/`, same page, manifest adds a Firefox add-on id). Install: about:debugging, This Firefox, Load Temporary Add-on, pick its `manifest.json`. Temporary add-ons are removed when Firefox closes; keeping it needs Mozilla signing (not set up) or Firefox Developer Edition / Nightly. Not tested in Firefox (not available here).
 - `areas/pages/newtab/` README.
 
 ## Round 16
