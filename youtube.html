@@ -915,6 +915,13 @@ html[data-kind="thumb"] #dz, html[data-clear="1"] #dz { display: none; }
 .yt-ring { color: var(--led, #fff); }
 /* the nebula once, big (not tiled) */
 html[data-kind][data-theme="legend"] { background-color: #000 !important; background-image: var(--ll-space) !important; background-size: cover !important; background-position: center top !important; background-repeat: no-repeat !important; background-blend-mode: normal !important; background-attachment: scroll !important; image-rendering: pixelated; }
+/* segment cards: 80s sitcom bumper, night skyline, one planet */
+.nc-title { position: absolute; left: 50%; top: 70px; font-size: 150px; line-height: 1; letter-spacing: 4px; white-space: nowrap; transform: translateX(-50%) skewX(-8deg); transform-origin: 50% 50%; }
+.nc-title span { display: block; }
+.nc-back { position: absolute; left: 0; top: 0; color: #000; -webkit-text-stroke: 22px #000; text-shadow: 14px 14px 0 #ff2f8e; }
+.nc-front { position: relative; color: transparent; background: linear-gradient(#ffffff 0 32%, #ffe45e 32% 52%, #ff6fb0 52% 74%, #4fd8ff 74%); -webkit-background-clip: text; background-clip: text; }
+.nc-pill { position: absolute; font-size: 38px; padding: 8px 22px; background: #000; color: #ffe45e; border: 4px solid #ffe45e; letter-spacing: 3px; box-shadow: 8px 8px 0 #ff2f8e; }
+.nc-pill2 { color: #4fd8ff; border-color: #4fd8ff; }
 
 </style>
 <script>try { var t = localStorage.getItem('nws-theme'); if (t) document.documentElement.setAttribute('data-theme', t); if (localStorage.getItem('nws-crt') === '1') document.documentElement.className += ' crt'; if (localStorage.getItem('nws-glow') === '1') document.documentElement.className += ' glow'; } catch (e) { /* storage blocked */ }
@@ -1995,7 +2002,7 @@ html[data-kind][data-theme="legend"] { background-color: #000 !important; backgr
   var stage = document.getElementById('stage'), dz = document.getElementById('dz'), dctx = dz.getContext('2d');
   root.setAttribute('data-kind', kind); if (kind === 'lower' || kind === 'bug') root.setAttribute('data-clear', '1');
   if (window.Nws) window.Nws.setTheme(theme);
-  var DUR = { intro: 9, end: 20, card: 2.5, lower: 6, bug: 1, thumb: 1, credits: 18, chat: 10 }; window.ytDuration = DUR[kind] || 1;
+  var DUR = { intro: 9, end: 20, card: 2.5, lower: 6, bug: 1, thumb: 1, credits: 18, chat: 10, segment: 3 }; window.ytDuration = DUR[kind] || 1;
   var NAMES = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'], DAYG = ['sun', 'moon', 'mars', 'mercury', 'jupiter', 'venus', 'saturn'];
   var gname = q.get('glyph') || DAYG[new Date(at).getDay()];
   function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
@@ -2106,6 +2113,50 @@ html[data-kind][data-theme="legend"] { background-color: #000 !important; backgr
       document.getElementById('ch-l').innerHTML = html;
       document.getElementById('ch-k').style.transform = 'translateX(' + (-Math.round(ts * 60 / 6) * 6) + 'px)';
       cover(step(ts < 0.6 ? 1 - ts / 0.6 : 0, 16), black());
+    },
+    segment: function (t) {
+      var ts = Math.floor(t * 12) / 12, P = { sun: 'identity', moon: 'mood', mercury: 'talk', venus: 'taste', mars: 'drive', jupiter: 'luck', saturn: 'discipline', uranus: 'chaos', neptune: 'dreams', pluto: 'power' }, pid = NAMES.indexOf(gname) >= 0 ? gname : 'sun';
+      if (!built) {
+        stage.innerHTML = '<canvas id="nc-b" width="480" height="270" style="position:absolute;left:0;top:0;width:1920px;height:1080px;image-rendering:pixelated"></canvas>' +
+          '<canvas id="nc-p" style="position:absolute;image-rendering:pixelated;width:1400px;height:1400px"></canvas>' +
+          '<canvas id="nc-f" width="480" height="270" style="position:absolute;left:0;top:0;width:1920px;height:1080px;image-rendering:pixelated"></canvas>' +
+          '<div id="nc-t" class="nc-title"><span class="nc-back"></span><span class="nc-front"></span></div>' +
+          '<div id="nc-l" class="nc-pill" style="left:70px;bottom:46px"></div><div id="nc-r" class="nc-pill nc-pill2" style="right:70px;bottom:46px"></div>'; built = true;
+        document.querySelector('#nc-t .nc-back').textContent = title.toUpperCase(); document.querySelector('#nc-t .nc-front').textContent = title.toUpperCase();
+        var tf = document.getElementById('nc-t'), fs = 150; while (tf.scrollWidth > 1700 && fs > 60) { fs -= 6; tf.style.fontSize = fs + 'px'; }
+      }
+      var X = document.getElementById('nc-b').getContext('2d'), F = document.getElementById('nc-f').getContext('2d'), i, x, y;
+      /* night sky: dithered gradient navy -> purple -> pink at the horizon */
+      var SK = [[4, 6, 38], [18, 10, 72], [52, 16, 104], [112, 24, 118], [190, 48, 130], [255, 110, 150]], id = X.createImageData(480, 270);
+      for (y = 0; y < 270; y++) for (x = 0; x < 480; x++) {
+        var g = (y / 270) * 5, k = Math.min(4, Math.floor(g)), f = g - k, th = (BY[y % 8][x % 8] + 0.5) / 64, c = SK[f > th ? k + 1 : k]; i = (y * 480 + x) * 4; id.data[i] = c[0]; id.data[i + 1] = c[1]; id.data[i + 2] = c[2]; id.data[i + 3] = 255;
+        var h = ((x * 73856093) ^ (y * 19349663)) >>> 0; if (y < 150 && h % 331 === 0 && ((h >>> 9) + Math.floor(ts * 3)) % 3) { id.data[i] = id.data[i + 1] = id.data[i + 2] = 255; }
+      }
+      X.putImageData(id, 0, 0);
+      /* skyline: two layers of buildings with lit windows that blink slowly */
+      var fd = F.createImageData(480, 270), rnd = (function (a) { return function () { a = (a * 1664525 + 1013904223) >>> 0; return a / 4294967296; }; })(7);
+      function px(x, y, c) { if (x < 0 || y < 0 || x >= 480 || y >= 270) return; var j = (y * 480 + x) * 4; fd.data[j] = c[0]; fd.data[j + 1] = c[1]; fd.data[j + 2] = c[2]; fd.data[j + 3] = 255; }
+      function layer(minH, maxH, body, edge, win, density, seed) {
+        var cx = -5, r = (function (a) { return function () { a = (a * 1664525 + 1013904223) >>> 0; return a / 4294967296; }; })(seed);
+        while (cx < 485) {
+          var w = 22 + Math.floor(r() * 30), h = minH + Math.floor(r() * (maxH - minH)), top = 270 - h, bx, by;
+          for (bx = 0; bx < w; bx++) for (by = top; by < 270; by++) px(cx + bx, by, bx === 0 || by === top ? edge : body);
+          if (r() > 0.6) { var ax = cx + 6 + Math.floor(r() * (w - 12)); for (by = top - 14; by < top; by++) px(ax, by, edge); px(ax, top - 15, [255, 60, 60]); }
+          for (bx = 4; bx < w - 3; bx += 5) for (by = top + 6; by < 262; by += 7) { var hh = Math.floor(r() * 1000), on = (hh % 100) < density * 100; if (((hh >> 3) + Math.floor(ts * 1.5)) % 7 === 0) on = !on; if (on) { px(cx + bx, by, win); px(cx + bx + 1, by, win); px(cx + bx, by + 1, win); px(cx + bx + 1, by + 1, win); } }
+          cx += w + Math.floor(r() * 4);
+        }
+      }
+      layer(60, 130, [38, 14, 78], [90, 36, 130], [255, 190, 90], 0.35, 11);
+      layer(30, 90, [8, 6, 28], [30, 18, 70], [255, 232, 120], 0.5, 29);
+      F.putImageData(fd, 0, 0);
+      /* planet rises behind the skyline */
+      var rise = ease((ts - 0.15) / 1.0), pc = document.getElementById('nc-p'), py = 900 - 440 * Math.round(rise * 12) / 12;
+      window.PlanetArt.draw(pc, { id: pid, n: 96, cell: 5, phase: 0.5, seed: 3 }); pc.style.left = (960 - 700) + 'px'; pc.style.top = (py - 700) + 'px';
+      /* title slams in (stepped), then the labels */
+      var tt = document.getElementById('nc-t'), sl = ease((ts - 0.9) / 0.35); tt.style.opacity = sl > 0 ? 1 : 0; tt.style.transform = 'translateX(-50%) skewX(-8deg) scale(' + (1.5 - 0.5 * Math.round(sl * 6) / 6) + ')';
+      var L = document.getElementById('nc-l'), R = document.getElementById('nc-r'); L.textContent = 'SEGMENT ' + num; R.textContent = pid.toUpperCase() + ' \u00B7 ' + P[pid].toUpperCase();
+      L.style.display = ts > 1.4 ? '' : 'none'; R.style.display = ts > 1.7 ? '' : 'none';
+      cover(step(ts < 0.5 ? 1 - ts / 0.5 : ts > 2.5 ? (ts - 2.5) / 0.5 : 0, 16), black());
     },
     bug: function () {
       stage.innerHTML = win('b1', 1640, 36, 244, 0, 'NWS', '<div style="display:flex;align-items:center;gap:12px;font-size:30px">' + glyph(gname, 48) + ' <span>SUBSCRIBE</span></div>');

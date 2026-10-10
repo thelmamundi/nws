@@ -10,7 +10,7 @@ const theme = arg('theme', 'legend'), title = arg('title', 'The sky, live'), sub
 const OUT = path.join(__dirname, '..', 'youtube', theme), URL = 'file://' + path.join(__dirname, '..', 'youtube.html'), FPS = 12;
 fs.mkdirSync(OUT, { recursive: true });
 const DASH = 'file://' + path.join(__dirname, '..', 'dashboard.html');
-const want = n => !only.length || only.includes(n);
+const want = n => (!only.length || only.includes(n)) && !(only.length === 1 && only[0] === 'segments');
 (async () => {
   const browser = await pw.chromium.launch({ executablePath: process.env.CHROME || undefined, args: ['--no-sandbox'] });
   async function open(kind, w, h, extra) {
@@ -31,6 +31,16 @@ const want = n => !only.length || only.includes(n);
   if (want('intro')) await video('intro', 'intro', 'mp4');
   if (want('end')) await video('end', 'end', 'mp4');
   if (want('card')) await video('card', 'card', 'mp4');
+  if (only.includes('segments')) {   /* night-court style segment cards, one per planet, in youtube/segments/ (same in every theme) */
+    const SEG = path.join(__dirname, '..', 'youtube', 'segments'); fs.mkdirSync(SEG, { recursive: true });
+    const names = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
+    for (let i = 0; i < names.length; i++) {
+      const p = await open('segment', 1920, 1080, '&glyph=' + names[i] + '&num=' + String(i + 1).padStart(2, '0')), dir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'yt-')), n = 36;
+      for (let f = 0; f < n; f++) { await p.evaluate(t => window.setT(t), f / FPS); await p.waitForTimeout(30); await p.screenshot({ path: path.join(dir, 'f' + String(f).padStart(4, '0') + '.png') }); if (f === 28) fs.copyFileSync(path.join(dir, 'f0028.png'), path.join(SEG, String(i + 1).padStart(2, '0') + '-' + names[i] + '.png')); }
+      cp.execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', path.join(dir, 'f%04d.png'), '-r', '30', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20', path.join(SEG, String(i + 1).padStart(2, '0') + '-' + names[i] + '.mp4')]);
+      fs.rmSync(dir, { recursive: true, force: true }); await p.close(); console.log('segment ' + names[i]);
+    }
+  }
   if (want('credits')) await video('credits', 'credits', 'mp4');
   if (want('chat')) { await video('chat', 'chat', 'mp4'); await still('chat', 'chat', 1920, 1080, 10); }
   if (want('lower')) { await video('lower', 'lowerthird', 'webm'); await still('lower', 'lowerthird', 1920, 1080, 2.5, true); }

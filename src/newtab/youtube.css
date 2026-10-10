@@ -29,3 +29,10 @@ html[data-kind="thumb"] #dz, html[data-clear="1"] #dz { display: none; }
 .yt-ring { color: var(--led, #fff); }
 /* the nebula once, big (not tiled) */
 html[data-kind][data-theme="legend"] { background-color: #000 !important; background-image: var(--ll-space) !important; background-size: cover !important; background-position: center top !important; background-repeat: no-repeat !important; background-blend-mode: normal !important; background-attachment: scroll !important; image-rendering: pixelated; }
+/* segment cards: 80s sitcom bumper, night skyline, one planet */
+.nc-title { position: absolute; left: 50%; top: 70px; font-size: 150px; line-height: 1; letter-spacing: 4px; white-space: nowrap; transform: translateX(-50%) skewX(-8deg); transform-origin: 50% 50%; }
+.nc-title span { display: block; }
+.nc-back { position: absolute; left: 0; top: 0; color: #000; -webkit-text-stroke: 22px #000; text-shadow: 14px 14px 0 #ff2f8e; }
+.nc-front { position: relative; color: transparent; background: linear-gradient(#ffffff 0 32%, #ffe45e 32% 52%, #ff6fb0 52% 74%, #4fd8ff 74%); -webkit-background-clip: text; background-clip: text; }
+.nc-pill { position: absolute; font-size: 38px; padding: 8px 22px; background: #000; color: #ffe45e; border: 4px solid #ffe45e; letter-spacing: 3px; box-shadow: 8px 8px 0 #ff2f8e; }
+.nc-pill2 { color: #4fd8ff; border-color: #4fd8ff; }
