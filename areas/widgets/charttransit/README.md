@@ -12,5 +12,8 @@ A bi-wheel: the sky now on the outer ring against a natal chart on the inner rin
 ## Notes
 Shown on: charts. Birth details are stored in the browser only (same store as Sky Link).
 
+## Notes
+Uses the same renderer as the Current Sky Chart (see `widgets/chartnow` for how it is drawn and the known gaps). Bi-wheel: transits on the outer ring, natal on the inner ring. Sample natal chart until a chart is linked (stored in localStorage `aw98_birth`).
+
 ## Start a chat
 > In nws, area: widgets/charttransit. Read areas/widgets/charttransit/README.md, make the changes, then log the round in docs/CHANGES.md.
