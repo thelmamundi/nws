@@ -25,6 +25,7 @@ Site-wide or cross-area changes: write them under **Requests** in `docs/CHANGES.
 | [`pages/weather`](pages/weather/README.md) | Weather radar page: Since Your Last Visit, Current Aspects, Conditions, Flight Board, Radar, Impact Forecast, Seismograph, Traffic, Time Control |
 | [`pages/sky`](pages/sky/README.md) | Sky desk page: the full instrument set |
 | [`pages/charts`](pages/charts/README.md) | Chart wheels page |
+| [`pages/lab`](pages/lab/README.md) | Console Lab: the ASCII astro calendar (332 FIGlet fonts, sky events, transits to your natal chart, copy / save / print) |
 | [`pages/posts`](pages/posts/README.md) | Posts archive and the six articles |
 | [`pages/post`](pages/post/README.md) | Article template with the live Sky Link card (topic planet, closest phenomenon, link your own chart) |
 | [`pages/about`](pages/about/README.md) | About page (placeholder copy) and Where To Find Me |
@@ -37,7 +38,7 @@ Site-wide or cross-area changes: write them under **Requests** in `docs/CHANGES.
 | [`parts/header-hero`](parts/header-hero/README.md) | Eyebrow chips, big title, mast chips, intro, and the spinning ASCII planet or glyph (changes with the planetary day on home) |
 | [`parts/footer`](parts/footer/README.md) | Link columns (SOON chips for unbuilt pages), fine print, credit |
 | [`parts/taskbar-tray`](parts/taskbar-tray/README.md) | Start menu with Colors, minimized windows, tray clock to the second and the planetary-hour icon |
-| [`parts/console`](parts/console/README.md) | The `C:\>` console in the left rail: help, dir, cd, sky, theme, crt, glow |
+| [`parts/console`](parts/console/README.md) | The `C:\>` console in the left rail: help, dir, cd, sky, theme, crt, glow, cal, figlet, fonts |
 | [`parts/on-air-ticker`](parts/on-air-ticker/README.md) | The scrolling transit tape under the page header |
 | [`parts/button-bar-88x31`](parts/button-bar-88x31/README.md) | The scrolling bar of 88x31 (slots 88x36) button graphics on home, including the live clock buttons |
 | [`parts/art-dither`](parts/art-dither/README.md) | Procedural planets and Moon, `img.dither` thumbnails: soft 4-tone dither (DOS blue, BIOS, LITERAL LEGEND) or 1-bit bitmap (green, amber, paper) |

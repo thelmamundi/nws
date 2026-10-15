@@ -88,6 +88,7 @@
     canvas.width = N; canvas.height = N;
     for (y = 0; y < N; y++) for (x = 0; x < N; x++) {
       var dx = x + 0.5 - C, dy = y + 0.5 - C, r = Math.sqrt(dx * dx + dy * dy), t = Math.atan2(dy, dx), lon = lonAt(t, asc), col = S.desk, band = null, edge = null;
+      if (r > R.o && spec.clear) continue;
       if (r > R.o) { if (S.stars) { var h = ((x * 73856093) ^ (y * 19349663)) >>> 0; if (h % 211 === 0) col = [255, 255, 255]; else if (h % 523 === 1) col = S.soft; } }
       else if (r > R.f) { band = 'frame'; edge = [R.f, R.o, false]; }
       else if (r > R.s) { band = 'signs'; edge = [R.s, R.f, true]; }

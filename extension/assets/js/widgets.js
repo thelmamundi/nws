@@ -1665,5 +1665,9 @@
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 
-  window.AW98 = { ui: ui, state: state, render: schedule };
+  window.AW98 = { ui: ui, state: state, render: schedule,
+    /* the saved birth chart, shared with the Console Lab calendar (lab-calendar.js) */
+    cities: CITIES, birth: function () { return birth; },
+    setBirth: function (o) { var b = makeBirth(o); applyBirth(b); store('aw98_birth', JSON.stringify(o)); schedule(true); return b; },
+    clearBirth: function () { acts.skylinkClear(); schedule(true); } };
 })();

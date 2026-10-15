@@ -884,6 +884,31 @@ canvas.wheel { display: block; width: 100%; max-width: 504px; aspect-ratio: 1 / 
 .chart-side .sunken { margin-bottom: 10px; }
 @media (max-width: 860px) { .chart-wrap { grid-template-columns: minmax(0, 1fr); } }
 
+/* ── Console Lab: ASCII astro calendar (assets/js/lab-calendar.js) ── */
+.lab-ctl { display: grid; gap: 6px; margin-bottom: 10px; }
+.lab-row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.lab-row > label:not(.inl), .lab-lbl { color: var(--acc); min-width: 7.5em; }
+.lab-row label + .btn, .lab-row .btn + .btn { margin-left: 0; }
+.lab-row input[type=number] { width: 4.5em; } .lab-row select { max-width: 16em; }
+.lab-checks .inl { white-space: nowrap; }
+.lab-birth, .lab-browse { margin-top: 4px; }
+.lab-out-wrap { overflow-x: auto; border: 2px solid var(--line); background: var(--panel); }
+.lab-out { --lab-dim: color-mix(in srgb, #fff 55%, var(--panel)); margin: 0; padding: 8px; font-family: "PerfectDOS", "Courier New", monospace; font-size: 14px; line-height: 1; letter-spacing: 0; color: #fff; background: var(--panel); white-space: pre; min-height: 6em; }
+.lab-out .ac-ttl { color: var(--led); } .lab-out .ac-sub { color: var(--cyan); } .lab-out .ac-nat { color: var(--pink); } .lab-out .ac-lun { color: #fff; }
+.lab-out .ac-sta { color: var(--redc); } .lab-out .ac-ing { color: var(--ledg); } .lab-out .ac-today { color: var(--panel); background: var(--led); }
+.lab-out .ac-brd, .lab-out .ac-dim, .lab-out .ac-moonIng, .lab-out .ac-moonAsp { color: var(--lab-dim); }
+.lab-out.lab-mono span { color: inherit; background: none; }
+.lab-out.lab-paper { background: #fff; color: #000; } .lab-out-wrap:has(.lab-paper) { background: #fff; }
+.lab-out.lab-paper span { color: #000; } .lab-out.lab-paper .ac-brd, .lab-out.lab-paper .ac-dim { color: #555; } .lab-out.lab-paper .ac-nat, .lab-out.lab-paper .ac-sta { color: #b0002a; }
+.lab-out.lab-paper .ac-today { color: #fff; background: #000; } .lab-out.lab-paper.lab-mono span { color: inherit; background: none; }
+.lab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; margin-top: 8px; }
+.lab-tile { display: block; text-align: left; overflow: hidden; border: 2px solid var(--line); background: var(--panel); color: #fff; padding: 6px; cursor: pointer; font-family: var(--ui); }
+.lab-tile:hover, .lab-tile:focus-visible { border-color: var(--acc); outline: none; }
+.lab-tile .lab-tname { display: block; color: var(--led); font-size: 14px; margin-bottom: 4px; }
+.lab-tile pre { margin: 0; font-family: "PerfectDOS", "Courier New", monospace; font-size: 8px; line-height: 1; white-space: pre; overflow: hidden; max-height: 12em; }
+.console .out .pre { white-space: pre; overflow-x: auto; line-height: 1; font-size: 12px; }
+.lab-out .lab-w, .lab-tile .lab-w { display: inline-block; width: 1ch; overflow: hidden; vertical-align: top; }
+
 /* YouTube kit: intro, end screen, title card, lower third, bug, thumbnail. One page, every frame is a function of ?t= so it can be rendered exactly. */
 html, body { margin: 0; padding: 0 !important; overflow: hidden; }
 body { padding-bottom: 0 !important; }

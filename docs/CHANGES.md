@@ -3,7 +3,25 @@
 Requests come in chat, one large batch at a time. After each batch I add a numbered entry here with **Comes with / Added / Changed / Fixed / Removed**. (`areas/` has a README per theme, page, part and widget if you ever want to point at one.)
 Old-site inventory: `docs/FROM-WS.md`. Writing posts: `docs/POSTS.md`.
 
-## Round 17 (current)
+## Round 18 (current)
+**Comes with:** the site as in Round 17, plus a Console Lab page.
+**Added**
+- **Console Lab** (`lab.html`): a new page for text-mode toys. It replaces the "Lab SOON" footer chip and has a Lab button in the Navigation window and the Start menu.
+- **ASCII Astro Calendar**, the first Lab component: a month as one block of text, like a printed ASCII wall calendar.
+  - FIGlet title and second line in any of **332 fonts** (the full set that ships with figlet.js), with Random buttons and a **Browse every font** gallery (filter, click to use).
+  - Day numbers plain or in a FIGlet font; Monday or Sunday weeks with week numbers; cell size; five border styles (single, double, ascii, dashed, shade). Only the month's days get boxes.
+  - Sky events per day with local times: lunations and quarters (with degree), stations, sign changes, aspects, Moon sign changes, optional Moon aspects, and the Moon's sign at the start of each day.
+  - **Natal transits**: exact hits from the transiting Sun to Pluto (Moon optional) to your natal planets, Ascendant and Midheaven. Uses the birth chart already saved by the personal panels; the page has a Birth chart box to add or change it.
+  - Lists under the grid: the month's sky in plain words, transits to your chart, your natal positions, and a key to the abbreviations.
+  - Copy text, Save .txt, Save .html (keeps the colours), Print; colour or mono; ink on paper; fit to width. Settings are remembered in this browser; `lab.html#2026-11` opens a month.
+- Console: `CAL [yyyy-mm]`, `FIGLET [-f font] text`, `FONTS [filter]`; `CD LAB` and `DIR` know the new page.
+- `scripts/make-figlet-fonts.js` packs figlet.js and the fonts into `assets/js/vendor/`. They load only on the Lab page or when a console FIGlet command runs (1.5 MB, once).
+- `areas/pages/lab/` README and REQUESTS.
+**Changed**
+- `window.AW98` also exposes the saved birth chart (`birth`, `setBirth`, `clearBirth`, `cities`) so the Lab and the personal panels share one chart.
+- The one-file preview (`--single`) includes the Lab tab with the fonts inlined.
+
+## Round 17
 **Comes with:** the site as in Round 16, plus a New Tab dashboard extension.
 **Added**
 - **NWS New Tab** (`extension/`, built by `node build.js --extension`): a Chrome / Edge / Brave extension that replaces the new tab page with a dashboard of the live gadgets. Same themes, fonts and window look as the site.

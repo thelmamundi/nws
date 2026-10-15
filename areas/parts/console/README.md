@@ -1,12 +1,13 @@
 # Console
 
-The `C:\>` console in the left rail: help, dir, cd, sky, theme, crt, glow.
+The `C:\>` console in the left rail: help, dir, cd, sky, theme, crt, glow, cal (opens the Console Lab calendar), figlet (big letters in any of 332 fonts), fonts (lists them).
 
 **Area:** `parts/console`
 
 ## Where it lives
 - `assets/js/console.js`
 - `src/partials/layout.html`  (`#console`)
+- FIGlet fonts come from `window.NwsFiglet` in `assets/js/lab-calendar.js`
 
 ## Start a chat
 Paste this into a new chat on the nws repo:

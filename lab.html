@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWS Console Lab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ASCII astro calendars in any of 332 FIGlet fonts, with the month's sky and transits to your natal chart">
+<meta name="theme-color" content="#0000aa">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230000aa'/%3E%3Cpath d='M3 12V4h2l6 5V4h2v8h-2L5 7v5z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/legacy.css">
+<link rel="stylesheet" href="assets/css/dos-skin.css">
+<script>try{var t=localStorage.getItem("nws-theme");if(t)document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("nws-crt")==="1")document.documentElement.className+=" crt";if(localStorage.getItem("nws-glow")==="1")document.documentElement.className+=" glow"}catch(e){}</script>
+</head>
+<body data-ticker="Normal">
+<canvas id="bg" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="page">
+  <div class="layout">
+
+    <aside class="side" aria-label="Site navigation">
+      <section class="win">
+        <div class="win-title"><span class="win-ico" aria-hidden="true">&#9776;</span><span class="win-name">Navigation</span></div>
+        <div class="win-body">
+          <nav aria-label="Main">
+            <ul class="nav-list">
+              <li><a class="nav-btn" href="index.html">Home</a></li>
+              <li><a class="nav-btn" href="weather.html">Weather</a></li>
+              <li><a class="nav-btn" href="sky.html">Sky</a></li>
+              <li><a class="nav-btn" href="charts.html">Charts</a></li>
+              <li><a class="nav-btn" href="posts.html">Posts</a></li>
+              <li><a class="nav-btn is-current" href="lab.html">Lab</a></li>
+              <li><details><summary class="nav-btn">About</summary>
+                <div class="tree-view"><ul>
+                  <li><a class="nav-btn" href="about.html">about me</a></li>
+                  <li><a class="nav-btn" href="about.html#find">where to find me</a></li>
+                </ul></div></details></li>
+              <li><details><summary class="nav-btn">Works</summary>
+                <div class="tree-view"><ul>
+                  <li><span class="nav-btn is-soon">projects <em class="soon">SOON</em></span></li>
+                  <li><span class="nav-btn is-soon">old posts <em class="soon">SOON</em></span></li>
+                  <li><span class="nav-btn is-soon">creations <em class="soon">SOON</em></span></li>
+                </ul></div></details></li>
+              <li><span class="nav-btn is-soon">Blog Site <em class="soon">SOON</em></span></li>
+              <li><span class="nav-btn is-soon">Links <em class="soon">SOON</em></span></li>
+              <li><span class="nav-btn is-soon">Sitemap <em class="soon">SOON</em></span></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <section class="win" data-widget="mini" data-title="Sky Now">
+        <div class="win-title"><span class="win-ico" aria-hidden="true">&#9790;&#65038;</span><span class="win-name">Sky Now</span></div>
+        <div class="win-body led"><div class="mini-body" data-body>&hellip;</div></div>
+      </section>
+
+      <section class="win win-counter">
+        <div class="win-title"><span class="win-name">Visit Counter</span></div>
+        <div class="win-body">
+          <div class="odometer" id="odometer" aria-label="Your visits to this site">000001</div>
+          <div class="odo-note">your visits (this browser only)</div>
+        </div>
+      </section>
+
+      <div class="badges" aria-label="Site badges">
+        <span class="badge b-any">BEST VIEWED<br>IN ANY BROWSER</span>
+        <span class="badge b-rss">80 x 25<br>TEXT MODE</span>
+        <span class="badge b-live">SKY: LIVE<br><i class="lamp" aria-hidden="true"></i></span>
+        <span class="badge b-priv">NO<br>TRACKING</span>
+        <button type="button" class="badge crt-toggle" aria-pressed="false">CRT<br>OFF</button>
+      </div>
+
+      <section class="win console" id="console">
+        <div class="win-title"><span class="win-name">C:\&gt; Console</span></div>
+        <div class="win-body"><div class="out" aria-live="polite"></div>
+          <form autocomplete="off"><label for="cmd">C:\&gt;</label><input id="cmd" type="text" spellcheck="false" autocapitalize="off" placeholder="help"></form></div>
+      </section>
+    </aside>
+
+    <main class="main" id="main">
+      <header class="masthead"><div class="masthead-main"><a href="index.html" class="wordart"><span class="wordart-glyph aw-day-glyph" aria-hidden="true"></span> NWS</a><p class="tagline">The sky, live, in your time zone.</p></div></header>
+      <div class="onair" id="onair" role="region" aria-label="Current transits ticker">
+        <a class="onair-sign" href="sky.html"><span class="lamp" aria-hidden="true"></span>ON AIR</a>
+        <div class="onair-window"><div class="onair-track" id="onair-track"><span class="dim">CALCULATING THE SKY&hellip;</span></div></div>
+      </div>
+<header class="doc-header has-art">
+  <div class="hdr-text">
+  <div class="doc-eyebrow"><span class="aw-day-glyph" aria-hidden="true"></span> <span class="chip" data-host>NWS</span> <span class="doc-eyebrow-tag">Console Lab</span></div>
+  <h1 class="doc-title">Console Lab</h1>
+  <div class="doc-subtitle">Text-mode toys built on the live sky. First up: an ASCII astro calendar in any FIGlet font, with your natal transits.</div>
+  <div class="mast" id="mast">
+    <span class="chip mast-chip"><span class="aw-day-glyph" id="mast-glyph" aria-hidden="true"></span></span>
+    <span class="chip mast-chip" id="mast-date">&hellip;</span>
+    <span class="chip mast-chip" id="mast-time">&hellip;</span>
+    <span class="chip mast-chip mast-chip-dim" id="mast-label">Next up</span>
+    <span class="chip mast-chip mast-chip-value" id="mast-value">&hellip;</span>
+  </div>
+  
+  </div>
+  <pre class="hero-art" data-ascii-art data-art="glyph:mercury" aria-hidden="true"></pre>
+</header>
+<section class="win" id="astrocal">
+  <div class="win-title"><span class="win-ico" aria-hidden="true">&#9638;</span><span class="win-name">ASCII Astro Calendar</span><span class="win-btns"><button type="button" class="wb-min" aria-label="Minimize ASCII Astro Calendar">_</button></span></div>
+  <div class="win-body">
+    <p class="win-q">What is the sky doing this month, and what is it touching in my chart? Printed as one block of text.</p>
+    <div data-lab="astrocal"><noscript>The calendar is computed in your browser, so it needs JavaScript.</noscript></div>
+    <p class="note">Times are in your time zone. Exact moments come from the same sky engine as the rest of the site (good to a few arc-minutes). The <b>n</b> in <b>Ma sqr nSu</b> means your natal Sun. Fonts: the full FIGlet collection that ships with figlet.js (MIT); each font file keeps its author's notes.</p>
+  </div>
+</section>
+
+    </main>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>NWS</h4><ul>
+        <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li>
+        <li><span class="f-soon">Contact <em class="soon">SOON</em></span></li><li><span class="f-soon">RSS feed <em class="soon">SOON</em></span></li></ul></div>
+      <div class="footer-col"><h4>Sky desk</h4><ul>
+        <li><a href="weather.html">Weather</a></li><li><a href="sky.html">Sky</a></li><li><a href="charts.html">Charts</a></li><li><a href="charts.html">Charts</a></li>
+        <li><span class="f-soon">My Weather <em class="soon">SOON</em></span></li><li><span class="f-soon">Resources <em class="soon">SOON</em></span></li>
+        <li><span class="f-soon">Archive <em class="soon">SOON</em></span></li><li><a href="lab.html">Console Lab</a></li></ul></div>
+      <div class="footer-col"><h4>Readings &amp; Shop</h4><ul>
+        <li><span class="f-soon">Readings <em class="soon">SOON</em></span></li><li><span class="f-soon">Shop <em class="soon">SOON</em></span></li></ul></div>
+      <div class="footer-col"><h4>Broadcast &amp; Members</h4><ul>
+        <li><span class="f-soon">Watch <em class="soon">SOON</em></span></li><li><span class="f-soon">Field Reports <em class="soon">SOON</em></span></li><li><span class="f-soon">Membership <em class="soon">SOON</em></span></li></ul></div>
+      <div class="footer-col"><h4>Policies</h4><ul>
+        <li><span class="f-soon">Privacy <em class="soon">SOON</em></span></li><li><span class="f-soon">Terms <em class="soon">SOON</em></span></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024-2026 NWS &nbsp;|&nbsp; <span class="chip" data-host>NWS</span> &nbsp;|&nbsp; <a href="#top" onclick="window.scrollTo(0,0);return false;">Back to top</a> &nbsp;|&nbsp; <a href="https://debtdeath.neocities.org/">+ cc-link layout by cc debtdeath +</a></p>
+      <p class="fine">Sky positions are computed live in your browser from approximate orbital elements (good to a few arc-minutes for the Moon, about a tenth of a degree for the slow planets). For entertainment and education. Times are shown in your local time.</p>
+      <p class="fine">Fonts: Perfect DOS VGA 437 by Zeh Fernando; Super VCR Mono by ASmolBoy (CC BY 4.0).</p>
+    </div>
+  </footer>
+</div>
+
+<div class="taskbar" id="taskbar">
+  <button type="button" class="start-btn" id="start-btn" aria-haspopup="true" aria-expanded="false"><span class="start-logo" aria-hidden="true">&#9737;&#65038;</span> Start</button>
+  <div class="start-menu" id="start-menu" hidden>
+    <div class="start-banner" aria-hidden="true"><span>NWS<b>DOS</b></span></div>
+    <nav class="start-items" aria-label="Start menu"><ul class="nav-list nav-menu">
+      <li><a class="nav-btn" href="index.html">Home</a></li><li><a class="nav-btn" href="weather.html">Weather</a></li>
+      <li><a class="nav-btn" href="sky.html">Sky</a></li><li><a class="nav-btn" href="charts.html">Charts</a></li><li><a class="nav-btn" href="posts.html">Posts</a></li><li><a class="nav-btn" href="lab.html">Lab</a></li><li><a class="nav-btn" href="about.html">About</a></li>
+      <li><details><summary class="nav-btn">Colors</summary><div class="tree-view"><ul>
+        <li><a class="nav-btn" href="#" data-theme-set="dos">DOS blue</a></li><li><a class="nav-btn" href="#" data-theme-set="bios">BIOS grey</a></li>
+        <li><a class="nav-btn" href="#" data-theme-set="phosphor">Void green</a></li><li><a class="nav-btn" href="#" data-theme-set="amber">Void amber</a></li><li><a class="nav-btn" href="#" data-theme-set="paper">Paper</a></li><li><a class="nav-btn fraktur" href="#" data-theme-set="legend">𝕷𝕴𝕿𝕰𝕽𝕬𝕷 𝕷𝕰𝕲𝕰𝕹𝕯</a></li>
+      </ul></div></details></li>
+    </ul></nav>
+  </div>
+  <div class="tasks" id="tasks" aria-label="Minimized windows"></div>
+  <div class="tray" title="Planetary hour" role="timer" aria-label="Local time and planetary hour"><span class="tray-moon" id="tray-moon">&#9790;&#65038;</span><span class="tray-clock" id="tray-clock">--:--</span></div>
+</div>
+
+<script src="assets/js/pixel-glyphs.js"></script>
+<script src="assets/js/chart-wheel.js"></script>
+<script src="assets/js/starfield.js"></script>
+<script src="assets/js/astro-engine.js"></script>
+<script src="assets/js/ascii-art.js"></script>
+<script src="assets/js/art.js"></script>
+<script src="assets/js/widgets.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/sky-topic.js"></script>
+<script src="assets/js/hero-art.js"></script>
+<script src="assets/js/theme.js"></script>
+<script src="assets/js/lab-calendar.js"></script>
+<script src="assets/js/console.js"></script>
+</body>
+</html>
